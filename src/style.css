@@ -809,7 +809,7 @@ body {
   transform: translateX(-50%);
   overflow: visible;
   padding: 0;
-  margin-top: 1.2rem; /* 紧接在标题下方高度，提升上半屏焦点 */
+  margin-top: -14rem; /* 大幅向上拉升 */
   user-select: none;
   flex: 1;
   display: flex;
