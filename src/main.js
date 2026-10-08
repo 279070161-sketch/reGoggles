@@ -156,4 +156,44 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('resize', updateIterationOnScroll);
     updateIterationOnScroll();
   }
+
+  // ==========================================================================
+  // Section 4: Versatile Expansion Interactive Accordion & Video Switcher
+  // ==========================================================================
+  const expansionItems = document.querySelectorAll('.expansion-item');
+  const expansionVideos = document.querySelectorAll('.expansion-video');
+  const hudStatusText = document.getElementById('hud-status-text');
+
+  if (expansionItems.length) {
+    expansionItems.forEach((item) => {
+      item.addEventListener('click', () => {
+        if (item.classList.contains('active')) return;
+
+        // 1. Update active item in left accordion list
+        expansionItems.forEach((el) => el.classList.remove('active'));
+        item.classList.add('active');
+
+        // 2. Switch right video display
+        const targetVideoId = item.dataset.target;
+        const targetStatus = item.dataset.status;
+
+        expansionVideos.forEach((video) => {
+          if (video.id === targetVideoId) {
+            video.classList.add('active');
+            try {
+              video.currentTime = 0;
+              video.play().catch(() => {});
+            } catch (e) {}
+          } else {
+            video.classList.remove('active');
+          }
+        });
+
+        // 3. Update HUD overlay status badge
+        if (hudStatusText && targetStatus) {
+          hudStatusText.textContent = targetStatus;
+        }
+      });
+    });
+  }
 });

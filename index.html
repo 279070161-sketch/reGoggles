@@ -277,6 +277,144 @@
       </section>
     </div>
 
+    <!-- Section 4: Versatile Expansion (Sensing System Customization) -->
+    <div class="expansion-section-wrapper" id="sensing-system">
+      <section class="expansion-section">
+        <div class="expansion-container">
+          
+          <!-- Top Header Grid (Title Left, Subtitle Right - Matching Section 2 & 3) -->
+          <div class="expansion-header-grid">
+            <div class="header-left">
+              <h2 class="expansion-title">
+                Define Your Sensing System with Versatile Expansion
+              </h2>
+            </div>
+            <div class="header-right">
+              <p class="expansion-subtitle">
+                Expansion ports support ToF, IMU, IR and more — free experience with different sensor setups.
+              </p>
+            </div>
+          </div>
+
+          <!-- Main Interactive Content Shell (2 Columns: Left Accordion List, Right Video Display) -->
+          <div class="expansion-content-grid">
+            
+            <!-- Left Column: Accordion List (3 Items) -->
+            <div class="expansion-list-wrapper">
+              
+              <!-- Item 1 (Default Active) -->
+              <div class="expansion-item active" data-target="video-original" data-status="Original features • Live System">
+                <div class="item-header">
+                  <div class="item-title-group">
+                    <span class="item-index">01</span>
+                    <h3 class="item-title">Original features</h3>
+                  </div>
+                  <div class="item-toggle-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                  </div>
+                </div>
+                <div class="item-body">
+                  <p class="item-desc">
+                    The reGoggles itself comes with a built-in HD camera, microphones X3, speakers X2, Wi-Fi + BLE connectivity, and an IMU sensor.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Item 2 -->
+              <div class="expansion-item" data-target="video-general" data-status="General Expansion Port • Custom Modules">
+                <div class="item-header">
+                  <div class="item-title-group">
+                    <span class="item-index">02</span>
+                    <h3 class="item-title">General Expansion Port</h3>
+                  </div>
+                  <div class="item-toggle-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                  </div>
+                </div>
+                <div class="item-body">
+                  <p class="item-desc">
+                    The General Expansion Port supports ToF, optical modules, SD cards, environmental sensors, custom modules
+                  </p>
+                </div>
+              </div>
+
+              <!-- Item 3 -->
+              <div class="expansion-item" data-target="video-vision" data-status="Vision Expansion Port • Multi-Camera & IMU">
+                <div class="item-header">
+                  <div class="item-title-group">
+                    <span class="item-index">03</span>
+                    <h3 class="item-title">Vision Expansion Port</h3>
+                  </div>
+                  <div class="item-toggle-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                  </div>
+                </div>
+                <div class="item-body">
+                  <p class="item-desc">
+                    The Vision Expansion Port supports additional Camera, additional Camera + IMU, and other vision module expansions.
+                  </p>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Right Column: Interactive Video Player Stage -->
+            <div class="expansion-video-wrapper">
+              <div class="video-display-card">
+                
+                <!-- Video 1 (Original features) -->
+                <video 
+                  id="video-original" 
+                  class="expansion-video active" 
+                  autoplay 
+                  loop 
+                  muted 
+                  playsinline 
+                  src="./video1.mp4" 
+                  poster="./1.1右侧仰视不带模组.png"
+                ></video>
+
+                <!-- Video 2 (General Expansion Port) -->
+                <video 
+                  id="video-general" 
+                  class="expansion-video" 
+                  autoplay 
+                  loop 
+                  muted 
+                  playsinline 
+                  src="./video2.mp4" 
+                  poster="./reGoggles -ID迭代效果图/V2.0.png"
+                ></video>
+
+                <!-- Video 3 (Vision Expansion Port) -->
+                <video 
+                  id="video-vision" 
+                  class="expansion-video" 
+                  autoplay 
+                  loop 
+                  muted 
+                  playsinline 
+                  src="./video3.mp4" 
+                  poster="./reGoggles -ID迭代效果图/V4.0.png"
+                ></video>
+
+                <!-- Tech HUD Overlay -->
+                <div class="video-hud-overlay">
+                  <div class="hud-tag">
+                    <span class="hud-pulse-dot"></span>
+                    <span class="hud-tag-text" id="hud-status-text">Original features • Live System</span>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+    </div>
+
     <!-- Modal Dialog for Action Triggers -->
     <div class="modal-backdrop" id="action-modal">
       <div class="modal-card">
