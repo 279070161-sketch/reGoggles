@@ -862,9 +862,10 @@ body {
   color: rgba(255, 255, 255, 0.7);
   background: transparent;
   padding: 0;
-  margin-top: 0.8rem;
+  margin-top: -1.4rem; /* 紧贴产品下方 */
   letter-spacing: 0.08em;
   opacity: 1;
+  z-index: 5;
 }
 
 .evolving-footer-annotation {

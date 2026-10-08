@@ -106,8 +106,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const iterationTrack = document.getElementById('iteration-track');
   const iterationCards = document.querySelectorAll('.iteration-card');
 
-  let currentTx = 0;
-
   function updateIterationOnScroll() {
     if (!evolvingWrapper || !iterationTrack || !iterationCards.length) return;
 
@@ -136,14 +134,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const screenCenter = window.innerWidth / 2;
     const currentCard = iterationCards[snappedIndex];
 
-    // 精准计算绝对屏幕中轴对齐（扣除外部容器内边距/外边距偏移）
-    const trackRectLeft = iterationTrack.getBoundingClientRect().left;
-    const trackBaseLeft = trackRectLeft - currentTx;
+    // 静态计算绝对屏幕中轴对齐，绝不读取动效中变化的 getBoundingClientRect，彻底消灭抖动跳跃
     const cardCenterInTrack = currentCard.offsetLeft + currentCard.offsetWidth / 2;
+    const targetTranslate = screenCenter - cardCenterInTrack;
 
-    const targetTranslate = screenCenter - trackBaseLeft - cardCenterInTrack;
-
-    currentTx = targetTranslate;
     iterationTrack.style.transform = `translateX(${targetTranslate}px)`;
 
     // 动态卡片放大：正中央当前选中卡片 100% 居中放大 (scale 2.05)，两侧卡片缩小淡化 (scale 0.72)
