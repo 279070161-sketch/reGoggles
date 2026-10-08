@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>reGoggles - Open Wearable AI Platform</title>
+  <meta name="description" content="An Open Wearable AI Platform for Industrial Assistance, Egocentric Data Collection, and Intelligent Maker Innovation." />
+  
+  <!-- JetBrains Mono Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="./src/style.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- Voltpile Exact Navigation Bar -->
+    <header class="main-header">
+      <div class="header-container">
+        <a href="#" class="brand-logo" aria-label="reGoggles Home">
+          <img src="./logo.svg" alt="reGoggles" class="brand-logo-img" />
+        </a>
+
+        <div class="header-nav-buttons">
+          <button class="menu-btn" id="header-menu-btn">
+            <span>Menu</span>
+            <div class="burger-icon">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </button>
+          <a href="#community-builders" class="contact-btn">
+            <span class="contact-text">Contact</span>
+            <div class="arrow-circle">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 7H13M13 7L7 1M13 7L7 13" stroke="#142325" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Hero Banner Section -->
+    <main class="hero-section" id="hero">
+      <div class="banner-wrapper">
+        
+        <!-- 1. Ultra-Slow Scrolling Text Background separated by dots -->
+        <div class="marquee-ticker-wrapper" id="marquee-ticker-wrapper">
+          <div class="marquee-track" id="marquee-track-1">
+            <span class="marquee-item">reGoggles</span>
+            <span class="marquee-dot">•</span>
+            <span class="marquee-item">reGoggles</span>
+            <span class="marquee-dot">•</span>
+            <span class="marquee-item">reGoggles</span>
+            <span class="marquee-dot">•</span>
+            <span class="marquee-item">reGoggles</span>
+            <span class="marquee-dot">•</span>
+          </div>
+          <div class="marquee-track" id="marquee-track-2" aria-hidden="true">
+            <span class="marquee-item">reGoggles</span>
+            <span class="marquee-dot">•</span>
+            <span class="marquee-item">reGoggles</span>
+            <span class="marquee-dot">•</span>
+            <span class="marquee-item">reGoggles</span>
+            <span class="marquee-dot">•</span>
+            <span class="marquee-item">reGoggles</span>
+            <span class="marquee-dot">•</span>
+          </div>
+        </div>
+
+        <!-- 2. Main Content Grid (Top Left Headline in JetBrains Mono) -->
+        <div class="banner-content-grid">
+          <div class="top-left-content">
+            <h1 class="hero-intro-text">
+              An Open Wearable AI Platform for Industrial Assistance, Egocentric Data Collection, and Intelligent Maker Innovation.
+            </h1>
+          </div>
+        </div>
+
+        <!-- 3. Centerpiece Product Render Stage (Continuous Floating Render) -->
+        <div class="product-stage-container" id="product-stage">
+          <div class="product-render-wrapper" id="product-wrapper">
+            <div class="product-shadow"></div>
+            <img 
+              src="./1.1右侧仰视不带模组.png" 
+              alt="reGoggles Product Render" 
+              class="product-image" 
+              id="product-img"
+            />
+          </div>
+        </div>
+
+        <!-- 4. Bottom Annotation Bar (Placed on Bottom Right) -->
+        <div class="bottom-annotation-bar">
+          <div class="annotation-right">
+            <p class="annotation-text">
+              Currently in development. Product design and features are subject to change before final release.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+    <!-- Section 2: VoltPile Sticky Venetian Blinds Scroll Transition Section -->
+    <div class="community-section-wrapper" id="community-builders">
+      <section class="community-section-sticky">
+        
+        <!-- Underneath Background Image (Clear and Sharp) -->
+        <div class="section-bg-image">
+          <img src="./section10_BG.png" alt="Community Builders Background" />
+        </div>
+        <div class="section-bg-overlay"></div>
+
+        <!-- VoltPile Venetian 3D Trapezoid Shutter Blinds Layer (10 组精准梯形) -->
+        <div class="blinds-container" id="blinds-container">
+          <div class="slat-row"><div class="slat-blade"></div></div>
+          <div class="slat-row"><div class="slat-blade"></div></div>
+          <div class="slat-row"><div class="slat-blade"></div></div>
+          <div class="slat-row"><div class="slat-blade"></div></div>
+          <div class="slat-row"><div class="slat-blade"></div></div>
+          <div class="slat-row"><div class="slat-blade"></div></div>
+          <div class="slat-row"><div class="slat-blade"></div></div>
+          <div class="slat-row"><div class="slat-blade"></div></div>
+          <div class="slat-row"><div class="slat-blade"></div></div>
+          <div class="slat-row"><div class="slat-blade"></div></div>
+        </div>
+
+      <div class="community-container">
+        
+        <!-- Main Content Shell -->
+        <div class="community-content">
+          <!-- Top Header Grid (Title Top-Left, Subtitle Top-Right matching VoltPile) -->
+          <div class="community-header-grid">
+            <div class="header-left">
+              <h2 class="community-main-title">
+                Be One of the First 100 Community Builders
+              </h2>
+            </div>
+            <div class="header-right">
+              <p class="community-subtitle">
+                We are inviting makers, developers, roboticists and AI builders to help shape what comes next. Join the community, and become:
+              </p>
+            </div>
+          </div>
+
+          <!-- 3-Column Role Cards Grid -->
+          <div class="roles-grid">
+            <!-- Card 1 -->
+            <div class="role-card">
+              <div class="icon-wrapper">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6E53D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path>
+                  <path d="M9 18h6"></path>
+                  <path d="M10 22h4"></path>
+                </svg>
+              </div>
+              <h3 class="role-title">Community Builders</h3>
+              <p class="role-desc">Build & show your projects</p>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="role-card">
+              <div class="icon-wrapper">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6E53D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+              </div>
+              <h3 class="role-title">Beta Testers</h3>
+              <p class="role-desc">Try DVTs & share feedbacks</p>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="role-card">
+              <div class="icon-wrapper">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6E53D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+              </div>
+              <h3 class="role-title">KOL Reviewers</h3>
+              <p class="role-desc">Publish reviews & insights</p>
+            </div>
+          </div>
+
+          <!-- Supplementary Text & Action Buttons -->
+          <div class="actions-block">
+            <p class="supplementary-text">
+              Subscribe or contact us to receive the latest reGoggles news and updates.
+            </p>
+
+            <div class="buttons-group">
+              <button class="btn-primary-action" id="join-community-btn">
+                <span>Join Community</span>
+                <span class="btn-arrow">→</span>
+              </button>
+
+              <button class="btn-secondary-action" id="subscribe-btn">
+                <span>Subscribe</span>
+              </button>
+
+              <button class="btn-secondary-action" id="contact-us-btn">
+                <span>Contact Us</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </div>
+
+    <!-- Section 3: ID Product Iteration Scroll-Driven Pinned Carousel -->
+    <div class="evolving-section-wrapper" id="evolving">
+      <section class="evolving-section-sticky">
+        <div class="evolving-container">
+          
+          <!-- Header Grid (Title Left, Subtitle Right - Matching Section 2) -->
+          <div class="evolving-header-grid">
+            <div class="header-left">
+              <h2 class="evolving-title">reGoggles Is Evolving</h2>
+            </div>
+            <div class="header-right">
+              <p class="evolving-subtitle">
+                ReGoggles is still under development, with features and capabilities continuously refined and expanded based on your feedbacks.
+              </p>
+            </div>
+          </div>
+
+          <!-- Scroll-Driven Interactive Stage (100% 下拉交互驱动) -->
+          <div class="iteration-marquee-wrapper" id="iteration-marquee-wrapper">
+            <div class="iteration-track" id="iteration-track">
+              <!-- Card 1 (V1.0) -->
+              <div class="iteration-card" data-version="V1.0">
+                <div class="product-img-wrapper">
+                  <img src="./reGoggles -ID迭代效果图/V1.0.png" alt="reGoggles V1.0" class="iteration-img" />
+                </div>
+                <div class="version-tag-bottom">V1.0</div>
+              </div>
+
+              <!-- Card 2 (V2.0) -->
+              <div class="iteration-card" data-version="V2.0">
+                <div class="product-img-wrapper">
+                  <img src="./reGoggles -ID迭代效果图/V2.0.png" alt="reGoggles V2.0" class="iteration-img" />
+                </div>
+                <div class="version-tag-bottom">V2.0</div>
+              </div>
+
+              <!-- Card 3 (V3.0) -->
+              <div class="iteration-card" data-version="V3.0">
+                <div class="product-img-wrapper">
+                  <img src="./reGoggles -ID迭代效果图/V3.0.png" alt="reGoggles V3.0" class="iteration-img" />
+                </div>
+                <div class="version-tag-bottom">V3.0</div>
+              </div>
+
+              <!-- Card 4 (V4.0) -->
+              <div class="iteration-card" data-version="V4.0">
+                <div class="product-img-wrapper">
+                  <img src="./reGoggles -ID迭代效果图/V4.0.png" alt="reGoggles V4.0" class="iteration-img" />
+                </div>
+                <div class="version-tag-bottom">V4.0</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Right Disclaimer Annotation -->
+          <div class="evolving-footer-annotation">
+            <p class="annotation-text">
+              Currently in development. Product design and features are subject to change before final release.
+            </p>
+          </div>
+
+        </div>
+      </section>
+    </div>
+
+    <!-- Modal Dialog for Action Triggers -->
+    <div class="modal-backdrop" id="action-modal">
+      <div class="modal-card">
+        <button class="modal-close" id="modal-close-btn">&times;</button>
+        <h3 class="modal-title" id="modal-title-text">Join reGoggles Community</h3>
+        <p class="modal-subtitle" id="modal-desc-text">Enter your email address to get early developer access and updates.</p>
+        
+        <form class="modal-form" id="subscribe-form" onsubmit="event.preventDefault(); alert('Thank you for subscribing to reGoggles updates!'); document.getElementById('action-modal').classList.remove('active');">
+          <input type="email" placeholder="Enter your email" required class="modal-input" />
+          <button type="submit" class="modal-submit-btn">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
