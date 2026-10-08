@@ -807,7 +807,8 @@ body {
   left: 50%;
   transform: translateX(-50%);
   overflow: visible;
-  padding: 2rem 0;
+  padding: 1rem 0;
+  margin-top: -3.5rem; /* 整体向上移动 */
   user-select: none;
   flex: 1;
   display: flex;
