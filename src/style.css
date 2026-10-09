@@ -1425,7 +1425,7 @@ body {
   align-items: center;
   justify-content: space-between;
   gap: 2rem;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  box-shadow: none;
   position: relative;
   overflow: hidden;
 }
@@ -1438,7 +1438,7 @@ body {
   width: 4px;
   height: 100%;
   background: var(--accent-lime);
-  box-shadow: 0 0 15px var(--accent-lime);
+  box-shadow: none;
 }
 
 .banner-chip-icon {
@@ -1590,19 +1590,19 @@ body {
   position: relative;
   height: 140px;
   border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: none;
   overflow: hidden;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+  box-shadow: none;
   cursor: pointer;
 }
 
 .feature-thumb-card:hover {
   transform: translateY(-4px);
-  border-color: rgba(198, 229, 61, 0.6);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 25px rgba(198, 229, 61, 0.2);
+  border: none;
+  box-shadow: none;
 }
 
 .thumb-img-wrapper {
