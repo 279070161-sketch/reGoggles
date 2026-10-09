@@ -89,11 +89,17 @@ body {
   text-decoration: none;
 }
 
-.brand-logo-img {
-  height: 26px;
-  width: auto;
-  filter: brightness(0) invert(1);
-  display: block;
+.brand-logo-text {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 1.45rem;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  color: #ffffff;
+  transition: opacity var(--transition-fast);
+}
+
+.brand-logo:hover .brand-logo-text {
+  opacity: 0.85;
 }
 
 .header-nav-buttons {
@@ -1372,7 +1378,21 @@ body {
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.data-card:hover .data-card-lineart-svg {
+.card-visual-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: contrast(1.22) brightness(1.03);
+  mix-blend-mode: multiply;
+  position: relative;
+  z-index: 2;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.data-card:hover .data-card-lineart-svg,
+.data-card:hover .card-visual-img {
   transform: scale(1.04);
 }
 
@@ -1498,3 +1518,543 @@ body {
     align-items: flex-start;
   }
 }
+
+/* ==========================================================================
+   Section 6: Capture Rich, Synchronized Multimodal Ego Data Styles
+   ========================================================================== */
+.multimodal-section-wrapper {
+  position: relative;
+  background: radial-gradient(circle at 50% 40%, #15272a 0%, #0c1719 100%);
+  color: var(--text-primary);
+  padding: 8rem 0 9rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.multimodal-section {
+  width: 100%;
+}
+
+.multimodal-container {
+  max-width: 1700px;
+  margin: 0 auto;
+  padding: 0 3rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.multimodal-header-grid {
+  display: grid;
+  grid-template-columns: 1fr 440px;
+  gap: 4rem;
+  align-items: start;
+  margin-bottom: 4rem;
+  width: 100%;
+}
+
+.multimodal-title {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: clamp(2.2rem, 3.6vw, 3.6rem);
+  font-weight: 500;
+  color: var(--accent-lime);
+  line-height: 1.18;
+  letter-spacing: -0.03em;
+}
+
+.multimodal-subtitle {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: #a4b7b8;
+  line-height: 1.6;
+}
+
+/* 3-Column Stage (Left Cards | Center Product & Callouts | Right Cards) */
+.multimodal-stage-wrapper {
+  display: grid;
+  grid-template-columns: 290px 1fr 290px;
+  gap: 2rem;
+  align-items: center;
+  width: 100%;
+  position: relative;
+}
+
+.cards-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
+  z-index: 10;
+}
+
+/* Feature Thumb Card (Frosted Dark Card with Image Background & Centered Overlaid Title) */
+.feature-thumb-card {
+  position: relative;
+  height: 140px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  overflow: hidden;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+}
+
+.feature-thumb-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(198, 229, 61, 0.6);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 25px rgba(198, 229, 61, 0.2);
+}
+
+.thumb-img-wrapper {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #0d191b;
+  margin-bottom: 0;
+}
+
+.thumb-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease, filter 0.4s ease;
+  filter: brightness(0.75);
+}
+
+.feature-thumb-card:hover .thumb-img {
+  transform: scale(1.08);
+  filter: brightness(0.88);
+}
+
+.thumb-overlay-gradient {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(15, 27, 29, 0.35) 0%, rgba(10, 19, 21, 0.78) 100%);
+  pointer-events: none;
+}
+
+.thumb-card-info {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 1rem;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.thumb-title {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1.25;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.95), 0 0 18px rgba(0, 0, 0, 0.9);
+  letter-spacing: -0.01em;
+}
+
+/* Center Product Stage (Enlarged Product Image) */
+.center-product-stage {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 560px;
+}
+
+.product-render-box {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.center-product-img {
+  width: 98%;
+  max-width: 720px;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 35px 70px rgba(0, 0, 0, 0.75));
+  z-index: 5;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.stage-ambient-glow {
+  position: absolute;
+  width: 480px;
+  height: 480px;
+  border-radius: 50%;
+  background: radial-gradient(circle at center, rgba(198, 229, 61, 0.16) 0%, rgba(6, 182, 212, 0.08) 50%, transparent 75%);
+  filter: blur(45px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Callout Line SVG Layer & High-Tech Laser Flow Animations */
+.callout-svg-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.flow-line {
+  will-change: stroke-dashoffset;
+}
+
+.flow-left {
+  animation: callout-flow-left 1.8s linear infinite;
+}
+
+.flow-right {
+  animation: callout-flow-right 1.8s linear infinite;
+}
+
+@keyframes callout-flow-left {
+  from {
+    stroke-dashoffset: 24;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes callout-flow-right {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: 24;
+  }
+}
+
+.pulse-ring {
+  animation: node-pulse-ring 2.2s cubic-bezier(0.4, 0, 0.6, 1) infinite alternate;
+}
+
+.pulse-ring-outer {
+  animation: node-pulse-outer 2.2s cubic-bezier(0.4, 0, 0.6, 1) infinite alternate 0.4s;
+}
+
+@keyframes node-pulse-ring {
+  0% {
+    r: 5px;
+    stroke-opacity: 0.4;
+  }
+  100% {
+    r: 8px;
+    stroke-opacity: 1;
+  }
+}
+
+@keyframes node-pulse-outer {
+  0% {
+    r: 9px;
+    stroke-opacity: 0.2;
+  }
+  100% {
+    r: 14px;
+    stroke-opacity: 0.65;
+  }
+}
+
+@media (max-width: 1200px) {
+  .multimodal-header-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .multimodal-stage-wrapper {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  .callout-svg-layer {
+    display: none;
+  }
+  .cards-column {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 768px) {
+  .cards-column {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================================================================
+   Section 7: Protective Design for Industrial Use
+   ========================================================================== */
+.protective-section-wrapper {
+  position: relative;
+  width: 100%;
+  background-color: #dbe1d2;
+  color: #142325;
+  padding: 8rem 0;
+  border-top: 1px solid rgba(20, 35, 37, 0.12);
+  overflow: hidden;
+}
+
+.protective-section {
+  width: 100%;
+}
+
+.protective-container {
+  max-width: 1700px;
+  margin: 0 auto;
+  padding: 0 3rem;
+  width: 100%;
+}
+
+.protective-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 4.5rem;
+  align-items: center;
+  width: 100%;
+}
+
+.protective-text-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.protective-title {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: clamp(2.2rem, 3.6vw, 3.6rem);
+  font-weight: 500;
+  color: #142325;
+  line-height: 1.18;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.8rem;
+}
+
+.protective-subtitle {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 1.05rem;
+  font-weight: 400;
+  color: rgba(20, 35, 37, 0.78);
+  line-height: 1.65;
+  max-width: 580px;
+}
+
+.protective-video-col {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.protective-video-card {
+  position: relative;
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  background: transparent;
+  box-shadow: none;
+  border: none;
+}
+
+.protective-video {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  border-radius: 16px;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  pointer-events: none;
+  user-select: none;
+}
+
+@media (max-width: 1024px) {
+  .protective-section-wrapper {
+    padding: 5rem 0;
+  }
+  .protective-container {
+    padding: 0 1.5rem;
+  }
+  .protective-grid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+}
+
+/* ==========================================================================
+   Section 8: Open SDK & Firmware
+   ========================================================================== */
+.sdk-section-wrapper {
+  position: relative;
+  width: 100%;
+  background: radial-gradient(circle at 50% 30%, #15272a 0%, #0c1719 100%);
+  color: #ffffff;
+  padding: 8rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.sdk-section {
+  width: 100%;
+}
+
+.sdk-container {
+  max-width: 1700px;
+  margin: 0 auto;
+  padding: 0 3rem;
+  width: 100%;
+}
+
+.sdk-grid {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  gap: 4.5rem;
+  align-items: center;
+  width: 100%;
+}
+
+.sdk-image-col {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sdk-img-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.sdk-img {
+  width: 100%;
+  height: auto;
+  max-height: 560px;
+  object-fit: contain;
+  border-radius: 16px;
+  filter: none;
+  box-shadow: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.sdk-content-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.sdk-title {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: clamp(2.2rem, 3.6vw, 3.6rem);
+  font-weight: 500;
+  color: #ffffff;
+  line-height: 1.18;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.5rem;
+}
+
+.sdk-subtitle {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 1rem;
+  font-weight: 400;
+  color: #a4b7b8;
+  line-height: 1.6;
+  margin-bottom: 2.5rem;
+  max-width: 620px;
+}
+
+.sdk-features-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  width: 100%;
+}
+
+.sdk-feature-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.2rem;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0 0 1.6rem 0;
+  border-radius: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  transition: border-color 0.3s ease;
+}
+
+.sdk-feature-card:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.feature-icon-box {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  background: rgba(198, 229, 61, 0.1);
+  border: 1px solid rgba(198, 229, 61, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+}
+
+.feature-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.feature-title {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.feature-desc {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: #a4b7b8;
+  margin: 0;
+  line-height: 1.4;
+}
+
+@media (max-width: 1024px) {
+  .sdk-section-wrapper {
+    padding: 5rem 0;
+  }
+  .sdk-container {
+    padding: 0 1.5rem;
+  }
+  .sdk-grid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+}
+
+

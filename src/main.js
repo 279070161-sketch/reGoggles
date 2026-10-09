@@ -270,6 +270,13 @@ document.addEventListener('DOMContentLoaded', () => {
     videoVis.addEventListener('pause', updateHotspotsVisibility);
   }
 
+  // Initialize 1.5x speed for all expansion videos
+  expansionVideos.forEach((video) => {
+    video.playbackRate = 1.5;
+    video.addEventListener('play', () => { video.playbackRate = 1.5; });
+    video.addEventListener('playing', () => { video.playbackRate = 1.5; });
+  });
+
   if (expansionItems.length) {
     expansionItems.forEach((item) => {
       item.addEventListener('click', () => {
@@ -279,7 +286,7 @@ document.addEventListener('DOMContentLoaded', () => {
         expansionItems.forEach((el) => el.classList.remove('active'));
         item.classList.add('active');
 
-        // 2. Switch right video display (plays once & freezes on last frame)
+        // 2. Switch right video display (plays once & freezes on last frame at 1.5x speed)
         const targetVideoId = item.dataset.target;
         const targetStatus = item.dataset.status;
 
@@ -288,6 +295,7 @@ document.addEventListener('DOMContentLoaded', () => {
             video.classList.add('active');
             try {
               video.currentTime = 0;
+              video.playbackRate = 1.5;
               const p = video.play();
               if (p && p.catch) p.catch(() => {});
             } catch (e) {}
