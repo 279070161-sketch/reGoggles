@@ -227,6 +227,48 @@ document.addEventListener('DOMContentLoaded', () => {
   const expansionItems = document.querySelectorAll('.expansion-item');
   const expansionVideos = document.querySelectorAll('.expansion-video');
   const hudStatusText = document.getElementById('hud-status-text');
+  const hotspotGeneral = document.getElementById('hotspot-general');
+  const hotspotVision = document.getElementById('hotspot-vision');
+  const videoGen = document.getElementById('video-general');
+  const videoVis = document.getElementById('video-vision');
+
+  function updateHotspotsVisibility() {
+    // 02 General Expansion Port Hotspot
+    if (hotspotGeneral && videoGen) {
+      const item02 = document.querySelector('.expansion-item[data-target="video-general"]');
+      const isItem02Active = item02 && item02.classList.contains('active') && videoGen.classList.contains('active');
+      if (isItem02Active && (videoGen.ended || (videoGen.paused && videoGen.currentTime > 0))) {
+        hotspotGeneral.classList.add('active');
+      } else {
+        hotspotGeneral.classList.remove('active');
+      }
+    }
+
+    // 03 Vision Expansion Port Hotspot
+    if (hotspotVision && videoVis) {
+      const item03 = document.querySelector('.expansion-item[data-target="video-vision"]');
+      const isItem03Active = item03 && item03.classList.contains('active') && videoVis.classList.contains('active');
+      if (isItem03Active && (videoVis.ended || (videoVis.paused && videoVis.currentTime > 0))) {
+        hotspotVision.classList.add('active');
+      } else {
+        hotspotVision.classList.remove('active');
+      }
+    }
+  }
+
+  if (videoGen) {
+    videoGen.addEventListener('ended', updateHotspotsVisibility);
+    videoGen.addEventListener('play', updateHotspotsVisibility);
+    videoGen.addEventListener('playing', updateHotspotsVisibility);
+    videoGen.addEventListener('pause', updateHotspotsVisibility);
+  }
+
+  if (videoVis) {
+    videoVis.addEventListener('ended', updateHotspotsVisibility);
+    videoVis.addEventListener('play', updateHotspotsVisibility);
+    videoVis.addEventListener('playing', updateHotspotsVisibility);
+    videoVis.addEventListener('pause', updateHotspotsVisibility);
+  }
 
   if (expansionItems.length) {
     expansionItems.forEach((item) => {
@@ -237,7 +279,7 @@ document.addEventListener('DOMContentLoaded', () => {
         expansionItems.forEach((el) => el.classList.remove('active'));
         item.classList.add('active');
 
-        // 2. Switch right video display
+        // 2. Switch right video display (plays once & freezes on last frame)
         const targetVideoId = item.dataset.target;
         const targetStatus = item.dataset.status;
 
@@ -246,14 +288,18 @@ document.addEventListener('DOMContentLoaded', () => {
             video.classList.add('active');
             try {
               video.currentTime = 0;
-              video.play().catch(() => {});
+              const p = video.play();
+              if (p && p.catch) p.catch(() => {});
             } catch (e) {}
           } else {
             video.classList.remove('active');
           }
         });
 
-        // 3. Update HUD overlay status badge
+        // 3. Immediately evaluate hotspots visibility (hides while playing)
+        updateHotspotsVisibility();
+
+        // 4. Update HUD overlay status badge
         if (hudStatusText && targetStatus) {
           hudStatusText.textContent = targetStatus;
         }
