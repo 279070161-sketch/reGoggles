@@ -114,25 +114,193 @@ body {
   font-size: 0.85rem;
   font-weight: 500;
   cursor: pointer;
-  transition: border-color var(--transition-fast);
+  transition: all var(--transition-fast);
+  position: relative;
+  z-index: 110;
 }
 
-.menu-btn:hover {
-  border-color: #ffffff;
+.menu-btn:hover,
+.menu-btn.active {
+  border-color: var(--accent-lime);
+  color: var(--accent-lime);
+  background: rgba(198, 229, 61, 0.08);
 }
 
 .burger-icon {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  justify-content: center;
+  gap: 3.5px;
   width: 16px;
+  height: 14px;
+  position: relative;
 }
 
 .burger-icon span {
   display: block;
   width: 100%;
   height: 1.5px;
-  background-color: #ffffff;
+  background-color: currentColor;
+  transition: transform 0.25s ease, opacity 0.2s ease;
+  transform-origin: center;
+}
+
+.menu-btn.active .burger-icon span:nth-child(1) {
+  transform: translateY(5px) rotate(45deg);
+}
+
+.menu-btn.active .burger-icon span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.menu-btn.active .burger-icon span:nth-child(3) {
+  transform: translateY(-5px) rotate(-45deg);
+}
+
+/* Navigation Dropdown Menu Panel */
+.nav-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 3rem;
+  width: 480px;
+  max-width: calc(100vw - 3rem);
+  background: rgba(18, 33, 35, 0.94);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(198, 229, 61, 0.25);
+  border-radius: 20px;
+  padding: 1.5rem;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.65), 0 0 30px rgba(198, 229, 61, 0.12);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-12px) scale(0.98);
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+              transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+              visibility 0.3s ease;
+  pointer-events: none;
+  z-index: 105;
+}
+
+.nav-dropdown-menu.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.nav-dropdown-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.nav-menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.nav-menu-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.nav-menu-hint {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--accent-lime);
+  background: rgba(198, 229, 61, 0.12);
+  padding: 0.2rem 0.6rem;
+  border-radius: 100px;
+  border: 1px solid rgba(198, 229, 61, 0.3);
+}
+
+.nav-links-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.nav-link-item {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 1rem 1.2rem;
+  border-radius: 12px;
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-link-item:hover,
+.nav-link-item.active {
+  background: rgba(198, 229, 61, 0.12);
+  border-color: rgba(198, 229, 61, 0.4);
+  transform: translateX(4px);
+}
+
+.nav-link-num {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--accent-lime);
+  opacity: 0.7;
+}
+
+.nav-link-item:hover .nav-link-num,
+.nav-link-item.active .nav-link-num {
+  opacity: 1;
+}
+
+.nav-link-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  flex: 1;
+}
+
+.nav-link-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #ffffff;
+  transition: color 0.2s ease;
+}
+
+.nav-link-item:hover .nav-link-title,
+.nav-link-item.active .nav-link-title {
+  color: var(--accent-lime);
+}
+
+.nav-link-sub {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  line-height: 1.3;
+}
+
+.nav-link-arrow {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.nav-link-item:hover .nav-link-arrow,
+.nav-link-item.active .nav-link-arrow {
+  background: var(--accent-lime);
+  color: var(--accent-pill-text);
+  transform: translateX(2px);
 }
 
 .contact-btn {

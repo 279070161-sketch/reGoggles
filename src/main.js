@@ -60,6 +60,70 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // ==========================================================================
+  // Header Navigation Menu Toggle & Smooth Anchor Scroll Logic
+  // ==========================================================================
+  const headerMenuBtn = document.getElementById('header-menu-btn');
+  const navDropdownMenu = document.getElementById('nav-dropdown-menu');
+  const navLinkItems = document.querySelectorAll('.nav-link-item');
+
+  function toggleNavMenu(forceState) {
+    if (!headerMenuBtn || !navDropdownMenu) return;
+    const isExpanded = typeof forceState === 'boolean' 
+      ? forceState 
+      : !navDropdownMenu.classList.contains('active');
+
+    headerMenuBtn.classList.toggle('active', isExpanded);
+    headerMenuBtn.setAttribute('aria-expanded', isExpanded ? 'true' : 'false');
+    navDropdownMenu.classList.toggle('active', isExpanded);
+  }
+
+  if (headerMenuBtn) {
+    headerMenuBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleNavMenu();
+    });
+  }
+
+  // Smooth scroll and close menu on clicking any navigation link
+  navLinkItems.forEach((link) => {
+    link.addEventListener('click', (e) => {
+      const targetHash = link.getAttribute('href');
+      if (targetHash && targetHash.startsWith('#')) {
+        e.preventDefault();
+        const targetElement = document.querySelector(targetHash);
+        
+        toggleNavMenu(false);
+
+        if (targetElement) {
+          const headerHeight = document.querySelector('.main-header')?.offsetHeight || 80;
+          const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - (targetHash === '#hero' ? headerHeight : 0);
+
+          window.scrollTo({
+            top: Math.max(0, targetPosition),
+            behavior: 'smooth'
+          });
+        }
+      }
+    });
+  });
+
+  // Close navigation menu when clicking outside
+  document.addEventListener('click', (e) => {
+    if (navDropdownMenu && navDropdownMenu.classList.contains('active')) {
+      if (!navDropdownMenu.contains(e.target) && !headerMenuBtn.contains(e.target)) {
+        toggleNavMenu(false);
+      }
+    }
+  });
+
+  // Close navigation menu on ESC key press
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && navDropdownMenu && navDropdownMenu.classList.contains('active')) {
+      toggleNavMenu(false);
+    }
+  });
+
   // VoltPile 100% 梯形 3D 百叶窗吸顶滚动复刻
   const communityWrapper = document.getElementById('community-builders');
   const slatBlades = document.querySelectorAll('.slat-blade');
