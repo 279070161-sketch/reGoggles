@@ -102,6 +102,11 @@ body {
   gap: 0.9rem;
 }
 
+.menu-btn-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
 .menu-btn {
   display: inline-flex;
   align-items: center;
@@ -158,11 +163,11 @@ body {
   transform: translateY(-5px) rotate(-45deg);
 }
 
-/* Navigation Dropdown Menu Panel (Clean Minimalist Title List) */
+/* Navigation Dropdown Menu Panel (Clean Minimalist Title List - Directly under Menu button) */
 .nav-dropdown-menu {
   position: absolute;
-  top: calc(100% + 10px);
-  right: 3rem;
+  top: calc(100% + 12px);
+  left: 0;
   width: 250px;
   max-width: calc(100vw - 3rem);
   background: rgba(18, 33, 35, 0.96);

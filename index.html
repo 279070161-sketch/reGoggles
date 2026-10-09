@@ -23,14 +23,27 @@
         </a>
 
         <div class="header-nav-buttons">
-          <button class="menu-btn" id="header-menu-btn" aria-expanded="false" aria-controls="nav-dropdown-menu">
-            <span class="menu-text">Menu</span>
-            <div class="burger-icon">
-              <span></span>
-              <span></span>
-              <span></span>
-            </div>
-          </button>
+          <div class="menu-btn-wrapper">
+            <button class="menu-btn" id="header-menu-btn" aria-expanded="false" aria-controls="nav-dropdown-menu">
+              <span class="menu-text">Menu</span>
+              <div class="burger-icon">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </button>
+
+            <!-- Quick Section Anchor Navigation Menu (Anchored directly under Menu button) -->
+            <nav class="nav-dropdown-menu" id="nav-dropdown-menu" aria-label="Main Navigation">
+              <ul class="nav-links-list">
+                <li><a href="#hero" class="nav-link-item">Overview</a></li>
+                <li><a href="#community-builders" class="nav-link-item">Community Builders</a></li>
+                <li><a href="#evolving" class="nav-link-item">reGoggles Is Evolving</a></li>
+                <li><a href="#sensing-system" class="nav-link-item">Sensing System</a></li>
+              </ul>
+            </nav>
+          </div>
+
           <a href="#community-builders" class="contact-btn">
             <span class="contact-text">Contact</span>
             <div class="arrow-circle">
@@ -41,16 +54,6 @@
           </a>
         </div>
       </div>
-
-      <!-- Quick Section Anchor Navigation Menu (Clean Title List) -->
-      <nav class="nav-dropdown-menu" id="nav-dropdown-menu" aria-label="Main Navigation">
-        <ul class="nav-links-list">
-          <li><a href="#hero" class="nav-link-item">Overview</a></li>
-          <li><a href="#community-builders" class="nav-link-item">Community Builders</a></li>
-          <li><a href="#evolving" class="nav-link-item">reGoggles Is Evolving</a></li>
-          <li><a href="#sensing-system" class="nav-link-item">Sensing System</a></li>
-        </ul>
-      </nav>
     </header>
 
     <!-- Main Hero Banner Section -->
