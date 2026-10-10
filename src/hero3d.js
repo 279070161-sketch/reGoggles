@@ -11,12 +11,12 @@ export function initHero3D() {
     existingImg.style.display = 'none';
   }
 
-  // Create canvas element for Three.js
+  // Canvas sizing and constraints
   const canvas = document.createElement('canvas');
   canvas.id = 'hero-3d-canvas';
   canvas.style.width = '100%';
   canvas.style.height = '100%';
-  canvas.style.maxHeight = ' clamp(550px, 78vh, 880px)';
+  canvas.style.maxHeight = 'clamp(650px, 85vh, 980px)';
   canvas.style.display = 'block';
   canvas.style.outline = 'none';
   canvas.style.cursor = 'grab';
@@ -87,9 +87,9 @@ export function initHero3D() {
 
       rawModel.position.sub(center);
 
-      // Scale model to comfortably fill viewport
+      // Scale model to comfortably fill viewport (Enlarged scale from 460 to 580)
       const maxDim = Math.max(size.x, size.y, size.z);
-      baseScale = 460 / maxDim;
+      baseScale = 580 / maxDim;
       rawModel.scale.setScalar(baseScale);
 
       // Enhance material properties for realistic metallic and frosted rendering
@@ -115,10 +115,10 @@ export function initHero3D() {
     }
   );
 
-  // Reference Image Anchor Pose: 1.1右侧仰视视角
-  let currentBaseX = -0.35; // Low-angle pitch up view
-  let currentBaseY = 0.70;  // Yaw front lens towards front-left
-  let currentBaseZ = -0.20; // Roll slant for 3/4 perspective view
+  // Base Anchor Pose set by user: X=-1.91, Y=0.02, Z=-0.47
+  let currentBaseX = -1.91;
+  let currentBaseY = 0.02;
+  let currentBaseZ = -0.47;
 
   // Mouse interaction state variables (relative offset delta)
   let mouseX = 0;
@@ -165,25 +165,25 @@ export function initHero3D() {
       <div>
         <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
           <span>X 轴 俯仰 (Pitch):</span>
-          <strong id="val-rot-x" style="color: #c6e53d; font-family: monospace;">-0.35</strong>
+          <strong id="val-rot-x" style="color: #c6e53d; font-family: monospace;">-1.91</strong>
         </div>
-        <input type="range" id="slider-rot-x" min="-3.14" max="3.14" step="0.01" value="-0.35" style="width: 100%; accent-color: #c6e53d; cursor: pointer;">
+        <input type="range" id="slider-rot-x" min="-3.14" max="3.14" step="0.01" value="-1.91" style="width: 100%; accent-color: #c6e53d; cursor: pointer;">
       </div>
 
       <div>
         <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
           <span>Y 轴 偏航 (Yaw):</span>
-          <strong id="val-rot-y" style="color: #c6e53d; font-family: monospace;">0.70</strong>
+          <strong id="val-rot-y" style="color: #c6e53d; font-family: monospace;">0.02</strong>
         </div>
-        <input type="range" id="slider-rot-y" min="-3.14" max="3.14" step="0.01" value="0.70" style="width: 100%; accent-color: #c6e53d; cursor: pointer;">
+        <input type="range" id="slider-rot-y" min="-3.14" max="3.14" step="0.01" value="0.02" style="width: 100%; accent-color: #c6e53d; cursor: pointer;">
       </div>
 
       <div>
         <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
           <span>Z 轴 翻滚 (Roll):</span>
-          <strong id="val-rot-z" style="color: #c6e53d; font-family: monospace;">-0.20</strong>
+          <strong id="val-rot-z" style="color: #c6e53d; font-family: monospace;">-0.47</strong>
         </div>
-        <input type="range" id="slider-rot-z" min="-3.14" max="3.14" step="0.01" value="-0.20" style="width: 100%; accent-color: #c6e53d; cursor: pointer;">
+        <input type="range" id="slider-rot-z" min="-3.14" max="3.14" step="0.01" value="-0.47" style="width: 100%; accent-color: #c6e53d; cursor: pointer;">
       </div>
 
       <button id="btn-copy-angles" style="

@@ -354,14 +354,14 @@ body {
   text-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
-/* Product Stage (Enlarged Size + Default Continuous Levitation Float) */
+/* Product Stage (Enlarged Size + Top Layer Floating Render) */
 .product-stage-container {
   position: absolute;
   inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 5;
+  z-index: 15;
   pointer-events: none;
 }
 
