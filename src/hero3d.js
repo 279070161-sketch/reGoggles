@@ -92,13 +92,47 @@ export function initHero3D() {
       baseScale = 580 / maxDim;
       rawModel.scale.setScalar(baseScale);
 
-      // Enhance material properties for realistic metallic and frosted rendering
+      // Enhance material properties: Apply metallic for body frame, glass transparency for lenses
       rawModel.traverse((child) => {
-        if (child.isMesh) {
+        if (child.isMesh && child.material) {
           child.material.side = THREE.DoubleSide;
-          if (child.material.metalness !== undefined) {
-            child.material.metalness = 0.75;
-            child.material.roughness = 0.25;
+
+          const meshName = (child.name || '').toLowerCase();
+          const matName = (child.material.name || '').toLowerCase();
+
+          // Check if mesh or material represents the front protective lens / visor shield / transparent element
+          const isLens = meshName.includes('lens') || 
+                         meshName.includes('visor') || 
+                         meshName.includes('glass') || 
+                         meshName.includes('trans') || 
+                         meshName.includes('shield') || 
+                         meshName.includes('cover') || 
+                         meshName.includes('window') || 
+                         matName.includes('lens') || 
+                         matName.includes('visor') || 
+                         matName.includes('glass') || 
+                         matName.includes('trans') || 
+                         matName.includes('shield') || 
+                         matName.includes('cover') || 
+                         child.material.transparent === true ||
+                         (child.material.opacity !== undefined && child.material.opacity < 0.98);
+
+          if (isLens) {
+            // Realistic crystal-clear transparent glass / acrylic visor rendering
+            child.material.transparent = true;
+            child.material.opacity = 0.28;       // Clear 72% transparent glass
+            child.material.roughness = 0.05;     // Ultra-smooth glass reflection
+            child.material.metalness = 0.02;     // Non-metallic glass
+            child.material.depthWrite = false;   // Prevent z-buffer sorting artifacts for glass
+            if (child.material.color) {
+              child.material.color.setHex(0xd0e8ff); // Subtle crystalline light blue tint
+            }
+          } else {
+            // Metallic industrial body frame
+            if (child.material.metalness !== undefined) {
+              child.material.metalness = 0.70;
+              child.material.roughness = 0.28;
+            }
           }
         }
       });

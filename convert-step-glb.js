@@ -18,14 +18,14 @@ async function convertToGLB() {
 
   console.log(`Parsed ${result.meshes.length} sub-meshes from STEP file.`);
 
-  // Aesthetic color palette matching industrial AI glasses (titanium grey, matte black, lime accent, glass teal)
+  // Aesthetic color palette matching industrial AI glasses (titanium grey, matte black, lime accent, glass transparent)
   const palette = [
-    [0.11, 0.17, 0.18], // Dark titanium
-    [0.18, 0.24, 0.26], // Matte slate grey
-    [0.78, 0.90, 0.24], // Lime accent
-    [0.45, 0.53, 0.54], // Brushed metallic
-    [0.24, 0.31, 0.32], // Anodized frame
-    [0.07, 0.11, 0.12]  // Core black housing
+    { color: [0.11, 0.17, 0.18], metallic: 0.75, roughness: 0.25, opacity: 1.0, transparent: false }, // 0: Dark titanium
+    { color: [0.18, 0.24, 0.26], metallic: 0.75, roughness: 0.25, opacity: 1.0, transparent: false }, // 1: Matte slate grey
+    { color: [0.78, 0.90, 0.24], metallic: 0.50, roughness: 0.35, opacity: 1.0, transparent: false }, // 2: Lime accent
+    { color: [0.82, 0.92, 1.00], metallic: 0.05, roughness: 0.05, opacity: 0.25, transparent: true },  // 3: GLASS LENS (Transparent)
+    { color: [0.24, 0.31, 0.32], metallic: 0.75, roughness: 0.25, opacity: 1.0, transparent: false }, // 4: Anodized frame
+    { color: [0.07, 0.11, 0.12], metallic: 0.80, roughness: 0.20, opacity: 1.0, transparent: false }  // 5: Core black housing
   ];
 
   const bufferChunks = [];
@@ -38,15 +38,23 @@ async function convertToGLB() {
   const materials = [];
 
   // Create palette materials
-  palette.forEach((color, idx) => {
-    materials.push({
-      name: `material_${idx}`,
-      pbrMetallicRoughness: {
-        baseColorFactor: [color[0], color[1], color[2], 1.0],
-        metallicFactor: 0.75,
-        roughnessFactor: 0.25
-      }
-    });
+  palette.forEach((mat, idx) => {
+    const pbr = {
+      baseColorFactor: [mat.color[0], mat.color[1], mat.color[2], mat.opacity],
+      metallicFactor: mat.metallic,
+      roughnessFactor: mat.roughness
+    };
+
+    const matObj = {
+      name: mat.transparent ? `glass_lens_material` : `material_${idx}`,
+      pbrMetallicRoughness: pbr
+    };
+
+    if (mat.transparent) {
+      matObj.alphaMode = "BLEND";
+    }
+
+    materials.push(matObj);
   });
 
   result.meshes.forEach((meshData, idx) => {
@@ -141,7 +149,13 @@ async function convertToGLB() {
       });
     }
 
-    const matIdx = idx % materials.length;
+    const dx = maxPos[0] - minPos[0];
+    const dy = maxPos[1] - minPos[1];
+    const dz = maxPos[2] - minPos[2];
+
+    // Detect front visor outer lens (dx > 140, dy > 35) or inner eye lenses (dx > 50, dy > 75)
+    const isLensMesh = (dx > 140 && dy > 35 && dz < 25) || (dx > 50 && dy > 75 && dz < 25);
+    const matIdx = isLensMesh ? 3 : (idx % materials.length === 3 ? 0 : idx % materials.length);
 
     const primitive = {
       attributes: attributes,
