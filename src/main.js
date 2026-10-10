@@ -1,8 +1,12 @@
 // ==========================================================================
-// reGoggles Banner - Flat Image & Interactive Section Logic
+// reGoggles Banner - 3D Interactive Model & Section Logic
 // ==========================================================================
+import { initHero3D } from './hero3d.js';
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Initialize Three.js interactive 3D hero model viewer
+  initHero3D();
+
   // Modal Elements
   const modalBackdrop = document.getElementById('action-modal');
   const modalCloseBtn = document.getElementById('modal-close-btn');
