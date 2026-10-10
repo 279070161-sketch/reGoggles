@@ -103,36 +103,34 @@ export function initHero3D() {
         }
       });
 
-      // Align CAD coordinate orientation matching reference image (3/4 isometric perspective: visor front-left, headband loop top-right)
-      rawModel.rotation.x = Math.PI * 0.38;
-      rawModel.rotation.y = -Math.PI * 0.25;
-      rawModel.rotation.z = -Math.PI * 0.15;
+      // Keep rawModel local rotation at 0, 0, 0
+      rawModel.rotation.set(0, 0, 0);
 
       modelGroup.add(rawModel);
       modelLoaded = true;
-
-      // Base target rotation centered around reference pose
-      targetRotationY = 0;
-      targetRotationX = 0;
     },
-    (progress) => {
-      // Loading progress if needed
-    },
+    (progress) => {},
     (error) => {
       console.error('Error loading reGoggles 3D model:', error);
     }
   );
 
-  // Mouse interaction state variables
+  // Reference Image Anchor Pose: 1.1右侧仰视视角
+  // Outer front lens facing front-left & upwards to camera, headband arch top-right, battery module bottom-right
+  const BASE_ROTATION_X = -0.35; // Low-angle pitch up view
+  const BASE_ROTATION_Y = 0.70;  // Yaw front lens towards front-left
+  const BASE_ROTATION_Z = -0.20; // Roll slant for 3/4 perspective view
+
+  // Mouse interaction state variables (relative offset delta)
   let mouseX = 0;
   let mouseY = 0;
-  let targetRotationX = 0.12;
-  let targetRotationY = 0.35;
+  let targetDeltaY = 0;
+  let targetDeltaX = 0;
 
   let isDragging = false;
   let previousMousePosition = { x: 0, y: 0 };
 
-  // Mouse move handler - Glasses look in the direction of the mouse
+  // Mouse move handler - Subtle cursor tracking relative to anchor pose
   function onMouseMove(event) {
     const windowHalfX = window.innerWidth / 2;
     const windowHalfY = window.innerHeight / 2;
@@ -141,9 +139,9 @@ export function initHero3D() {
     mouseY = (event.clientY - windowHalfY) / windowHalfY;
 
     if (!isDragging) {
-      // Range: Yaw ±50deg (0.87 rad), Pitch ±30deg (0.52 rad)
-      targetRotationY = mouseX * 0.87;
-      targetRotationX = mouseY * 0.52;
+      // Relative mouse interaction range: Yaw ±12deg (0.21 rad), Pitch ±8deg (0.14 rad)
+      targetDeltaY = mouseX * 0.21;
+      targetDeltaX = mouseY * 0.14;
     }
   }
 
@@ -166,8 +164,8 @@ export function initHero3D() {
         y: e.clientY - previousMousePosition.y
       };
 
-      targetRotationY += deltaMove.x * 0.008;
-      targetRotationX += deltaMove.y * 0.008;
+      targetDeltaY += deltaMove.x * 0.008;
+      targetDeltaX += deltaMove.y * 0.008;
 
       previousMousePosition = { x: e.clientX, y: e.clientY };
     }
@@ -185,12 +183,12 @@ export function initHero3D() {
       mouseX = (touch.clientX - windowHalfX) / windowHalfX;
       mouseY = (touch.clientY - windowHalfY) / windowHalfY;
 
-      targetRotationY = mouseX * 0.85;
-      targetRotationX = mouseY * 0.5;
+      targetDeltaY = mouseX * 0.20;
+      targetDeltaX = mouseY * 0.12;
     }
   }, { passive: true });
 
-  // Smooth Render Loop (FPS-independent lerp + floating levitation)
+  // Smooth Render Loop (FPS-independent lerp + floating levitation around reference anchor pose)
   let clock = new THREE.Clock();
 
   function animate() {
@@ -199,13 +197,19 @@ export function initHero3D() {
     const elapsedTime = clock.getElapsedTime();
 
     if (modelLoaded) {
-      // Smooth interpolation towards mouse target rotation (spring dampening)
-      modelGroup.rotation.y += (targetRotationY - modelGroup.rotation.y) * 0.06;
-      modelGroup.rotation.x += (targetRotationX - modelGroup.rotation.x) * 0.06;
+      // Target rotation is BASE ANCHOR POSE + MOUSE RELATIVE DELTA
+      const targetY = BASE_ROTATION_Y + targetDeltaY;
+      const targetX = BASE_ROTATION_X + targetDeltaX;
+
+      // Smooth spring dampening towards target rotation
+      modelGroup.rotation.y += (targetY - modelGroup.rotation.y) * 0.06;
+      modelGroup.rotation.x += (targetX - modelGroup.rotation.x) * 0.06;
+
+      // Z roll includes base rotation + subtle floating oscillation
+      modelGroup.rotation.z = BASE_ROTATION_Z + Math.cos(elapsedTime * 1.2) * 0.015;
 
       // Continuous subtle mid-air levitation float effect
-      modelGroup.position.y = Math.sin(elapsedTime * 1.8) * 14;
-      modelGroup.rotation.z = Math.cos(elapsedTime * 1.2) * 0.02;
+      modelGroup.position.y = Math.sin(elapsedTime * 1.8) * 12;
     }
 
     renderer.render(scene, camera);
