@@ -2265,6 +2265,11 @@ body {
   flex: 1;
 }
 
+/* Equal height split for uniform 2x3 bento grids */
+.bento-col .ratio-equal {
+  flex: 1 !important;
+}
+
 /* Single-card column fallback */
 .bento-col .ratio-tall:only-child {
   flex: 1;
