@@ -93,47 +93,71 @@ export function initHero3D() {
       rawModel.scale.setScalar(baseScale);
 
       // Enhance material properties: Apply metallic for body frame, glass transparency for lenses
+      let meshIndex = 0;
       rawModel.traverse((child) => {
-        if (child.isMesh && child.material) {
-          child.material.side = THREE.DoubleSide;
+        if (child.isMesh && child.geometry) {
+          if (!child.geometry.boundingBox) {
+            child.geometry.computeBoundingBox();
+          }
+          const b = child.geometry.boundingBox;
+          const dx = Math.abs(b.max.x - b.min.x);
+          const dy = Math.abs(b.max.y - b.min.y);
+          const dz = Math.abs(b.max.z - b.min.z);
 
           const meshName = (child.name || '').toLowerCase();
-          const matName = (child.material.name || '').toLowerCase();
+          const matName = (child.material && child.material.name ? child.material.name : '').toLowerCase();
 
-          // Check if mesh or material represents the front protective lens / visor shield / transparent element
-          const isLens = meshName.includes('lens') || 
-                         meshName.includes('visor') || 
-                         meshName.includes('glass') || 
-                         meshName.includes('trans') || 
-                         meshName.includes('shield') || 
-                         meshName.includes('cover') || 
-                         meshName.includes('window') || 
-                         matName.includes('lens') || 
-                         matName.includes('visor') || 
-                         matName.includes('glass') || 
-                         matName.includes('trans') || 
-                         matName.includes('shield') || 
-                         matName.includes('cover') || 
-                         child.material.transparent === true ||
-                         (child.material.opacity !== undefined && child.material.opacity < 0.98);
+          // Check for front outer glass visor shield (Mesh #269 & #257: dx ~ 155, dy ~ 32-43)
+          const isOuterVisor = (dx > 140 && dy > 30 && dz < 20) || 
+                               matName.includes('glass_lens_material') ||
+                               meshName.includes('part_269') || 
+                               meshName.includes('part_257');
 
-          if (isLens) {
-            // Realistic crystal-clear transparent glass / acrylic visor rendering
-            child.material.transparent = true;
-            child.material.opacity = 0.28;       // Clear 72% transparent glass
-            child.material.roughness = 0.05;     // Ultra-smooth glass reflection
-            child.material.metalness = 0.02;     // Non-metallic glass
-            child.material.depthWrite = false;   // Prevent z-buffer sorting artifacts for glass
-            if (child.material.color) {
-              child.material.color.setHex(0xd0e8ff); // Subtle crystalline light blue tint
-            }
+          // Check for inner eye visor lenses & nose bridge plates (Mesh #271, #363, #270, #259)
+          const isInnerLens = (dx > 45 && dy > 70 && dz < 25) || 
+                              (dx > 10 && dy > 90 && dz < 25) ||
+                              meshName.includes('part_271') || 
+                              meshName.includes('part_363') || 
+                              meshName.includes('part_270') || 
+                              meshName.includes('part_259');
+
+          if (isOuterVisor) {
+            // Front outer protective lens shield: 85% transparent crystal clear glass
+            child.material = new THREE.MeshPhysicalMaterial({
+              color: 0xdbf0ff,
+              transparent: true,
+              opacity: 0.15,          // High transparency (85% clear)
+              roughness: 0.02,        // Crystal smooth reflection
+              metalness: 0.0,         // Non-metallic glass
+              transmission: 0.95,     // Light transmission
+              ior: 1.5,               // Glass index of refraction
+              reflectivity: 0.6,
+              side: THREE.DoubleSide,
+              depthWrite: false
+            });
+          } else if (isInnerLens) {
+            // Inner eye display lenses: Translucent smoked glass tint
+            child.material = new THREE.MeshPhysicalMaterial({
+              color: 0xa0c4e8,
+              transparent: true,
+              opacity: 0.22,          // Translucent inner glass
+              roughness: 0.05,
+              metalness: 0.0,
+              transmission: 0.88,
+              side: THREE.DoubleSide,
+              depthWrite: false
+            });
           } else {
             // Metallic industrial body frame
-            if (child.material.metalness !== undefined) {
-              child.material.metalness = 0.70;
-              child.material.roughness = 0.28;
+            if (child.material) {
+              child.material.side = THREE.DoubleSide;
+              if (child.material.metalness !== undefined) {
+                child.material.metalness = 0.70;
+                child.material.roughness = 0.28;
+              }
             }
           }
+          meshIndex++;
         }
       });
 
