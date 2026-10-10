@@ -2095,10 +2095,10 @@ body {
 .carousel-stage-container {
   position: relative;
   width: 100%;
-  padding: 1rem 0 3rem;
+  padding: 1rem 0 3.5rem;
   overflow: hidden;
   user-select: none;
-  min-height: 760px;
+  min-height: 920px;
 }
 
 /* Navigation Arrow Buttons */
@@ -2147,7 +2147,7 @@ body {
 .carousel-track {
   position: relative;
   width: 100%;
-  height: 720px;
+  height: 840px;
   margin: 0 auto;
 }
 
