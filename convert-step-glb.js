@@ -149,12 +149,8 @@ async function convertToGLB() {
       });
     }
 
-    const dx = maxPos[0] - minPos[0];
-    const dy = maxPos[1] - minPos[1];
-    const dz = maxPos[2] - minPos[2];
-
-    // Detect front visor outer lens (dx > 140, dy > 35) or inner eye lenses (dx > 50, dy > 75)
-    const isLensMesh = (dx > 140 && dy > 35 && dz < 25) || (dx > 50 && dy > 75 && dz < 25);
+    // ONLY sub-mesh #269 is the front visor protective lens shield
+    const isLensMesh = (idx === 269) || (meshData.name && meshData.name.includes('269'));
     const matIdx = isLensMesh ? 3 : (idx % materials.length === 3 ? 0 : idx % materials.length);
 
     const primitive = {
