@@ -2157,6 +2157,10 @@ body {
   top: 0;
   left: 50%;
   width: min(1080px, 85vw);
+  height: 780px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   background: transparent;
   border: none;
   border-radius: 0;
@@ -2179,9 +2183,10 @@ body {
 /* Slide Header Grid */
 .slide-header-grid {
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: 340px 1fr;
   gap: 3rem;
   align-items: center;
+  min-height: 96px;
   margin-bottom: 1.5rem;
   width: 100%;
 }
