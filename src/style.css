@@ -2095,9 +2095,10 @@ body {
 .carousel-stage-container {
   position: relative;
   width: 100%;
-  padding: 1rem 0 4rem;
+  padding: 1rem 0 3rem;
   overflow: hidden;
   user-select: none;
+  min-height: 760px;
 }
 
 /* Navigation Arrow Buttons */
@@ -2142,34 +2143,35 @@ body {
   transform: translateY(-50%) scale(0.96);
 }
 
-/* Sliding Track */
+/* Sliding Track Stage Container */
 .carousel-track {
-  display: flex;
-  gap: 2.5rem;
-  width: max-content;
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: transform;
+  position: relative;
+  width: 100%;
+  height: 720px;
+  margin: 0 auto;
 }
 
-/* Individual Slide Card (No Card Background Color) */
+/* Individual 3D Stage Slide Card */
 .theme-slide-card {
+  position: absolute;
+  top: 0;
+  left: 50%;
   width: min(1080px, 85vw);
-  flex-shrink: 0;
   background: transparent;
   border: none;
   border-radius: 0;
   padding: 0;
   box-shadow: none;
+  transform-origin: center center;
   transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease, filter 0.6s ease;
+  will-change: transform, opacity, filter;
   opacity: 0.25;
-  transform: scale(0.85);
   filter: blur(4px) brightness(0.4);
   pointer-events: none;
 }
 
 .theme-slide-card.active {
   opacity: 1;
-  transform: scale(1);
   filter: none;
   pointer-events: auto;
 }

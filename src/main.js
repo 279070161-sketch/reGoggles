@@ -316,12 +316,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ==========================================================================
-  // Section 9: Applications 3D Stage Carousel Logic
+  // Section 9: Applications 3D Infinite Circular Loop Carousel Logic
   // ==========================================================================
   const stageContainer = document.querySelector('.carousel-stage-container');
-  const stageTrack = document.getElementById('stage-carousel-track');
   const slideCards = document.querySelectorAll('.theme-slide-card');
-  const themeTabBtns = document.querySelectorAll('.theme-tab-btn');
   const indicatorDots = document.querySelectorAll('.indicator-dot');
   const arrowPrev = document.getElementById('stage-arrow-prev');
   const arrowNext = document.getElementById('stage-arrow-next');
@@ -329,39 +327,45 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentSlideIndex = 0;
   const totalSlides = slideCards.length;
 
-  function updateCarousel(index) {
-    if (!stageTrack || !slideCards.length || !stageContainer) return;
+  function update3DCarousel(activeIndex) {
+    if (!slideCards.length || !stageContainer) return;
 
-    currentSlideIndex = (index + totalSlides) % totalSlides;
+    currentSlideIndex = (activeIndex + totalSlides) % totalSlides;
 
-    // 1. Calculate translation to center the current active slide
-    const containerWidth = stageContainer.offsetWidth;
-    const activeSlide = slideCards[currentSlideIndex];
-    const slideWidth = activeSlide.offsetWidth;
-    const slideLeft = activeSlide.offsetLeft;
-
-    const translateX = (containerWidth / 2) - (slideLeft + slideWidth / 2);
-    stageTrack.style.transform = `translateX(${translateX}px)`;
-
-    // 2. Update active slide classes
     slideCards.forEach((card, idx) => {
-      if (idx === currentSlideIndex) {
+      // Calculate circular offset relative to activeIndex (for 3 slides: -1, 0, 1)
+      let diff = idx - currentSlideIndex;
+      if (diff === -2) diff = 1;
+      if (diff === 2) diff = -1;
+
+      if (diff === 0) {
+        // Active Center Slide
+        card.style.transform = 'translate(-50%, 0) scale(1)';
+        card.style.opacity = '1';
+        card.style.filter = 'none';
+        card.style.zIndex = '10';
+        card.style.pointerEvents = 'auto';
         card.classList.add('active');
-      } else {
+      } else if (diff === -1) {
+        // Left Preview Slide (Circular Wrapped)
+        card.style.transform = 'translate(calc(-50% - 100% - 2.5rem), 0) scale(0.85)';
+        card.style.opacity = '0.25';
+        card.style.filter = 'blur(4px) brightness(0.4)';
+        card.style.zIndex = '5';
+        card.style.pointerEvents = 'none';
+        card.classList.remove('active');
+      } else if (diff === 1) {
+        // Right Preview Slide (Circular Wrapped)
+        card.style.transform = 'translate(calc(-50% + 100% + 2.5rem), 0) scale(0.85)';
+        card.style.opacity = '0.25';
+        card.style.filter = 'blur(4px) brightness(0.4)';
+        card.style.zIndex = '5';
+        card.style.pointerEvents = 'none';
         card.classList.remove('active');
       }
     });
 
-    // 3. Update top theme tabs
-    themeTabBtns.forEach((btn, idx) => {
-      if (idx === currentSlideIndex) {
-        btn.classList.add('active');
-      } else {
-        btn.classList.remove('active');
-      }
-    });
-
-    // 4. Update bottom indicator dots
+    // Update bottom indicator dots
     indicatorDots.forEach((dot, idx) => {
       if (idx === currentSlideIndex) {
         dot.classList.add('active');
@@ -372,29 +376,25 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (slideCards.length) {
-    // Initial centering
-    setTimeout(() => updateCarousel(0), 50);
+    // Initial position
+    update3DCarousel(0);
 
-    // Prev / Next Arrows
+    // Prev / Next Arrows (Endless Infinite Circular Loop!)
     if (arrowPrev) {
-      arrowPrev.addEventListener('click', () => updateCarousel(currentSlideIndex - 1));
+      arrowPrev.addEventListener('click', () => update3DCarousel(currentSlideIndex - 1));
     }
     if (arrowNext) {
-      arrowNext.addEventListener('click', () => updateCarousel(currentSlideIndex + 1));
+      arrowNext.addEventListener('click', () => update3DCarousel(currentSlideIndex + 1));
     }
 
-    // Tabs navigation
-    themeTabBtns.forEach((btn, idx) => {
-      btn.addEventListener('click', () => updateCarousel(idx));
-    });
-
-    // Dot indicators
+    // Indicator Dots
     indicatorDots.forEach((dot, idx) => {
-      dot.addEventListener('click', () => updateCarousel(idx));
+      dot.addEventListener('click', () => update3DCarousel(idx));
     });
 
     // Handle window resize
-    window.addEventListener('resize', () => updateCarousel(currentSlideIndex));
+    window.addEventListener('resize', () => update3DCarousel(currentSlideIndex));
   }
 });
+
 
