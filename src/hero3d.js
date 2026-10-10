@@ -116,10 +116,9 @@ export function initHero3D() {
   );
 
   // Reference Image Anchor Pose: 1.1右侧仰视视角
-  // Outer front lens facing front-left & upwards to camera, headband arch top-right, battery module bottom-right
-  const BASE_ROTATION_X = -0.35; // Low-angle pitch up view
-  const BASE_ROTATION_Y = 0.70;  // Yaw front lens towards front-left
-  const BASE_ROTATION_Z = -0.20; // Roll slant for 3/4 perspective view
+  let currentBaseX = -0.35; // Low-angle pitch up view
+  let currentBaseY = 0.70;  // Yaw front lens towards front-left
+  let currentBaseZ = -0.20; // Roll slant for 3/4 perspective view
 
   // Mouse interaction state variables (relative offset delta)
   let mouseX = 0;
@@ -128,7 +127,136 @@ export function initHero3D() {
   let targetDeltaX = 0;
 
   let isDragging = false;
+  let isRightDragging = false;
   let previousMousePosition = { x: 0, y: 0 };
+
+  // Create UI Control & Real-time Readout Panel
+  const panel = document.createElement('div');
+  panel.id = 'hero-3d-debug-panel';
+  panel.style.cssText = `
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    z-index: 100;
+    background: rgba(12, 16, 20, 0.88);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(198, 229, 61, 0.35);
+    border-radius: 12px;
+    padding: 16px 18px;
+    color: #e2e8f0;
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-size: 13px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    width: 280px;
+    user-select: none;
+  `;
+
+  panel.innerHTML = `
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px;">
+      <span style="font-weight: 700; color: #c6e53d; display: flex; align-items: center; gap: 6px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+        3D 角度实时调试板
+      </span>
+      <span style="font-size: 10px; opacity: 0.6; background: rgba(198,229,61,0.15); color: #c6e53d; padding: 2px 6px; border-radius: 4px;">按住拖拽眼镜</span>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+      <div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+          <span>X 轴 俯仰 (Pitch):</span>
+          <strong id="val-rot-x" style="color: #c6e53d; font-family: monospace;">-0.35</strong>
+        </div>
+        <input type="range" id="slider-rot-x" min="-3.14" max="3.14" step="0.01" value="-0.35" style="width: 100%; accent-color: #c6e53d; cursor: pointer;">
+      </div>
+
+      <div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+          <span>Y 轴 偏航 (Yaw):</span>
+          <strong id="val-rot-y" style="color: #c6e53d; font-family: monospace;">0.70</strong>
+        </div>
+        <input type="range" id="slider-rot-y" min="-3.14" max="3.14" step="0.01" value="0.70" style="width: 100%; accent-color: #c6e53d; cursor: pointer;">
+      </div>
+
+      <div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+          <span>Z 轴 翻滚 (Roll):</span>
+          <strong id="val-rot-z" style="color: #c6e53d; font-family: monospace;">-0.20</strong>
+        </div>
+        <input type="range" id="slider-rot-z" min="-3.14" max="3.14" step="0.01" value="-0.20" style="width: 100%; accent-color: #c6e53d; cursor: pointer;">
+      </div>
+
+      <button id="btn-copy-angles" style="
+        margin-top: 6px;
+        background: #c6e53d;
+        color: #0b0f12;
+        border: none;
+        border-radius: 6px;
+        padding: 8px 12px;
+        font-weight: 700;
+        font-size: 12px;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+      ">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+        复制当前角度数值
+      </button>
+    </div>
+  `;
+
+  container.style.position = 'relative';
+  container.appendChild(panel);
+
+  const sliderX = panel.querySelector('#slider-rot-x');
+  const sliderY = panel.querySelector('#slider-rot-y');
+  const sliderZ = panel.querySelector('#slider-rot-z');
+  const valX = panel.querySelector('#val-rot-x');
+  const valY = panel.querySelector('#val-rot-y');
+  const valZ = panel.querySelector('#val-rot-z');
+  const btnCopy = panel.querySelector('#btn-copy-angles');
+
+  function updatePanelUI() {
+    sliderX.value = currentBaseX.toFixed(2);
+    sliderY.value = currentBaseY.toFixed(2);
+    sliderZ.value = currentBaseZ.toFixed(2);
+
+    valX.textContent = currentBaseX.toFixed(2);
+    valY.textContent = currentBaseY.toFixed(2);
+    valZ.textContent = currentBaseZ.toFixed(2);
+  }
+
+  sliderX.addEventListener('input', (e) => {
+    currentBaseX = parseFloat(e.target.value);
+    valX.textContent = currentBaseX.toFixed(2);
+  });
+
+  sliderY.addEventListener('input', (e) => {
+    currentBaseY = parseFloat(e.target.value);
+    valY.textContent = currentBaseY.toFixed(2);
+  });
+
+  sliderZ.addEventListener('input', (e) => {
+    currentBaseZ = parseFloat(e.target.value);
+    valZ.textContent = currentBaseZ.toFixed(2);
+  });
+
+  btnCopy.addEventListener('click', () => {
+    const textToCopy = `BASE_ROTATION_X = ${currentBaseX.toFixed(2)};\nBASE_ROTATION_Y = ${currentBaseY.toFixed(2)};\nBASE_ROTATION_Z = ${currentBaseZ.toFixed(2)};`;
+    navigator.clipboard.writeText(textToCopy).then(() => {
+      btnCopy.style.background = '#22c55e';
+      btnCopy.style.color = '#ffffff';
+      btnCopy.innerHTML = '✓ 已复制数值!';
+      setTimeout(() => {
+        btnCopy.style.background = '#c6e53d';
+        btnCopy.style.color = '#0b0f12';
+        btnCopy.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg> 复制当前角度数值`;
+      }, 2000);
+    });
+  });
 
   // Mouse move handler - Subtle cursor tracking relative to anchor pose
   function onMouseMove(event) {
@@ -138,35 +266,48 @@ export function initHero3D() {
     mouseX = (event.clientX - windowHalfX) / windowHalfX;
     mouseY = (event.clientY - windowHalfY) / windowHalfY;
 
-    if (!isDragging) {
+    if (!isDragging && !isRightDragging) {
       // Relative mouse interaction range: Yaw ±12deg (0.21 rad), Pitch ±8deg (0.14 rad)
-      targetDeltaY = mouseX * 0.21;
-      targetDeltaX = mouseY * 0.14;
+      targetDeltaY = mouseX * 0.15;
+      targetDeltaX = mouseY * 0.10;
     }
   }
 
-  // Drag orbit support
+  // Prevent context menu on right drag
+  canvas.addEventListener('contextmenu', (e) => e.preventDefault());
+
+  // Drag orbit support (Left-drag for Pitch/Yaw, Right-drag for Roll)
   canvas.addEventListener('mousedown', (e) => {
-    isDragging = true;
+    if (e.button === 0) {
+      isDragging = true;
+    } else if (e.button === 2) {
+      isRightDragging = true;
+    }
     canvas.style.cursor = 'grabbing';
     previousMousePosition = { x: e.clientX, y: e.clientY };
   });
 
   window.addEventListener('mouseup', () => {
     isDragging = false;
+    isRightDragging = false;
     canvas.style.cursor = 'grab';
   });
 
   canvas.addEventListener('mousemove', (e) => {
-    if (isDragging && modelLoaded) {
+    if ((isDragging || isRightDragging) && modelLoaded) {
       const deltaMove = {
         x: e.clientX - previousMousePosition.x,
         y: e.clientY - previousMousePosition.y
       };
 
-      targetDeltaY += deltaMove.x * 0.008;
-      targetDeltaX += deltaMove.y * 0.008;
+      if (isDragging) {
+        currentBaseY += deltaMove.x * 0.008;
+        currentBaseX += deltaMove.y * 0.008;
+      } else if (isRightDragging) {
+        currentBaseZ += deltaMove.x * 0.008;
+      }
 
+      updatePanelUI();
       previousMousePosition = { x: e.clientX, y: e.clientY };
     }
   });
@@ -183,8 +324,8 @@ export function initHero3D() {
       mouseX = (touch.clientX - windowHalfX) / windowHalfX;
       mouseY = (touch.clientY - windowHalfY) / windowHalfY;
 
-      targetDeltaY = mouseX * 0.20;
-      targetDeltaX = mouseY * 0.12;
+      targetDeltaY = mouseX * 0.15;
+      targetDeltaX = mouseY * 0.10;
     }
   }, { passive: true });
 
@@ -198,15 +339,15 @@ export function initHero3D() {
 
     if (modelLoaded) {
       // Target rotation is BASE ANCHOR POSE + MOUSE RELATIVE DELTA
-      const targetY = BASE_ROTATION_Y + targetDeltaY;
-      const targetX = BASE_ROTATION_X + targetDeltaX;
+      const targetY = currentBaseY + targetDeltaY;
+      const targetX = currentBaseX + targetDeltaX;
 
       // Smooth spring dampening towards target rotation
-      modelGroup.rotation.y += (targetY - modelGroup.rotation.y) * 0.06;
-      modelGroup.rotation.x += (targetX - modelGroup.rotation.x) * 0.06;
+      modelGroup.rotation.y += (targetY - modelGroup.rotation.y) * 0.08;
+      modelGroup.rotation.x += (targetX - modelGroup.rotation.x) * 0.08;
 
       // Z roll includes base rotation + subtle floating oscillation
-      modelGroup.rotation.z = BASE_ROTATION_Z + Math.cos(elapsedTime * 1.2) * 0.015;
+      modelGroup.rotation.z = currentBaseZ + Math.cos(elapsedTime * 1.2) * 0.015;
 
       // Continuous subtle mid-air levitation float effect
       modelGroup.position.y = Math.sin(elapsedTime * 1.8) * 12;
