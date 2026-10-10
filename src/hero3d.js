@@ -116,17 +116,22 @@ export function initHero3D() {
   );
 
   // Base Anchor Pose set by user: X=-1.91, Y=0.02, Z=-0.47
-  const BASE_ROTATION_X = -1.91;
-  const BASE_ROTATION_Y = 0.02;
-  const BASE_ROTATION_Z = -0.47;
+  let baseRotationX = -1.91;
+  let baseRotationY = 0.02;
+  let baseRotationZ = -0.47;
 
-  // Mouse interaction state variables (relative offset delta)
+  // Mouse interaction & drag orbit state
   let mouseX = 0;
   let mouseY = 0;
   let targetDeltaY = 0;
   let targetDeltaX = 0;
 
-  // Mouse move handler - Subtle cursor tracking relative to anchor pose
+  let isDragging = false;
+  let dragDeltaX = 0;
+  let dragDeltaY = 0;
+  let previousMousePosition = { x: 0, y: 0 };
+
+  // Mouse hover tracking
   function onMouseMove(event) {
     const windowHalfX = window.innerWidth / 2;
     const windowHalfY = window.innerHeight / 2;
@@ -134,29 +139,70 @@ export function initHero3D() {
     mouseX = (event.clientX - windowHalfX) / windowHalfX;
     mouseY = (event.clientY - windowHalfY) / windowHalfY;
 
-    // Relative mouse interaction range: Yaw ±12deg (0.21 rad), Pitch ±8deg (0.14 rad)
-    targetDeltaY = mouseX * 0.18;
-    targetDeltaX = mouseY * 0.12;
-  }
-
-  window.addEventListener('mousemove', onMouseMove, { passive: true });
-
-  // Touch support for mobile devices
-  window.addEventListener('touchmove', (e) => {
-    if (e.touches.length > 0) {
-      const touch = e.touches[0];
-      const windowHalfX = window.innerWidth / 2;
-      const windowHalfY = window.innerHeight / 2;
-
-      mouseX = (touch.clientX - windowHalfX) / windowHalfX;
-      mouseY = (touch.clientY - windowHalfY) / windowHalfY;
-
+    if (!isDragging) {
       targetDeltaY = mouseX * 0.18;
       targetDeltaX = mouseY * 0.12;
     }
+  }
+
+  // Mouse Drag Orbit Event Listeners
+  canvas.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    canvas.style.cursor = 'grabbing';
+    previousMousePosition = { x: e.clientX, y: e.clientY };
+  });
+
+  window.addEventListener('mouseup', () => {
+    if (isDragging) {
+      isDragging = false;
+      canvas.style.cursor = 'grab';
+    }
+  });
+
+  canvas.addEventListener('mousemove', (e) => {
+    if (isDragging && modelLoaded) {
+      const deltaMove = {
+        x: e.clientX - previousMousePosition.x,
+        y: e.clientY - previousMousePosition.y
+      };
+
+      dragDeltaY += deltaMove.x * 0.008;
+      dragDeltaX += deltaMove.y * 0.008;
+
+      previousMousePosition = { x: e.clientX, y: e.clientY };
+    }
+  });
+
+  window.addEventListener('mousemove', onMouseMove, { passive: true });
+
+  // Touch Drag Orbit for Mobile Devices
+  canvas.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) {
+      isDragging = true;
+      previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    }
   }, { passive: true });
 
-  // Smooth Render Loop (FPS-independent lerp + floating levitation around reference anchor pose)
+  window.addEventListener('touchend', () => {
+    isDragging = false;
+  });
+
+  canvas.addEventListener('touchmove', (e) => {
+    if (isDragging && e.touches.length === 1 && modelLoaded) {
+      const touch = e.touches[0];
+      const deltaMove = {
+        x: touch.clientX - previousMousePosition.x,
+        y: touch.clientY - previousMousePosition.y
+      };
+
+      dragDeltaY += deltaMove.x * 0.008;
+      dragDeltaX += deltaMove.y * 0.008;
+
+      previousMousePosition = { x: touch.clientX, y: touch.clientY };
+    }
+  }, { passive: true });
+
+  // Smooth Render Loop (FPS-independent lerp + floating levitation + drag rotation)
   let clock = new THREE.Clock();
 
   function animate() {
@@ -165,16 +211,16 @@ export function initHero3D() {
     const elapsedTime = clock.getElapsedTime();
 
     if (modelLoaded) {
-      // Target rotation is BASE ANCHOR POSE + MOUSE RELATIVE DELTA
-      const targetY = BASE_ROTATION_Y + targetDeltaY;
-      const targetX = BASE_ROTATION_X + targetDeltaX;
+      // Target rotation is BASE ANCHOR POSE + DRAG ROTATION + MOUSE RELATIVE DELTA
+      const targetY = baseRotationY + dragDeltaY + targetDeltaY;
+      const targetX = baseRotationX + dragDeltaX + targetDeltaX;
 
       // Smooth spring dampening towards target rotation
       modelGroup.rotation.y += (targetY - modelGroup.rotation.y) * 0.08;
       modelGroup.rotation.x += (targetX - modelGroup.rotation.x) * 0.08;
 
       // Z roll includes base rotation + subtle floating oscillation
-      modelGroup.rotation.z = BASE_ROTATION_Z + Math.cos(elapsedTime * 1.2) * 0.015;
+      modelGroup.rotation.z = baseRotationZ + Math.cos(elapsedTime * 1.2) * 0.015;
 
       // Continuous subtle mid-air levitation float effect
       modelGroup.position.y = Math.sin(elapsedTime * 1.8) * 12;
