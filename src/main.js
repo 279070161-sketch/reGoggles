@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const joinBtn = document.getElementById('join-community-btn');
   const subscribeBtn = document.getElementById('subscribe-btn');
   const contactBtn = document.getElementById('contact-us-btn');
+  const buildContactBtn = document.getElementById('build-contact-btn');
 
   function openModal(title, desc) {
     if (modalTitle) modalTitle.textContent = title;
@@ -41,13 +42,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  const handleContactClick = () => {
+    openModal(
+      'Contact reGoggles Team',
+      'Have technical inquiries, partnership proposals, or media questions? Leave your email and we will reach out.'
+    );
+  };
+
   if (contactBtn) {
-    contactBtn.addEventListener('click', () => {
-      openModal(
-        'Contact reGoggles Team',
-        'Have technical inquiries, partnership proposals, or media questions? Leave your email and we will reach out.'
-      );
-    });
+    contactBtn.addEventListener('click', handleContactClick);
+  }
+
+  if (buildContactBtn) {
+    buildContactBtn.addEventListener('click', handleContactClick);
   }
 
   if (modalCloseBtn) {
