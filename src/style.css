@@ -2081,15 +2081,6 @@ body {
   width: 100%;
 }
 
-.applications-header-grid {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 3rem;
-  align-items: flex-end;
-  margin-bottom: 2.5rem;
-  width: 100%;
-}
-
 .applications-main-title {
   font-family: 'JetBrains Mono', monospace !important;
   font-size: clamp(2.2rem, 3.8vw, 3.8rem);
@@ -2097,51 +2088,8 @@ body {
   color: #ffffff;
   letter-spacing: -0.03em;
   line-height: 1.15;
-}
-
-.theme-tabs-nav {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  padding: 0.4rem;
-  border-radius: 100px;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-}
-
-.theme-tab-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  padding: 0.65rem 1.4rem;
-  border-radius: 100px;
-  background: transparent;
-  border: none;
-  color: #a4b7b8;
-  font-family: 'JetBrains Mono', monospace !important;
-  font-size: 0.88rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.theme-tab-btn:hover {
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.theme-tab-btn.active {
-  background: var(--accent-lime);
-  color: var(--accent-pill-text);
-  font-weight: 700;
-  box-shadow: 0 6px 20px rgba(198, 229, 61, 0.25);
-}
-
-.tab-index {
-  font-size: 0.75rem;
-  opacity: 0.8;
+  text-align: center;
+  margin-bottom: 2rem;
 }
 
 .carousel-stage-container {
