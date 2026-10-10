@@ -2057,4 +2057,250 @@ body {
   }
 }
 
+/* ==========================================================================
+   Section 9: Applications (Bento Grid Carousel)
+   ========================================================================== */
+.applications-section-wrapper {
+  position: relative;
+  width: 100%;
+  background: radial-gradient(circle at 50% 20%, #15272a 0%, #091214 100%);
+  color: #ffffff;
+  padding: 8rem 0 9rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.applications-section {
+  width: 100%;
+}
+
+.applications-container {
+  max-width: 1700px;
+  margin: 0 auto;
+  padding: 0 3rem;
+  width: 100%;
+}
+
+.applications-header-grid {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 3rem;
+  align-items: flex-end;
+  margin-bottom: 3.5rem;
+  width: 100%;
+}
+
+.applications-main-title {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: clamp(2.2rem, 3.8vw, 3.8rem);
+  font-weight: 500;
+  color: #ffffff;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+
+.theme-tabs-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 0.4rem;
+  border-radius: 100px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.theme-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.65rem 1.4rem;
+  border-radius: 100px;
+  background: transparent;
+  border: none;
+  color: #a4b7b8;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 0.88rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.theme-tab-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.theme-tab-btn.active {
+  background: var(--accent-lime);
+  color: var(--accent-pill-text);
+  font-weight: 700;
+  box-shadow: 0 6px 20px rgba(198, 229, 61, 0.25);
+}
+
+.tab-index {
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+.applications-carousel-stage {
+  position: relative;
+  width: 100%;
+}
+
+.theme-slide {
+  display: none;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.theme-slide.active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.slide-header {
+  margin-bottom: 2.5rem;
+  max-width: 900px;
+}
+
+.theme-title {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 1.8rem;
+  font-weight: 500;
+  color: var(--accent-lime);
+  margin-bottom: 0.6rem;
+  letter-spacing: -0.02em;
+}
+
+.theme-subtitle {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 1rem;
+  font-weight: 400;
+  color: #a4b7b8;
+  line-height: 1.6;
+}
+
+/* 7-Card Bento Grid Layout */
+.bento-grid-stage {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.bento-card {
+  position: relative;
+  height: 280px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #0d191b;
+  border: none;
+  box-shadow: none;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bento-card.card-span-2 {
+  grid-column: span 2;
+}
+
+.bento-card.card-span-1 {
+  grid-column: span 1;
+}
+
+.bento-img-wrapper {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.bento-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.75);
+  transition: transform 0.4s ease, filter 0.4s ease;
+}
+
+.bento-card:hover .bento-img {
+  transform: scale(1.05);
+  filter: brightness(0.88);
+}
+
+.bento-overlay-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(10, 19, 21, 0.92) 0%, rgba(10, 19, 21, 0.25) 65%, transparent 100%);
+  pointer-events: none;
+}
+
+.bento-card-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 1.6rem;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.4rem;
+  pointer-events: none;
+}
+
+.bento-badge {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--accent-lime);
+  background: rgba(198, 229, 61, 0.15);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid rgba(198, 229, 61, 0.3);
+}
+
+.bento-card-title {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1.3;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+}
+
+@media (max-width: 1200px) {
+  .bento-grid-stage {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .bento-card.card-span-2 {
+    grid-column: span 2;
+  }
+  .applications-header-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 768px) {
+  .bento-grid-stage {
+    grid-template-columns: 1fr;
+  }
+  .bento-card.card-span-2,
+  .bento-card.card-span-1 {
+    grid-column: span 1;
+  }
+  .theme-tabs-nav {
+    flex-wrap: wrap;
+    border-radius: 12px;
+  }
+}
+
+
 

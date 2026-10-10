@@ -314,4 +314,31 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   }
+
+  // ==========================================================================
+  // Section 9: Applications Bento Grid Carousel Theme Switcher
+  // ==========================================================================
+  const themeTabBtns = document.querySelectorAll('.theme-tab-btn');
+  const themeSlides = document.querySelectorAll('.theme-slide');
+
+  if (themeTabBtns.length && themeSlides.length) {
+    themeTabBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const themeIndex = btn.dataset.theme;
+        
+        // Update active button
+        themeTabBtns.forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        // Update active slide
+        themeSlides.forEach((slide, idx) => {
+          if (idx.toString() === themeIndex) {
+            slide.classList.add('active');
+          } else {
+            slide.classList.remove('active');
+          }
+        });
+      });
+    });
+  }
 });
