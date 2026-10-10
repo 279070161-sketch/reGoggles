@@ -316,29 +316,85 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ==========================================================================
-  // Section 9: Applications Bento Grid Carousel Theme Switcher
+  // Section 9: Applications 3D Stage Carousel Logic
   // ==========================================================================
+  const stageContainer = document.querySelector('.carousel-stage-container');
+  const stageTrack = document.getElementById('stage-carousel-track');
+  const slideCards = document.querySelectorAll('.theme-slide-card');
   const themeTabBtns = document.querySelectorAll('.theme-tab-btn');
-  const themeSlides = document.querySelectorAll('.theme-slide');
+  const indicatorDots = document.querySelectorAll('.indicator-dot');
+  const arrowPrev = document.getElementById('stage-arrow-prev');
+  const arrowNext = document.getElementById('stage-arrow-next');
 
-  if (themeTabBtns.length && themeSlides.length) {
-    themeTabBtns.forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const themeIndex = btn.dataset.theme;
-        
-        // Update active button
-        themeTabBtns.forEach((b) => b.classList.remove('active'));
+  let currentSlideIndex = 0;
+  const totalSlides = slideCards.length;
+
+  function updateCarousel(index) {
+    if (!stageTrack || !slideCards.length || !stageContainer) return;
+
+    currentSlideIndex = (index + totalSlides) % totalSlides;
+
+    // 1. Calculate translation to center the current active slide
+    const containerWidth = stageContainer.offsetWidth;
+    const activeSlide = slideCards[currentSlideIndex];
+    const slideWidth = activeSlide.offsetWidth;
+    const slideLeft = activeSlide.offsetLeft;
+
+    const translateX = (containerWidth / 2) - (slideLeft + slideWidth / 2);
+    stageTrack.style.transform = `translateX(${translateX}px)`;
+
+    // 2. Update active slide classes
+    slideCards.forEach((card, idx) => {
+      if (idx === currentSlideIndex) {
+        card.classList.add('active');
+      } else {
+        card.classList.remove('active');
+      }
+    });
+
+    // 3. Update top theme tabs
+    themeTabBtns.forEach((btn, idx) => {
+      if (idx === currentSlideIndex) {
         btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
 
-        // Update active slide
-        themeSlides.forEach((slide, idx) => {
-          if (idx.toString() === themeIndex) {
-            slide.classList.add('active');
-          } else {
-            slide.classList.remove('active');
-          }
-        });
-      });
+    // 4. Update bottom indicator dots
+    indicatorDots.forEach((dot, idx) => {
+      if (idx === currentSlideIndex) {
+        dot.classList.add('active');
+      } else {
+        dot.classList.remove('active');
+      }
     });
   }
+
+  if (slideCards.length) {
+    // Initial centering
+    setTimeout(() => updateCarousel(0), 50);
+
+    // Prev / Next Arrows
+    if (arrowPrev) {
+      arrowPrev.addEventListener('click', () => updateCarousel(currentSlideIndex - 1));
+    }
+    if (arrowNext) {
+      arrowNext.addEventListener('click', () => updateCarousel(currentSlideIndex + 1));
+    }
+
+    // Tabs navigation
+    themeTabBtns.forEach((btn, idx) => {
+      btn.addEventListener('click', () => updateCarousel(idx));
+    });
+
+    // Dot indicators
+    indicatorDots.forEach((dot, idx) => {
+      dot.addEventListener('click', () => updateCarousel(idx));
+    });
+
+    // Handle window resize
+    window.addEventListener('resize', () => updateCarousel(currentSlideIndex));
+  }
 });
+
