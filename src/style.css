@@ -1731,10 +1731,10 @@ body {
 
 @keyframes callout-flow-right {
   from {
-    stroke-dashoffset: 0;
+    stroke-dashoffset: 24;
   }
   to {
-    stroke-dashoffset: 24;
+    stroke-dashoffset: 0;
   }
 }
 
