@@ -2147,7 +2147,7 @@ body {
 .carousel-stage-container {
   position: relative;
   width: 100%;
-  padding: 0.5rem 0 3rem;
+  padding: 1rem 0 5rem;
   overflow: hidden;
   user-select: none;
 }
@@ -2262,7 +2262,7 @@ body {
   grid-template-columns: repeat(3, 1fr);
   gap: 0.8rem;
   width: 100%;
-  height: 560px;
+  height: 500px;
 }
 
 .bento-col {
@@ -2296,11 +2296,11 @@ body {
 }
 
 .bento-col.col-1 .ratio-medium {
-  flex: 1.3;
+  flex: 1.35;
 }
 
 .bento-col.col-2 .ratio-tall {
-  flex: 1.35;
+  flex: 1.4;
 }
 
 .bento-col.col-2 .ratio-medium {
@@ -2354,7 +2354,7 @@ body {
 
 .card-title-bold {
   font-family: 'JetBrains Mono', monospace !important;
-  font-size: clamp(0.76rem, 0.9vw, 0.95rem);
+  font-size: clamp(0.74rem, 0.88vw, 0.94rem);
   font-weight: 800;
   color: #ffffff;
   margin: 0;
@@ -2369,7 +2369,7 @@ body {
   align-items: center;
   justify-content: center;
   gap: 0.6rem;
-  margin-top: 2rem;
+  margin-top: 2.5rem;
 }
 
 .indicator-dot {
