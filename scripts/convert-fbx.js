@@ -160,6 +160,28 @@ const groups = {
 let totalInputMeshes = 0;
 let totalInputVertices = 0;
 
+function getOutwardDirection(center) {
+  if (center.z < -200) {
+    return new THREE.Vector3(0, 0, -1);
+  } else if (center.z > -50) {
+    const d = new THREE.Vector3(center.x - 8.3, (center.y - 65) * 0.5, center.z - (-40));
+    if (d.lengthSq() > 0.0001) d.normalize(); else d.set(0, 0, 1);
+    return d;
+  } else if (center.x > 80) {
+    return new THREE.Vector3(1, 0, 0);
+  } else if (center.x < -75) {
+    return new THREE.Vector3(-1, 0, 0);
+  } else if (center.x > 50 && center.x < 80) {
+    return new THREE.Vector3(-1, 0, 0);
+  } else if (center.x < -50 && center.x > -75) {
+    return new THREE.Vector3(1, 0, 0);
+  } else {
+    const d = new THREE.Vector3(center.x, center.y - 70, center.z - (-100));
+    if (d.lengthSq() > 0.0001) d.normalize(); else d.set(0, 1, 0);
+    return d;
+  }
+}
+
 rawScene.traverse(child => {
   if (child.isMesh && child.geometry) {
     totalInputMeshes++;
@@ -173,7 +195,14 @@ rawScene.traverse(child => {
 
     // Exact categorization matching KeyShot industrial render
     let category = 'housing_grey';
-    if (meshName.includes('头顶绑带') || meshName.includes('绑带') || meshName.includes('strap')) {
+    // Only actual fabric strap ribbons: top overhead strap (#1935) and rear temple straps (#1911)
+    // The top middle component (#1974) is a smooth plastic clip/cradle, categorized under lime_accents
+    const isStrapPart = (
+      matName.includes('1935') || 
+      matName.includes('1911')
+    ) && !matName.includes('1974') && !meshName.includes('头顶绑带');
+
+    if (isStrapPart) {
       category = 'strap_lime';
     } else if (meshName.includes('丝印') || matName.includes('1906')) {
       if (colHex === 'cccccc' || matName.includes('1906')) {
@@ -213,22 +242,57 @@ rawScene.traverse(child => {
     const mergedGeom = BufferGeometryUtils.mergeVertices(child.geometry, 0.001);
     mergedGeom.applyMatrix4(child.matrixWorld);
 
-    // If silkscreen, offset along normal by 0.08mm to physically separate from coplanar body
+    // If silkscreen, ensure vertex winding/normals point outwards and physically offset by 0.12mm
     if (category.startsWith('silkscreen')) {
       mergedGeom.computeVertexNormals();
       const posAttr = mergedGeom.attributes.position;
       const normAttr = mergedGeom.attributes.normal;
-      if (posAttr && normAttr) {
-        for (let i = 0; i < posAttr.count; i++) {
-          posAttr.setXYZ(
-            i,
-            posAttr.getX(i) + normAttr.getX(i) * 0.08,
-            posAttr.getY(i) + normAttr.getY(i) * 0.08,
-            posAttr.getZ(i) + normAttr.getZ(i) * 0.08
-          );
-        }
-        posAttr.needsUpdate = true;
+
+      const box = new THREE.Box3().setFromBufferAttribute(posAttr);
+      const center = new THREE.Vector3();
+      box.getCenter(center);
+      const outDir = getOutwardDirection(center);
+
+      let avgN = new THREE.Vector3();
+      for (let i = 0; i < normAttr.count; i++) {
+        avgN.x += normAttr.getX(i);
+        avgN.y += normAttr.getY(i);
+        avgN.z += normAttr.getZ(i);
       }
+      avgN.divideScalar(normAttr.count);
+      const flip = avgN.dot(outDir) < 0;
+
+      if (flip) {
+        if (mergedGeom.index) {
+          const arr = mergedGeom.index.array;
+          for (let i = 0; i < arr.length; i += 3) {
+            const tmp = arr[i + 1];
+            arr[i + 1] = arr[i + 2];
+            arr[i + 2] = tmp;
+          }
+          mergedGeom.index.needsUpdate = true;
+        } else {
+          for (let i = 0; i < posAttr.count; i += 3) {
+            const x1 = posAttr.getX(i + 1), y1 = posAttr.getY(i + 1), z1 = posAttr.getZ(i + 1);
+            posAttr.setXYZ(i + 1, posAttr.getX(i + 2), posAttr.getY(i + 2), posAttr.getZ(i + 2));
+            posAttr.setXYZ(i + 2, x1, y1, z1);
+          }
+          posAttr.needsUpdate = true;
+        }
+        mergedGeom.computeVertexNormals();
+      }
+
+      const finalNorm = mergedGeom.attributes.normal;
+      const offsetDist = 0.12;
+      for (let i = 0; i < posAttr.count; i++) {
+        posAttr.setXYZ(
+          i,
+          posAttr.getX(i) + finalNorm.getX(i) * offsetDist,
+          posAttr.getY(i) + finalNorm.getY(i) * offsetDist,
+          posAttr.getZ(i) + finalNorm.getZ(i) * offsetDist
+        );
+      }
+      posAttr.needsUpdate = true;
     }
 
     groups[category].push(mergedGeom);

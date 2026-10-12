@@ -12,11 +12,11 @@ export function initHero3D() {
     existingImg.style.display = 'none';
   }
 
-  // Canvas sizing and constraints
+  // Canvas sizing and constraints (Full-bleed 100% viewport width & height)
   const canvas = document.createElement('canvas');
   canvas.id = 'hero-3d-canvas';
   canvas.style.width = '100%';
-  canvas.style.height = 'clamp(620px, 82vh, 950px)';
+  canvas.style.height = '100%';
   canvas.style.display = 'block';
   canvas.style.outline = 'none';
   canvas.style.cursor = 'grab';
@@ -26,10 +26,10 @@ export function initHero3D() {
   // Scene setup
   const scene = new THREE.Scene();
 
-  // Camera setup
+  // Camera setup - Full viewport aspect ratio prevents clipping at any angle
   const rect = container.getBoundingClientRect();
   const width = rect.width || window.innerWidth;
-  const height = canvas.clientHeight || rect.height || 650;
+  const height = rect.height || window.innerHeight;
 
   // near: 5, far: 5000 - Completely prevents clipping at any 360 degree rotation angle
   const camera = new THREE.PerspectiveCamera(35, width / height, 5, 5000);
@@ -82,6 +82,111 @@ export function initHero3D() {
   let modelLoaded = false;
   let baseScale = 1;
 
+  // Procedural woven nylon strap textures (interlaced ballistic nylon webbing)
+  let wovenTextures = null;
+  function getWovenStrapTextures() {
+    if (wovenTextures) return wovenTextures;
+
+    const size = 512;
+    const numCells = 16; // 16x16 dense weave pattern cells per unit tile for ultra-fine textile look
+
+    const colorCanvas = document.createElement('canvas');
+    colorCanvas.width = size;
+    colorCanvas.height = size;
+    const colorCtx = colorCanvas.getContext('2d');
+    const colorImg = colorCtx.createImageData(size, size);
+    const colorData = colorImg.data;
+
+    const normalCanvas = document.createElement('canvas');
+    normalCanvas.width = size;
+    normalCanvas.height = size;
+    const normalCtx = normalCanvas.getContext('2d');
+    const normalImg = normalCtx.createImageData(size, size);
+    const normalData = normalImg.data;
+
+    function getHeight(px, py) {
+      const u = (px / size) * numCells;
+      const v = (py / size) * numCells;
+      const cellX = Math.floor(u);
+      const cellY = Math.floor(v);
+      const fx = u - cellX;
+      const fy = v - cellY;
+
+      // Interlocked dense ballistic nylon webbing weave
+      const isWarp = (cellX + cellY) % 2 === 0;
+
+      let h = 0;
+      if (isWarp) {
+        const dome = Math.sin(fx * Math.PI);
+        const wave = Math.cos(fy * Math.PI) * 0.16;
+        const micro = Math.sin(fx * Math.PI * 4) * 0.04;
+        h = Math.pow(Math.max(0, dome), 0.72) * 0.88 + wave + micro;
+      } else {
+        const dome = Math.sin(fy * Math.PI);
+        const wave = -Math.cos(fx * Math.PI) * 0.16;
+        const micro = Math.sin(fy * Math.PI * 4) * 0.04;
+        h = Math.pow(Math.max(0, dome), 0.72) * 0.88 + wave + micro;
+      }
+      return Math.min(1, Math.max(0, h));
+    }
+
+    // Authentic woven lime green: #7ca818 -> R: 124, G: 168, B: 24
+    const baseR = 124, baseG = 168, baseB = 24;
+
+    for (let y = 0; y < size; y++) {
+      for (let x = 0; x < size; x++) {
+        const idx = (y * size + x) * 4;
+        const h = getHeight(x, y);
+
+        // Micro crevice shading: fine yarn grooves with subtle highlight on yarn crowns
+        const shade = 0.72 + h * 0.38;
+        colorData[idx] = Math.min(255, Math.round(baseR * shade));
+        colorData[idx + 1] = Math.min(255, Math.round(baseG * shade));
+        colorData[idx + 2] = Math.min(255, Math.round(baseB * shade));
+        colorData[idx + 3] = 255;
+
+        // Tangent-space Normal calculation
+        const x0 = (x - 1 + size) % size;
+        const x1 = (x + 1) % size;
+        const y0 = (y - 1 + size) % size;
+        const y1 = (y + 1) % size;
+
+        const dx = (getHeight(x1, y) - getHeight(x0, y)) * 3.5;
+        const dy = (getHeight(x, y1) - getHeight(x, y0)) * 3.5;
+        const dz = 1.0;
+
+        const invLen = 1.0 / Math.sqrt(dx * dx + dy * dy + dz * dz);
+        const nx = -dx * invLen;
+        const ny = -dy * invLen;
+        const nz = dz * invLen;
+
+        normalData[idx] = Math.round((nx * 0.5 + 0.5) * 255);
+        normalData[idx + 1] = Math.round((ny * 0.5 + 0.5) * 255);
+        normalData[idx + 2] = Math.round((nz * 0.5 + 0.5) * 255);
+        normalData[idx + 3] = 255;
+      }
+    }
+
+    colorCtx.putImageData(colorImg, 0, 0);
+    normalCtx.putImageData(normalImg, 0, 0);
+
+    const colorTexture = new THREE.CanvasTexture(colorCanvas);
+    colorTexture.wrapS = THREE.RepeatWrapping;
+    colorTexture.wrapT = THREE.RepeatWrapping;
+    colorTexture.repeat.set(80, 24);
+    colorTexture.colorSpace = THREE.SRGBColorSpace;
+    colorTexture.generateMipmaps = true;
+
+    const normalTexture = new THREE.CanvasTexture(normalCanvas);
+    normalTexture.wrapS = THREE.RepeatWrapping;
+    normalTexture.wrapT = THREE.RepeatWrapping;
+    normalTexture.repeat.set(80, 24);
+    normalTexture.generateMipmaps = true;
+
+    wovenTextures = { colorTexture, normalTexture };
+    return wovenTextures;
+  }
+
   // Load 3D GLB Model
   // Model setup handler
   const setupModel = (gltf) => {
@@ -129,6 +234,19 @@ export function initHero3D() {
             child.material.polygonOffsetFactor = -2;
             child.material.polygonOffsetUnits = -4;
             child.renderOrder = 2;
+          } else if (matName.includes('strap') || meshName.includes('strap')) {
+            // Authentic woven nylon webbing with tactile woven micro-relief
+            const { colorTexture, normalTexture } = getWovenStrapTextures();
+            child.material = new THREE.MeshStandardMaterial({
+              name: 'strap_lime_woven',
+              map: colorTexture,
+              normalMap: normalTexture,
+              normalScale: new THREE.Vector2(2.0, 2.0),
+              roughness: 0.84,
+              metalness: 0.02,
+              side: THREE.DoubleSide
+            });
+            child.renderOrder = 1;
           } else {
             child.material.transparent = false;
             child.material.depthWrite = true;
@@ -295,9 +413,9 @@ export function initHero3D() {
     }
   }, { passive: true });
 
-  // Base Anchor Translation to balance viewport (shifted further left and down per user request)
-  const baseAnchorX = -135;
-  const baseAnchorY = -82;
+  // Base Anchor Translation to balance viewport (shifted slightly right and down per user request)
+  const baseAnchorX = -105;
+  const baseAnchorY = -108;
 
   // Smooth Render Loop (FPS-independent lerp + floating levitation + drag rotation)
   let clock = new THREE.Clock();
@@ -333,7 +451,7 @@ export function initHero3D() {
   function onWindowResize() {
     const newRect = container.getBoundingClientRect();
     const newWidth = newRect.width || window.innerWidth;
-    const newHeight = canvas.clientHeight || newRect.height || 650;
+    const newHeight = newRect.height || window.innerHeight;
 
     camera.aspect = newWidth / newHeight;
     camera.near = 5;
