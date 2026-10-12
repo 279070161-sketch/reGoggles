@@ -37,37 +37,35 @@
       justify-content: center;
       opacity: 1;
       visibility: visible;
-      transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: all;
+      user-select: none;
     }
     #global-preloader.loaded {
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
     }
+    .preloader-counter {
+      font-family: 'JetBrains Mono', monospace !important;
+      font-size: 0.95rem;
+      font-weight: 400;
+      color: #97abac;
+      letter-spacing: 0.04em;
+      font-variant-numeric: tabular-nums;
+      opacity: 0.75;
+    }
+    .preloader-symbol {
+      font-size: 0.85rem;
+      opacity: 0.85;
+    }
   </style>
 </head>
 <body>
-  <!-- Full-Screen Cyber Digital Preloader -->
+  <!-- Minimal Full-Screen Digital Preloader -->
   <div id="global-preloader" class="global-preloader">
-    <div class="preloader-content">
-      <div class="preloader-header">
-        <span class="preloader-tag">reGoggles // INITIALIZING</span>
-        <span class="preloader-code">SYS.3D_ENGINE</span>
-      </div>
-      
-      <div class="preloader-counter-wrapper">
-        <span class="preloader-number" id="preloader-percent">0</span>
-        <span class="preloader-percent-symbol">%</span>
-      </div>
-
-      <div class="preloader-bar-track">
-        <div class="preloader-bar-fill" id="preloader-progress-bar"></div>
-      </div>
-
-      <div class="preloader-footer">
-        <span class="preloader-status" id="preloader-status-text">INITIALIZING CORE ASSETS...</span>
-        <span class="preloader-sys-info">60 FPS • PBR HQ</span>
-      </div>
+    <div class="preloader-counter">
+      <span class="preloader-number" id="preloader-percent">0</span><span class="preloader-symbol">%</span>
     </div>
   </div>
 

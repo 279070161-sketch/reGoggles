@@ -53,11 +53,11 @@ export function initHero3D() {
             preloaderEl.classList.add('loaded');
             setTimeout(() => {
               try { preloaderEl.remove(); } catch (e) {}
-            }, 850);
+            }, 550);
           }
-        }, 220);
+        }, 120);
       }
-    }, 25);
+    }, 20);
   }
 
   // Safety timer to prevent getting stuck if any asset fails
