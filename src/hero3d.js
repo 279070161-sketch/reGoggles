@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 
 export function initHero3D() {
   const container = document.getElementById('product-wrapper');
@@ -45,26 +46,32 @@ export function initHero3D() {
   renderer.setSize(width, height, false);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.35;
+  renderer.toneMappingExposure = 1.45;
 
-  // Lighting setup - Fine-tuned industrial hardware illumination
-  const ambientLight = new THREE.AmbientLight(0xffffff, 1.4);
+  // Setup High-End Studio HDRI Environment for realistic KeyShot reflections
+  const pmremGenerator = new THREE.PMREMGenerator(renderer);
+  pmremGenerator.compileEquirectangularShader();
+  const roomEnv = new RoomEnvironment();
+  scene.environment = pmremGenerator.fromScene(roomEnv, 0.04).texture;
+
+  // Lighting setup - Crisp industrial hardware studio illumination
+  const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
   scene.add(ambientLight);
 
-  const mainLight = new THREE.DirectionalLight(0xffffff, 2.6);
-  mainLight.position.set(300, 400, 500);
+  const mainLight = new THREE.DirectionalLight(0xffffff, 2.5);
+  mainLight.position.set(400, 500, 600);
   scene.add(mainLight);
 
-  const fillLight = new THREE.DirectionalLight(0x447788, 1.5);
-  fillLight.position.set(-400, -200, 300);
+  const fillLight = new THREE.DirectionalLight(0xddeeff, 1.4);
+  fillLight.position.set(-500, -100, 400);
   scene.add(fillLight);
 
-  const accentLimeLight = new THREE.DirectionalLight(0xc6e53d, 2.2);
-  accentLimeLight.position.set(0, -300, -400);
-  scene.add(accentLimeLight);
+  const limeRimLight = new THREE.DirectionalLight(0xb4e828, 1.8);
+  limeRimLight.position.set(200, -300, -400);
+  scene.add(limeRimLight);
 
-  const topRimLight = new THREE.DirectionalLight(0xffffff, 1.8);
-  topRimLight.position.set(0, 500, -200);
+  const topRimLight = new THREE.DirectionalLight(0xffffff, 2.0);
+  topRimLight.position.set(0, 600, -300);
   scene.add(topRimLight);
 
   // Group container for the 3D model
@@ -104,10 +111,13 @@ export function initHero3D() {
           matName.includes('lime') || 
           matName.includes('metal') || 
           matName.includes('housing') ||
-          matName.includes('silkscreen')
+          matName.includes('silkscreen') ||
+          matName.includes('sensor') ||
+          matName.includes('smoked') ||
+          matName.includes('strap')
         ) {
           // Pre-tuned PBR: keep material as is, ensure correct rendering settings
-          if (matName.includes('glass')) {
+          if (matName.includes('glass') || matName.includes('smoked')) {
             child.material.transparent = true;
             child.material.depthWrite = false;
             child.renderOrder = 3;
@@ -284,9 +294,9 @@ export function initHero3D() {
     }
   }, { passive: true });
 
-  // Base Anchor Translation to balance viewport (shifted left and down)
-  const baseAnchorX = -65;
-  const baseAnchorY = -42;
+  // Base Anchor Translation to balance viewport (shifted further left and down per user request)
+  const baseAnchorX = -135;
+  const baseAnchorY = -82;
 
   // Smooth Render Loop (FPS-independent lerp + floating levitation + drag rotation)
   let clock = new THREE.Clock();
