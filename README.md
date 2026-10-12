@@ -19,12 +19,6 @@ reGoggles/
 ├── public/                  # Vite 公共静态资源目录
 │   ├── logo.svg             # 矢量 Logo / 图标
 │   └── reGoggles-3D-1008.glb # 经过优化的 3D 网页交互模型 (带透明镜片材质)
-├── resources/               # 归档与原始设计参考素材
-│   ├── id_iterations/       # ID 迭代原始图包
-│   ├── ref_images/          # 设计参考切片图库
-│   ├── renders_260910/      # 2026-09-10 渲染图片原件
-│   ├── renders_260923/      # 2026-09-23 模组特写渲染原件
-│   └── tapnow_raw/          # 原始截图备份
 ├── scripts/                 # 工程辅助与模型格式转换脚本
 │   ├── convert-step.js      # STEP 转 GLTF 导出脚本
 │   └── convert-step-glb.js  # STEP 独立解析构建二进制 GLB 脚本
