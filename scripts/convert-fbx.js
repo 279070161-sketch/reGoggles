@@ -76,7 +76,12 @@ const materials = {
     color: new THREE.Color(0xedf2f7),
     metalness: 0.15,
     roughness: 0.30,
-    side: THREE.DoubleSide
+    side: THREE.DoubleSide,
+    polygonOffset: true,
+    polygonOffsetFactor: -2,
+    polygonOffsetUnits: -4,
+    depthTest: true,
+    depthWrite: true
   }),
   housing: new THREE.MeshStandardMaterial({
     name: 'matte_housing',
@@ -139,6 +144,25 @@ rawScene.traverse(child => {
     // Merge duplicate vertices to index the geometry
     const mergedGeom = BufferGeometryUtils.mergeVertices(child.geometry, 0.001);
     mergedGeom.applyMatrix4(child.matrixWorld);
+
+    // If silkscreen, offset along normal by 0.08mm to physically separate from coplanar body
+    if (category === 'silkscreen') {
+      mergedGeom.computeVertexNormals();
+      const posAttr = mergedGeom.attributes.position;
+      const normAttr = mergedGeom.attributes.normal;
+      if (posAttr && normAttr) {
+        for (let i = 0; i < posAttr.count; i++) {
+          posAttr.setXYZ(
+            i,
+            posAttr.getX(i) + normAttr.getX(i) * 0.08,
+            posAttr.getY(i) + normAttr.getY(i) * 0.08,
+            posAttr.getZ(i) + normAttr.getZ(i) * 0.08
+          );
+        }
+        posAttr.needsUpdate = true;
+      }
+    }
+
     groups[category].push(mergedGeom);
   }
 });
@@ -157,6 +181,7 @@ for (const [category, geoms] of Object.entries(groups)) {
     merged.computeVertexNormals();
     const mesh = new THREE.Mesh(merged, materials[category]);
     mesh.name = `reGoggles_${category}`;
+    mesh.renderOrder = category === 'silkscreen' ? 2 : category === 'glass' ? 3 : 1;
     exportScene.add(mesh);
   }
 }

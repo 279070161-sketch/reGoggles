@@ -15,8 +15,7 @@ export function initHero3D() {
   const canvas = document.createElement('canvas');
   canvas.id = 'hero-3d-canvas';
   canvas.style.width = '100%';
-  canvas.style.height = '100%';
-  canvas.style.maxHeight = 'clamp(650px, 85vh, 980px)';
+  canvas.style.height = 'clamp(620px, 82vh, 950px)';
   canvas.style.display = 'block';
   canvas.style.outline = 'none';
   canvas.style.cursor = 'grab';
@@ -29,17 +28,19 @@ export function initHero3D() {
   // Camera setup
   const rect = container.getBoundingClientRect();
   const width = rect.width || window.innerWidth;
-  const height = rect.height || 600;
+  const height = canvas.clientHeight || rect.height || 650;
 
-  const camera = new THREE.PerspectiveCamera(35, width / height, 0.1, 1000);
+  // near: 5, far: 5000 - Completely prevents clipping at any 360 degree rotation angle
+  const camera = new THREE.PerspectiveCamera(35, width / height, 5, 5000);
   camera.position.set(0, 0, 850);
 
-  // Renderer setup
+  // Renderer setup with logarithmic depth buffer to permanently eliminate Z-fighting on silkscreen
   const renderer = new THREE.WebGLRenderer({
     canvas: canvas,
     alpha: true,
     antialias: true,
-    powerPreference: 'high-performance'
+    powerPreference: 'high-performance',
+    logarithmicDepthBuffer: true
   });
   renderer.setSize(width, height, false);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -109,9 +110,18 @@ export function initHero3D() {
           if (matName.includes('glass')) {
             child.material.transparent = true;
             child.material.depthWrite = false;
+            child.renderOrder = 3;
+          } else if (matName.includes('silkscreen')) {
+            child.material.transparent = false;
+            child.material.depthWrite = true;
+            child.material.polygonOffset = true;
+            child.material.polygonOffsetFactor = -2;
+            child.material.polygonOffsetUnits = -4;
+            child.renderOrder = 2;
           } else {
             child.material.transparent = false;
             child.material.depthWrite = true;
+            child.renderOrder = 1;
           }
           child.material.side = THREE.DoubleSide;
         } else {
@@ -307,9 +317,11 @@ export function initHero3D() {
   function onWindowResize() {
     const newRect = container.getBoundingClientRect();
     const newWidth = newRect.width || window.innerWidth;
-    const newHeight = newRect.height || 600;
+    const newHeight = canvas.clientHeight || newRect.height || 650;
 
     camera.aspect = newWidth / newHeight;
+    camera.near = 5;
+    camera.far = 5000;
     camera.updateProjectionMatrix();
 
     renderer.setSize(newWidth, newHeight, false);
