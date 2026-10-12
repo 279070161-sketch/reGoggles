@@ -193,7 +193,10 @@ rawScene.traverse(child => {
     const meshName = (child.name || '').toLowerCase();
     const colHex = origMat?.color ? origMat.color.getHexString() : '';
 
-    // Exact categorization matching KeyShot industrial render
+    child.geometry.computeBoundingBox();
+    const childBox = child.geometry.boundingBox.clone().applyMatrix4(child.matrixWorld);
+    const cz = (childBox.min.z + childBox.max.z) / 2;
+
     let category = 'housing_grey';
     // Only actual fabric strap ribbons: top overhead strap (#1935) and rear temple straps (#1911)
     // The top middle component (#1974) is a smooth plastic clip/cradle, categorized under lime_accents
@@ -202,10 +205,32 @@ rawScene.traverse(child => {
       matName.includes('1911')
     ) && !matName.includes('1974') && !meshName.includes('头顶绑带');
 
+    // Rear battery/pad module at the very back of the head strap (all non-silkscreen parts -> matte lime green)
+    const isRearModule = cz < -240 && !meshName.includes('丝印');
+
+    // All strap buckles, wire loops, and sliders on the straps (all -> titanium grey)
+    const isStrapBuckle = (
+      meshName.includes('8c9d2877') ||
+      meshName.includes('2ef38e7d') ||
+      meshName.includes('eb3cf570') ||
+      meshName.includes('ddb2e32a') ||
+      meshName.includes('a7b286a8') ||
+      meshName.includes('f43257eb')
+    );
+    
+    // Temple main legs (should be titanium grey, matching camera housing)
+    const isTempleLeg = meshName.includes('61c534c8') || meshName.includes('6937f95a');
+
     if (isStrapPart) {
       category = 'strap_lime';
+    } else if (isRearModule) {
+      category = 'lime_accents'; // Rear module -> matte lime green
+    } else if (isStrapBuckle || isTempleLeg) {
+      category = 'housing_grey'; // Temple legs and all strap buckles -> titanium grey
     } else if (meshName.includes('丝印') || matName.includes('1906')) {
-      if (colHex === 'cccccc' || matName.includes('1906')) {
+      if (cz < -240) {
+        category = 'silkscreen_dark'; // Dark contrast silkscreen on rear lime module
+      } else if (colHex === 'cccccc' || matName.includes('1906')) {
         category = 'silkscreen_white';
       } else if (colHex === '84a32f' || matName.includes('1929')) {
         category = 'silkscreen_lime'; // Temple seeed studio, crosshair logo, etc.
