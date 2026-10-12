@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 
 export function initHero3D() {
@@ -358,8 +359,16 @@ export function initHero3D() {
     finishPreloader();
   };
 
-  // Load 3D GLB Model (supports offline Base64 in memory or standard relative fetch)
+  // Load 3D GLB Model with Draco compression support
   const loader = new GLTFLoader();
+  const dracoLoader = new DRACOLoader();
+  const isLocalFile = typeof window !== 'undefined' && window.location.protocol === 'file:';
+  dracoLoader.setDecoderPath(
+    isLocalFile 
+      ? 'https://www.gstatic.com/draco/versioned/decoders/1.5.7/' 
+      : './draco/gltf/'
+  );
+  loader.setDRACOLoader(dracoLoader);
   const MODEL_URL = './reGoggles-render-hq.glb';
 
   if (typeof window !== 'undefined' && window.__REGOGGLES_MODEL_BASE64__) {
@@ -492,11 +501,23 @@ export function initHero3D() {
   const baseAnchorX = -105;
   const baseAnchorY = -108;
 
+  // Off-screen render pause to save GPU when scrolled away
+  let isHeroVisible = true;
+  if (typeof window !== 'undefined' && 'IntersectionObserver' in window) {
+    const heroSection = document.getElementById('hero') || container;
+    const heroObserver = new IntersectionObserver((entries) => {
+      isHeroVisible = entries[0].isIntersecting;
+    }, { threshold: 0.05 });
+    heroObserver.observe(heroSection);
+  }
+
   // Smooth Render Loop (FPS-independent lerp + floating levitation + drag rotation)
   let clock = new THREE.Clock();
 
   function animate() {
     requestAnimationFrame(animate);
+
+    if (!isHeroVisible) return; // Pause GPU rendering when hero is not visible
 
     const elapsedTime = clock.getElapsedTime();
 

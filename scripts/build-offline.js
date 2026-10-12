@@ -66,6 +66,10 @@ if (fs.existsSync(path.join(ROOT, 'public/logo.svg'))) {
 if (fs.existsSync(path.join(ROOT, 'public/reGoggles-render-hq.glb'))) {
   fs.copyFileSync(path.join(ROOT, 'public/reGoggles-render-hq.glb'), path.join(DIST, 'reGoggles-render-hq.glb'));
 }
+if (fs.existsSync(path.join(ROOT, 'public/draco'))) {
+  copyRecursive(path.join(ROOT, 'public/draco'), path.join(DIST, 'draco'));
+  copyRecursive(path.join(ROOT, 'public/draco'), path.join(ASSETS_OUT, 'draco'));
+}
 
 // 5. Generate clean standalone dist/index.html
 console.log('5. Generating dist/index.html with classic zero-CORS scripts...');
