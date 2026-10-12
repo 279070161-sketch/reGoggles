@@ -3,7 +3,7 @@
 // ==========================================================================
 import { initHero3D } from './hero3d.js';
 
-document.addEventListener('DOMContentLoaded', () => {
+function initApp() {
   // Initialize Three.js interactive 3D hero model viewer
   initHero3D();
 
@@ -406,6 +406,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Handle window resize
     window.addEventListener('resize', () => update3DCarousel(currentSlideIndex));
   }
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initApp);
+} else {
+  initApp();
+}
 
 

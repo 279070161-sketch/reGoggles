@@ -70,6 +70,31 @@
       <span class="preloader-number" id="preloader-percent">0</span><span class="preloader-symbol">%</span>
     </div>
   </div>
+  <script>
+    (function() {
+      var pEl = document.getElementById('preloader-percent');
+      var timer = setInterval(function() {
+        if (!pEl) return;
+        var cur = parseInt(pEl.textContent || '0', 10);
+        var loader = document.getElementById('global-preloader');
+        if (cur >= 100 || (loader && loader.classList.contains('loaded'))) {
+          clearInterval(timer);
+          return;
+        }
+        if (cur < 20) {
+          pEl.textContent = (cur + 1) + '';
+        }
+      }, 50);
+      setTimeout(function() {
+        var loader = document.getElementById('global-preloader');
+        if (loader && !loader.classList.contains('loaded')) {
+          if (pEl) pEl.textContent = '100';
+          loader.classList.add('loaded');
+          setTimeout(function() { try { loader.remove(); } catch(e){} }, 550);
+        }
+      }, 5000);
+    })();
+  </script>
 
   <div id="app">
     <!-- Voltpile Exact Navigation Bar -->
