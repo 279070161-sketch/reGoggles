@@ -46,52 +46,53 @@ console.log('2. Defining authentic KeyShot PBR materials...');
 const materials = {
   strap_lime: new THREE.MeshStandardMaterial({
     name: 'strap_lime',
-    color: new THREE.Color(0x9bd822),
-    roughness: 0.58,
-    metalness: 0.04,
+    color: new THREE.Color(0x7ca818), // Deep saturated woven nylon lime (does not wash out white under light)
+    roughness: 0.82,
+    metalness: 0.0,
     side: THREE.DoubleSide
   }),
   glass_visor: new THREE.MeshPhysicalMaterial({
     name: 'glass_visor',
-    color: new THREE.Color(0xf4f9ff),
+    color: new THREE.Color(0xffffff),
     transparent: true,
-    opacity: 0.15,
-    transmission: 0.95,
+    opacity: 0.12,
+    transmission: 0.96,
     roughness: 0.02,
     ior: 1.52,
     reflectivity: 0.8,
     side: THREE.DoubleSide,
     depthWrite: false
   }),
-  smoked_translucent: new THREE.MeshPhysicalMaterial({
-    name: 'smoked_translucent',
-    color: new THREE.Color(0x283038),
+  frame_translucent: new THREE.MeshPhysicalMaterial({
+    name: 'frame_translucent',
+    color: new THREE.Color(0x2c343b), // Semi-transparent smoked polycarbonate front frame
     transparent: true,
-    opacity: 0.45,
-    transmission: 0.65,
-    roughness: 0.12,
-    ior: 1.5,
+    opacity: 0.38,
+    transmission: 0.74,
+    roughness: 0.14,
+    ior: 1.52,
+    reflectivity: 0.65,
     side: THREE.DoubleSide,
     depthWrite: false
   }),
   housing_grey: new THREE.MeshStandardMaterial({
     name: 'housing_grey',
-    color: new THREE.Color(0x424950), // Anodized slate grey matching KeyShot
-    metalness: 0.42,
-    roughness: 0.35,
+    color: new THREE.Color(0x3e454c), // Matte anodized slate grey
+    metalness: 0.40,
+    roughness: 0.38,
     side: THREE.DoubleSide
   }),
   sensor_dark: new THREE.MeshStandardMaterial({
     name: 'sensor_dark',
-    color: new THREE.Color(0x1a1c1e), // Dark graphite for ToF sensor & camera trims
+    color: new THREE.Color(0x181a1c), // Dark graphite for ToF sensor & camera trims
     metalness: 0.60,
-    roughness: 0.25,
+    roughness: 0.28,
     side: THREE.DoubleSide
   }),
   lime_accents: new THREE.MeshStandardMaterial({
     name: 'lime_accents',
-    color: new THREE.Color(0xa2e222), // Signature lime green accents
-    metalness: 0.20,
+    color: new THREE.Color(0x96d61e), // Signature lime green accents
+    metalness: 0.15,
     roughness: 0.30,
     side: THREE.DoubleSide
   }),
@@ -102,11 +103,35 @@ const materials = {
     roughness: 0.16,
     side: THREE.DoubleSide
   }),
+  silkscreen_lime: new THREE.MeshStandardMaterial({
+    name: 'silkscreen_lime',
+    color: new THREE.Color(0xaee824), // Vibrant lime green silkscreen (seeed studio on temple, crosshairs, stripes)
+    metalness: 0.15,
+    roughness: 0.25,
+    side: THREE.DoubleSide,
+    polygonOffset: true,
+    polygonOffsetFactor: -2,
+    polygonOffsetUnits: -4,
+    depthTest: true,
+    depthWrite: true
+  }),
   silkscreen_white: new THREE.MeshStandardMaterial({
     name: 'silkscreen_white',
-    color: new THREE.Color(0xf6f9fc),
+    color: new THREE.Color(0xf6f9fc), // Crisp white silkscreen (FC, CE certifications on glass)
     metalness: 0.10,
     roughness: 0.25,
+    side: THREE.DoubleSide,
+    polygonOffset: true,
+    polygonOffsetFactor: -2,
+    polygonOffsetUnits: -4,
+    depthTest: true,
+    depthWrite: true
+  }),
+  silkscreen_dark: new THREE.MeshStandardMaterial({
+    name: 'silkscreen_dark',
+    color: new THREE.Color(0x1f2226),
+    metalness: 0.20,
+    roughness: 0.30,
     side: THREE.DoubleSide,
     polygonOffset: true,
     polygonOffsetFactor: -2,
@@ -122,12 +147,14 @@ rawScene.updateMatrixWorld(true);
 const groups = {
   strap_lime: [],
   glass_visor: [],
-  smoked_translucent: [],
+  frame_translucent: [],
   housing_grey: [],
   sensor_dark: [],
   lime_accents: [],
   polished_metals: [],
-  silkscreen_white: []
+  silkscreen_lime: [],
+  silkscreen_white: [],
+  silkscreen_dark: []
 };
 
 let totalInputMeshes = 0;
@@ -142,17 +169,24 @@ rawScene.traverse(child => {
     const origMat = Array.isArray(child.material) ? child.material[0] : child.material;
     const matName = (origMat?.name || '').toLowerCase();
     const meshName = (child.name || '').toLowerCase();
+    const colHex = origMat?.color ? origMat.color.getHexString() : '';
 
     // Exact categorization matching KeyShot industrial render
     let category = 'housing_grey';
     if (meshName.includes('头顶绑带') || meshName.includes('绑带') || meshName.includes('strap')) {
       category = 'strap_lime';
-    } else if (meshName.includes('镜片') && matName.includes('glass')) {
-      category = 'glass_visor';
-    } else if (matName.includes('115') || matName.includes('113')) {
-      category = 'smoked_translucent';
     } else if (meshName.includes('丝印') || matName.includes('1906')) {
-      category = 'silkscreen_white';
+      if (colHex === 'cccccc' || matName.includes('1906')) {
+        category = 'silkscreen_white';
+      } else if (colHex === '84a32f' || matName.includes('1929')) {
+        category = 'silkscreen_lime'; // Temple seeed studio, crosshair logo, etc.
+      } else {
+        category = 'silkscreen_dark';
+      }
+    } else if (meshName.includes('镜片') && matName.includes('glass')) {
+      category = 'glass_visor'; // Clear front visor lens
+    } else if (matName.includes('glass') || matName.includes('115') || matName.includes('113')) {
+      category = 'frame_translucent'; // Front frame & temple transparent covers
     } else if (
       matName.includes('1929') || 
       matName.includes('1832') || 
@@ -180,7 +214,7 @@ rawScene.traverse(child => {
     mergedGeom.applyMatrix4(child.matrixWorld);
 
     // If silkscreen, offset along normal by 0.08mm to physically separate from coplanar body
-    if (category === 'silkscreen_white') {
+    if (category.startsWith('silkscreen')) {
       mergedGeom.computeVertexNormals();
       const posAttr = mergedGeom.attributes.position;
       const normAttr = mergedGeom.attributes.normal;
@@ -215,7 +249,7 @@ for (const [category, geoms] of Object.entries(groups)) {
     merged.computeVertexNormals();
     const mesh = new THREE.Mesh(merged, materials[category]);
     mesh.name = `reGoggles_${category}`;
-    mesh.renderOrder = category === 'silkscreen_white' ? 2 : (category === 'glass_visor' || category === 'smoked_translucent') ? 3 : 1;
+    mesh.renderOrder = category.startsWith('silkscreen') ? 2 : (category === 'glass_visor' || category === 'frame_translucent') ? 3 : 1;
     exportScene.add(mesh);
   }
 }

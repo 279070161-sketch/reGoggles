@@ -46,31 +46,32 @@ export function initHero3D() {
   renderer.setSize(width, height, false);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.45;
+  renderer.toneMappingExposure = 1.05; // Controlled exposure to preserve saturated lime green
 
   // Setup High-End Studio HDRI Environment for realistic KeyShot reflections
   const pmremGenerator = new THREE.PMREMGenerator(renderer);
   pmremGenerator.compileEquirectangularShader();
   const roomEnv = new RoomEnvironment();
   scene.environment = pmremGenerator.fromScene(roomEnv, 0.04).texture;
+  scene.environmentIntensity = 0.75; // Balanced environment reflection without blinding specular glaze
 
-  // Lighting setup - Crisp industrial hardware studio illumination
-  const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
+  // Lighting setup - Soft, controlled KeyShot studio illumination (no overexposure)
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.85);
   scene.add(ambientLight);
 
-  const mainLight = new THREE.DirectionalLight(0xffffff, 2.5);
+  const mainLight = new THREE.DirectionalLight(0xffffff, 1.5);
   mainLight.position.set(400, 500, 600);
   scene.add(mainLight);
 
-  const fillLight = new THREE.DirectionalLight(0xddeeff, 1.4);
+  const fillLight = new THREE.DirectionalLight(0xcce2ec, 0.85);
   fillLight.position.set(-500, -100, 400);
   scene.add(fillLight);
 
-  const limeRimLight = new THREE.DirectionalLight(0xb4e828, 1.8);
+  const limeRimLight = new THREE.DirectionalLight(0x92c81a, 0.8);
   limeRimLight.position.set(200, -300, -400);
   scene.add(limeRimLight);
 
-  const topRimLight = new THREE.DirectionalLight(0xffffff, 2.0);
+  const topRimLight = new THREE.DirectionalLight(0xffffff, 0.9);
   topRimLight.position.set(0, 600, -300);
   scene.add(topRimLight);
 
@@ -113,11 +114,11 @@ export function initHero3D() {
           matName.includes('housing') ||
           matName.includes('silkscreen') ||
           matName.includes('sensor') ||
-          matName.includes('smoked') ||
+          matName.includes('translucent') ||
           matName.includes('strap')
         ) {
           // Pre-tuned PBR: keep material as is, ensure correct rendering settings
-          if (matName.includes('glass') || matName.includes('smoked')) {
+          if (matName.includes('glass') || matName.includes('translucent')) {
             child.material.transparent = true;
             child.material.depthWrite = false;
             child.renderOrder = 3;
