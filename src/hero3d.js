@@ -85,41 +85,56 @@ export function initHero3D() {
 
     rawModel.position.sub(center);
 
-    // Scale model to comfortably fill viewport (Enlarged scale from 460 to 580)
+    // Scale model to comfortably fill hero section
     const maxDim = Math.max(size.x, size.y, size.z);
-    baseScale = 580 / maxDim;
+    baseScale = 680 / maxDim;
     rawModel.scale.setScalar(baseScale);
 
-    // Enhance material properties: Apply metallic for body frame, glass transparency ONLY for lens sub-mesh #269
+    // Enhance material properties
     let meshIndex = 0;
     rawModel.traverse((child) => {
       if (child.isMesh && child.geometry) {
         const meshName = (child.name || '').toLowerCase();
         const matName = (child.material && child.material.name ? child.material.name : '').toLowerCase();
 
-        // ONLY sub-mesh #269 / part_269 or glass_lens_material is the front protective lens shield
-        const isFrontLens269 = meshName.includes('269') || 
-                               meshName.includes('part_269') || 
-                               matName.includes('glass') || 
-                               meshIndex === 269;
-
-        if (isFrontLens269) {
-          // Front protective lens shield: High optical clear glass
-          child.material = new THREE.MeshPhysicalMaterial({
-            color: 0xdbf0ff,
-            transparent: true,
-            opacity: 0.18,          // High transparency (82% clear)
-            roughness: 0.03,        // Crystal smooth reflection
-            metalness: 0.0,         // Non-metallic glass
-            transmission: 0.92,     // Optical light transmission
-            ior: 1.5,               // Glass index of refraction
-            reflectivity: 0.6,
-            side: THREE.DoubleSide,
-            depthWrite: false
-          });
+        // If mesh already has pre-tuned PBR materials (from optimized FBX converter)
+        if (
+          matName.includes('glass') || 
+          matName.includes('lime') || 
+          matName.includes('metal') || 
+          matName.includes('housing') ||
+          matName.includes('silkscreen')
+        ) {
+          // Pre-tuned PBR: keep material as is, ensure correct rendering settings
+          if (matName.includes('glass')) {
+            child.material.transparent = true;
+            child.material.depthWrite = false;
+          } else {
+            child.material.transparent = false;
+            child.material.depthWrite = true;
+          }
+          child.material.side = THREE.DoubleSide;
         } else {
-          // All other parts (temple arms, frame housing, straps): 100% Solid Opaque
-          if (child.material) {
+          // Legacy CAD model compatibility
+          const isFrontLens = meshName.includes('269') || 
+                              meshName.includes('part_269') || 
+                              matName.includes('glass') || 
+                              meshIndex === 269;
+
+          if (isFrontLens) {
+            child.material = new THREE.MeshPhysicalMaterial({
+              color: 0xdbf0ff,
+              transparent: true,
+              opacity: 0.18,
+              roughness: 0.03,
+              metalness: 0.0,
+              transmission: 0.92,
+              ior: 1.5,
+              reflectivity: 0.6,
+              side: THREE.DoubleSide,
+              depthWrite: false
+            });
+          } else if (child.material) {
             child.material.side = THREE.DoubleSide;
             child.material.transparent = false;
             child.material.opacity = 1.0;
@@ -143,6 +158,8 @@ export function initHero3D() {
 
   // Load 3D GLB Model (supports offline Base64 in memory or standard relative fetch)
   const loader = new GLTFLoader();
+  const MODEL_URL = './reGoggles-render-hq.glb';
+
   if (typeof window !== 'undefined' && window.__REGOGGLES_MODEL_BASE64__) {
     try {
       const binaryString = atob(window.__REGOGGLES_MODEL_BASE64__);
@@ -156,11 +173,11 @@ export function initHero3D() {
       });
     } catch (e) {
       console.warn('Fallback to file loading:', e);
-      loader.load('./reGoggles-3D-1008.glb', setupModel);
+      loader.load(MODEL_URL, setupModel);
     }
   } else {
     loader.load(
-      './reGoggles-3D-1008.glb',
+      MODEL_URL,
       setupModel,
       (progress) => {},
       (error) => {
@@ -169,10 +186,11 @@ export function initHero3D() {
     );
   }
 
-  // Base Anchor Pose set by user: X=-1.91, Y=0.02, Z=-0.47
-  let baseRotationX = -1.91;
-  let baseRotationY = 0.02;
-  let baseRotationZ = -0.47;
+  // Base Anchor Pose for Y-up HQ model:
+  // Tilted down (X=0.28) and turned ~33 deg towards 3/4 isometric view (Y=-0.58)
+  let baseRotationX = 0.28;
+  let baseRotationY = -0.58;
+  let baseRotationZ = -0.06;
 
   // Mouse interaction & drag orbit state
   let mouseX = 0;

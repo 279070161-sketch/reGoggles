@@ -28,7 +28,9 @@ esbuild.buildSync({
 
 // 2. Encode 3D GLB Model into model-data.js as Base64 for zero-CORS in-memory parsing
 console.log('2. Generating model-data.js for in-memory 3D rendering (zero CORS)...');
-const glbBuffer = fs.readFileSync(path.join(ROOT, 'public/reGoggles-3D-1008.glb'));
+const hqModelPath = path.join(ROOT, 'public/reGoggles-render-hq.glb');
+const modelPath = fs.existsSync(hqModelPath) ? hqModelPath : path.join(ROOT, 'public/reGoggles-3D-1008.glb');
+const glbBuffer = fs.readFileSync(modelPath);
 const base64Str = glbBuffer.toString('base64');
 const modelJsContent = `window.__REGOGGLES_MODEL_BASE64__ = "${base64Str}";\n`;
 fs.writeFileSync(path.join(ASSETS_OUT, 'model-data.js'), modelJsContent, 'utf8');
@@ -61,8 +63,8 @@ copyRecursive(path.join(ROOT, 'assets/videos'), path.join(ASSETS_OUT, 'videos'))
 if (fs.existsSync(path.join(ROOT, 'public/logo.svg'))) {
   fs.copyFileSync(path.join(ROOT, 'public/logo.svg'), path.join(DIST, 'logo.svg'));
 }
-if (fs.existsSync(path.join(ROOT, 'public/reGoggles-3D-1008.glb'))) {
-  fs.copyFileSync(path.join(ROOT, 'public/reGoggles-3D-1008.glb'), path.join(DIST, 'reGoggles-3D-1008.glb'));
+if (fs.existsSync(path.join(ROOT, 'public/reGoggles-render-hq.glb'))) {
+  fs.copyFileSync(path.join(ROOT, 'public/reGoggles-render-hq.glb'), path.join(DIST, 'reGoggles-render-hq.glb'));
 }
 
 // 5. Generate clean standalone dist/index.html
