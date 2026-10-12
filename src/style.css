@@ -397,31 +397,6 @@ body {
   }
 }
 
-.product-shadow {
-  position: absolute;
-  bottom: -45px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 82%;
-  height: 45px;
-  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 75%);
-  filter: blur(18px);
-  pointer-events: none;
-  z-index: -1;
-  animation: shadow-float-pulse 3.6s ease-in-out infinite alternate;
-}
-
-@keyframes shadow-float-pulse {
-  0% {
-    transform: translateX(-50%) scale(1);
-    opacity: 0.95;
-  }
-  100% {
-    transform: translateX(-50%) scale(0.88);
-    opacity: 0.75;
-  }
-}
-
 /* Bottom Annotation Bar */
 .bottom-annotation-bar {
   position: relative;

@@ -284,6 +284,10 @@ export function initHero3D() {
     }
   }, { passive: true });
 
+  // Base Anchor Translation to balance viewport (shifted left and down)
+  const baseAnchorX = -65;
+  const baseAnchorY = -42;
+
   // Smooth Render Loop (FPS-independent lerp + floating levitation + drag rotation)
   let clock = new THREE.Clock();
 
@@ -304,8 +308,9 @@ export function initHero3D() {
       // Z roll includes base rotation + subtle floating oscillation
       modelGroup.rotation.z = baseRotationZ + Math.cos(elapsedTime * 1.2) * 0.015;
 
-      // Continuous subtle mid-air levitation float effect
-      modelGroup.position.y = Math.sin(elapsedTime * 1.8) * 12;
+      // Continuous subtle mid-air levitation float effect with left-down anchor offset
+      modelGroup.position.x = baseAnchorX;
+      modelGroup.position.y = baseAnchorY + Math.sin(elapsedTime * 1.8) * 12;
     }
 
     renderer.render(scene, camera);
