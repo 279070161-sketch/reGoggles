@@ -74,79 +74,100 @@ export function initHero3D() {
   let baseScale = 1;
 
   // Load 3D GLB Model
-  const loader = new GLTFLoader();
-  loader.load(
-    './reGoggles-3D-1008.glb',
-    (gltf) => {
-      const rawModel = gltf.scene;
+  // Model setup handler
+  const setupModel = (gltf) => {
+    const rawModel = gltf.scene;
 
-      // Calculate Bounding Box and Center Model
-      const box = new THREE.Box3().setFromObject(rawModel);
-      const center = box.getCenter(new THREE.Vector3());
-      const size = box.getSize(new THREE.Vector3());
+    // Calculate Bounding Box and Center Model
+    const box = new THREE.Box3().setFromObject(rawModel);
+    const center = box.getCenter(new THREE.Vector3());
+    const size = box.getSize(new THREE.Vector3());
 
-      rawModel.position.sub(center);
+    rawModel.position.sub(center);
 
-      // Scale model to comfortably fill viewport (Enlarged scale from 460 to 580)
-      const maxDim = Math.max(size.x, size.y, size.z);
-      baseScale = 580 / maxDim;
-      rawModel.scale.setScalar(baseScale);
+    // Scale model to comfortably fill viewport (Enlarged scale from 460 to 580)
+    const maxDim = Math.max(size.x, size.y, size.z);
+    baseScale = 580 / maxDim;
+    rawModel.scale.setScalar(baseScale);
 
-      // Enhance material properties: Apply metallic for body frame, glass transparency ONLY for lens sub-mesh #269
-      let meshIndex = 0;
-      rawModel.traverse((child) => {
-        if (child.isMesh && child.geometry) {
-          const meshName = (child.name || '').toLowerCase();
-          const matName = (child.material && child.material.name ? child.material.name : '').toLowerCase();
+    // Enhance material properties: Apply metallic for body frame, glass transparency ONLY for lens sub-mesh #269
+    let meshIndex = 0;
+    rawModel.traverse((child) => {
+      if (child.isMesh && child.geometry) {
+        const meshName = (child.name || '').toLowerCase();
+        const matName = (child.material && child.material.name ? child.material.name : '').toLowerCase();
 
-          // ONLY sub-mesh #269 / part_269 or glass_lens_material is the front protective lens shield
-          const isFrontLens269 = meshName.includes('269') || 
-                                 meshName.includes('part_269') || 
-                                 matName.includes('glass') || 
-                                 meshIndex === 269;
+        // ONLY sub-mesh #269 / part_269 or glass_lens_material is the front protective lens shield
+        const isFrontLens269 = meshName.includes('269') || 
+                               meshName.includes('part_269') || 
+                               matName.includes('glass') || 
+                               meshIndex === 269;
 
-          if (isFrontLens269) {
-            // Front protective lens shield: High optical clear glass
-            child.material = new THREE.MeshPhysicalMaterial({
-              color: 0xdbf0ff,
-              transparent: true,
-              opacity: 0.18,          // High transparency (82% clear)
-              roughness: 0.03,        // Crystal smooth reflection
-              metalness: 0.0,         // Non-metallic glass
-              transmission: 0.92,     // Optical light transmission
-              ior: 1.5,               // Glass index of refraction
-              reflectivity: 0.6,
-              side: THREE.DoubleSide,
-              depthWrite: false
-            });
-          } else {
-            // All other parts (temple arms, frame housing, straps): 100% Solid Opaque
-            if (child.material) {
-              child.material.side = THREE.DoubleSide;
-              child.material.transparent = false;
-              child.material.opacity = 1.0;
-              child.material.depthWrite = true;
-              if (child.material.metalness !== undefined) {
-                child.material.metalness = 0.70;
-                child.material.roughness = 0.28;
-              }
+        if (isFrontLens269) {
+          // Front protective lens shield: High optical clear glass
+          child.material = new THREE.MeshPhysicalMaterial({
+            color: 0xdbf0ff,
+            transparent: true,
+            opacity: 0.18,          // High transparency (82% clear)
+            roughness: 0.03,        // Crystal smooth reflection
+            metalness: 0.0,         // Non-metallic glass
+            transmission: 0.92,     // Optical light transmission
+            ior: 1.5,               // Glass index of refraction
+            reflectivity: 0.6,
+            side: THREE.DoubleSide,
+            depthWrite: false
+          });
+        } else {
+          // All other parts (temple arms, frame housing, straps): 100% Solid Opaque
+          if (child.material) {
+            child.material.side = THREE.DoubleSide;
+            child.material.transparent = false;
+            child.material.opacity = 1.0;
+            child.material.depthWrite = true;
+            if (child.material.metalness !== undefined) {
+              child.material.metalness = 0.70;
+              child.material.roughness = 0.28;
             }
           }
-          meshIndex++;
         }
+        meshIndex++;
+      }
+    });
+
+    // Keep rawModel local rotation at 0, 0, 0
+    rawModel.rotation.set(0, 0, 0);
+
+    modelGroup.add(rawModel);
+    modelLoaded = true;
+  };
+
+  // Load 3D GLB Model (supports offline Base64 in memory or standard relative fetch)
+  const loader = new GLTFLoader();
+  if (typeof window !== 'undefined' && window.__REGOGGLES_MODEL_BASE64__) {
+    try {
+      const binaryString = atob(window.__REGOGGLES_MODEL_BASE64__);
+      const len = binaryString.length;
+      const bytes = new Uint8Array(len);
+      for (let i = 0; i < len; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+      }
+      loader.parse(bytes.buffer, '', setupModel, (err) => {
+        console.error('Error parsing embedded 3D model:', err);
       });
-
-      // Keep rawModel local rotation at 0, 0, 0
-      rawModel.rotation.set(0, 0, 0);
-
-      modelGroup.add(rawModel);
-      modelLoaded = true;
-    },
-    (progress) => {},
-    (error) => {
-      console.error('Error loading reGoggles 3D model:', error);
+    } catch (e) {
+      console.warn('Fallback to file loading:', e);
+      loader.load('./reGoggles-3D-1008.glb', setupModel);
     }
-  );
+  } else {
+    loader.load(
+      './reGoggles-3D-1008.glb',
+      setupModel,
+      (progress) => {},
+      (error) => {
+        console.error('Error loading reGoggles 3D model:', error);
+      }
+    );
+  }
 
   // Base Anchor Pose set by user: X=-1.91, Y=0.02, Z=-0.47
   let baseRotationX = -1.91;
