@@ -6,10 +6,69 @@ export function initHero3D() {
   const container = document.getElementById('product-wrapper');
   if (!container) return;
 
-  // Replace existing static image with canvas
+  // Full-Screen Digital Preloader Controller
+  const preloaderEl = document.getElementById('global-preloader');
+  const percentEl = document.getElementById('preloader-percent');
+  const barEl = document.getElementById('preloader-progress-bar');
+  const statusEl = document.getElementById('preloader-status-text');
+
+  let currentDisplayPct = 0;
+  let targetPct = 15;
+  let preloaderDismissed = false;
+
+  function updatePreloaderTarget(pct, statusText) {
+    if (pct > targetPct) targetPct = Math.min(100, Math.floor(pct));
+    if (statusText && statusEl) {
+      statusEl.textContent = statusText;
+    }
+  }
+
+  // Smooth digital counter & progress bar tick loop (runs at ~45fps)
+  const progressTimer = setInterval(() => {
+    if (preloaderDismissed) {
+      clearInterval(progressTimer);
+      return;
+    }
+    if (currentDisplayPct < targetPct) {
+      const diff = targetPct - currentDisplayPct;
+      const step = Math.min(3, Math.max(1, Math.ceil(diff * 0.12)));
+      currentDisplayPct = Math.min(targetPct, currentDisplayPct + step);
+      if (percentEl) percentEl.textContent = currentDisplayPct;
+      if (barEl) barEl.style.width = `${currentDisplayPct}%`;
+    }
+  }, 22);
+
+  function finishPreloader() {
+    if (preloaderDismissed) return;
+    targetPct = 100;
+    if (statusEl) statusEl.textContent = 'SYSTEM READY // RENDERING';
+
+    const check100 = setInterval(() => {
+      if (currentDisplayPct >= 100) {
+        clearInterval(check100);
+        clearInterval(progressTimer);
+        preloaderDismissed = true;
+        setTimeout(() => {
+          if (preloaderEl) {
+            preloaderEl.classList.add('loaded');
+            setTimeout(() => {
+              try { preloaderEl.remove(); } catch (e) {}
+            }, 850);
+          }
+        }, 220);
+      }
+    }, 25);
+  }
+
+  // Safety timer to prevent getting stuck if any asset fails
+  setTimeout(() => {
+    finishPreloader();
+  }, 9000);
+
+  // Remove legacy static image if still present
   const existingImg = document.getElementById('product-img');
   if (existingImg) {
-    existingImg.style.display = 'none';
+    existingImg.remove();
   }
 
   // Canvas sizing and constraints (Full-bleed 100% viewport width & height)
@@ -293,6 +352,10 @@ export function initHero3D() {
 
     modelGroup.add(rawModel);
     modelLoaded = true;
+
+    // Trigger immediate render of first 3D frame before unveiling
+    renderer.render(scene, camera);
+    finishPreloader();
   };
 
   // Load 3D GLB Model (supports offline Base64 in memory or standard relative fetch)
@@ -301,26 +364,38 @@ export function initHero3D() {
 
   if (typeof window !== 'undefined' && window.__REGOGGLES_MODEL_BASE64__) {
     try {
+      updatePreloaderTarget(35, 'DECODING MEMORY BUFFER...');
       const binaryString = atob(window.__REGOGGLES_MODEL_BASE64__);
       const len = binaryString.length;
       const bytes = new Uint8Array(len);
       for (let i = 0; i < len; i++) {
         bytes[i] = binaryString.charCodeAt(i);
       }
+      updatePreloaderTarget(65, 'PARSING GEOMETRY & MATERIALS...');
       loader.parse(bytes.buffer, '', setupModel, (err) => {
         console.error('Error parsing embedded 3D model:', err);
+        finishPreloader();
       });
     } catch (e) {
       console.warn('Fallback to file loading:', e);
-      loader.load(MODEL_URL, setupModel);
+      loader.load(MODEL_URL, setupModel, null, () => finishPreloader());
     }
   } else {
+    updatePreloaderTarget(25, 'REQUESTING 3D ASSETS...');
     loader.load(
       MODEL_URL,
       setupModel,
-      (progress) => {},
+      (progress) => {
+        if (progress.total > 0) {
+          const pct = Math.min(92, Math.floor((progress.loaded / progress.total) * 92));
+          updatePreloaderTarget(pct, 'STREAMING 3D MESH ASSETS...');
+        } else {
+          updatePreloaderTarget(Math.min(88, targetPct + 12), 'DOWNLOADING 3D ASSETS...');
+        }
+      },
       (error) => {
         console.error('Error loading reGoggles 3D model:', error);
+        finishPreloader();
       }
     );
   }
