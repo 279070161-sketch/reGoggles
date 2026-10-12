@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import esbuild from 'esbuild';
 
-const ROOT = 'f:/projects/reGoggles';
+const ROOT = process.cwd();
 const DIST = path.join(ROOT, 'dist');
 const ASSETS_OUT = path.join(DIST, 'assets');
 
@@ -23,7 +23,7 @@ esbuild.buildSync({
   minify: true,
   outfile: path.join(ASSETS_OUT, 'app.bundle.js'),
   platform: 'browser',
-  target: ['es2020', 'chrome80', 'edge80', 'safari14']
+  target: ['es2022']
 });
 
 // 2. Encode 3D GLB Model into model-data.js as Base64 for zero-CORS in-memory parsing

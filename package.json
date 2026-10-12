@@ -12,6 +12,7 @@
     "build:offline": "node scripts/build-offline.js"
   },
   "devDependencies": {
+    "esbuild": "^0.28.2",
     "vite": "^5.4.2"
   },
   "dependencies": {
