@@ -14,35 +14,54 @@ if (fs.existsSync(DIST)) {
 }
 fs.mkdirSync(ASSETS_OUT, { recursive: true });
 
+// ------------------------------------------------------------------
+// Fix for "preloader stuck at 0% on GitHub Pages":
+// esbuild IIFE builds replace `import.meta` with an empty object, so any
+// bundled module that runs `new URL(x, import.meta.url)` at module scope
+// (three.js DRACOLoader does exactly this) throws
+//   "Uncaught TypeError: Failed to construct 'URL': Invalid URL"
+// the moment the bundle is evaluated. The whole app then never registers
+// its listeners and the preloader stays at 0% forever.
+// This plugin rewrites import.meta.url to resolve against the page URL,
+// which is a valid absolute base in every environment (GitHub Pages,
+// any static host, and file://).
+// ------------------------------------------------------------------
+const importMetaUrlShim = {
+  name: 'import-meta-url-shim',
+  setup(build) {
+    build.onLoad({ filter: /\.m?js$/ }, (args) => {
+      let contents = fs.readFileSync(args.path, 'utf8');
+      if (!contents.includes('import.meta.url')) return null;
+      contents = contents.replace(
+        /import\.meta\.url/g,
+        '(typeof self !== "undefined" && self.location ? self.location.href : "")'
+      );
+      return { contents, loader: 'js' };
+    });
+  },
+};
+
 // 1. Bundle JS with esbuild into IIFE format
 console.log('1. Bundling JavaScript into standalone IIFE app.bundle.js...');
-esbuild.buildSync({
+await esbuild.build({
   entryPoints: [path.join(ROOT, 'src/main.js')],
   bundle: true,
   format: 'iife',
   minify: true,
   outfile: path.join(ASSETS_OUT, 'app.bundle.js'),
   platform: 'browser',
-  target: ['es2022']
+  target: ['es2022'],
+  plugins: [importMetaUrlShim]
 });
 
-// 2. Encode 3D GLB Model into model-data.js as Base64 for zero-CORS in-memory parsing
-console.log('2. Generating model-data.js for in-memory 3D rendering (zero CORS)...');
-const hqModelPath = path.join(ROOT, 'public/reGoggles-render-hq.glb');
-const modelPath = fs.existsSync(hqModelPath) ? hqModelPath : path.join(ROOT, 'public/reGoggles-3D-1008.glb');
-const glbBuffer = fs.readFileSync(modelPath);
-const base64Str = glbBuffer.toString('base64');
-const modelJsContent = `window.__REGOGGLES_MODEL_BASE64__ = "${base64Str}";\n`;
-fs.writeFileSync(path.join(ASSETS_OUT, 'model-data.js'), modelJsContent, 'utf8');
-
-// 3. Minify and copy CSS
-console.log('3. Bundling style.css...');
+// 2. Minify and copy CSS
+console.log('2. Bundling style.css...');
 const cssContent = fs.readFileSync(path.join(ROOT, 'src/style.css'), 'utf8');
 const minifiedCss = esbuild.transformSync(cssContent, { loader: 'css', minify: true });
 fs.writeFileSync(path.join(ASSETS_OUT, 'style.css'), minifiedCss.code, 'utf8');
 
-// 4. Copy static web assets (images, videos) into dist/assets
-console.log('4. Copying images and videos into dist/assets...');
+// 3. Copy static web assets (images, videos) into dist/assets
+console.log('3. Copying images and videos into dist/assets...');
 function copyRecursive(src, dst) {
   if (!fs.existsSync(dst)) fs.mkdirSync(dst, { recursive: true });
   for (const item of fs.readdirSync(src, { withFileTypes: true })) {
@@ -59,7 +78,7 @@ function copyRecursive(src, dst) {
 copyRecursive(path.join(ROOT, 'assets/images'), path.join(ASSETS_OUT, 'images'));
 copyRecursive(path.join(ROOT, 'assets/videos'), path.join(ASSETS_OUT, 'videos'));
 
-// Also copy favicon/logo and glb as backup
+// Copy favicon/logo, 3D model, and Draco decoders
 if (fs.existsSync(path.join(ROOT, 'public/logo.svg'))) {
   fs.copyFileSync(path.join(ROOT, 'public/logo.svg'), path.join(DIST, 'logo.svg'));
 }
@@ -71,8 +90,8 @@ if (fs.existsSync(path.join(ROOT, 'public/draco'))) {
   copyRecursive(path.join(ROOT, 'public/draco'), path.join(ASSETS_OUT, 'draco'));
 }
 
-// 5. Generate clean standalone dist/index.html
-console.log('5. Generating dist/index.html with classic zero-CORS scripts...');
+// 4. Generate clean standalone dist/index.html
+console.log('4. Generating dist/index.html with fast production bundle...');
 let html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
 
 // Replace CSS link to point to ./assets/style.css
@@ -85,10 +104,35 @@ html = html.replace(
 html = html.replace(/<script\s+type="importmap">[\s\S]*?<\/script>/i, '');
 html = html.replace(/<script\s+type="module"\s+src="\.\/src\/main\.js"><\/script>/i, '');
 
-// Append classic offline scripts before </body>
+// Append standalone bundle before </body>
 const scriptTags = `
-  <!-- Standalone Zero-Server Offline 3D Engine & Model -->
-  <script src="./assets/model-data.js"></script>
+  <!-- Preloader watchdog: if the main bundle ever crashes at evaluation
+       time, the counter would stay at 0% forever and soft-lock the site.
+       If nothing has advanced the counter after 6 seconds, take over,
+       animate to 100% and remove the preloader. -->
+  <script>
+    (function () {
+      setTimeout(function () {
+        var el = document.getElementById('preloader-percent');
+        if (!el || el.textContent !== '0') return; // real app already running
+        var p = document.getElementById('global-preloader');
+        var n = 0;
+        var iv = setInterval(function () {
+          n += 3;
+          el.textContent = Math.min(100, n);
+          if (n >= 100) {
+            clearInterval(iv);
+            if (p) {
+              p.classList.add('loaded');
+              setTimeout(function () { try { p.remove(); } catch (e) {} }, 600);
+            }
+          }
+        }, 60);
+      }, 6000);
+    })();
+  </script>
+
+  <!-- Standalone High-Performance 3D Engine Bundle -->
   <script src="./assets/app.bundle.js"></script>
 </body>`;
 
