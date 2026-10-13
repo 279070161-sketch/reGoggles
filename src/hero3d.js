@@ -10,39 +10,36 @@ export function initHero3D() {
   // Full-Screen Digital Preloader Controller
   const preloaderEl = document.getElementById('global-preloader');
   const percentEl = document.getElementById('preloader-percent');
-  const barEl = document.getElementById('preloader-progress-bar');
-  const statusEl = document.getElementById('preloader-status-text');
 
   let currentDisplayPct = 0;
-  let targetPct = 15;
+  let targetPct = 12;
   let preloaderDismissed = false;
 
-  function updatePreloaderTarget(pct, statusText) {
+  function updatePreloaderTarget(pct) {
     if (pct > targetPct) targetPct = Math.min(100, Math.floor(pct));
-    if (statusText && statusEl) {
-      statusEl.textContent = statusText;
-    }
   }
 
-  // Smooth digital counter & progress bar tick loop (runs at ~45fps)
+  // Smooth digital counter loop: constantly ticks and smoothly chases targetPct
   const progressTimer = setInterval(() => {
     if (preloaderDismissed) {
       clearInterval(progressTimer);
       return;
     }
+    // Steadily advance targetPct up to 86% while waiting for network / decoder
+    if (targetPct < 86) {
+      targetPct += 0.45;
+    }
     if (currentDisplayPct < targetPct) {
       const diff = targetPct - currentDisplayPct;
-      const step = Math.min(3, Math.max(1, Math.ceil(diff * 0.12)));
+      const step = Math.min(4, Math.max(1, Math.ceil(diff * 0.16)));
       currentDisplayPct = Math.min(targetPct, currentDisplayPct + step);
-      if (percentEl) percentEl.textContent = currentDisplayPct;
-      if (barEl) barEl.style.width = `${currentDisplayPct}%`;
+      if (percentEl) percentEl.textContent = Math.floor(currentDisplayPct);
     }
-  }, 22);
+  }, 32);
 
   function finishPreloader() {
     if (preloaderDismissed) return;
     targetPct = 100;
-    if (statusEl) statusEl.textContent = 'SYSTEM READY // RENDERING';
 
     const check100 = setInterval(() => {
       if (currentDisplayPct >= 100) {
@@ -57,6 +54,9 @@ export function initHero3D() {
             }, 550);
           }
         }, 120);
+      } else {
+        currentDisplayPct = Math.min(100, currentDisplayPct + 3);
+        if (percentEl) percentEl.textContent = Math.floor(currentDisplayPct);
       }
     }, 20);
   }
@@ -64,13 +64,17 @@ export function initHero3D() {
   // Safety timer to prevent getting stuck if any asset fails
   setTimeout(() => {
     finishPreloader();
-  }, 9000);
+  }, 7000);
 
   // Remove legacy static image if still present
   const existingImg = document.getElementById('product-img');
   if (existingImg) {
     existingImg.remove();
   }
+
+  // Defer all heavy WebGL init to next event-loop tick so the preloader
+  // setInterval renders at least one frame before the GPU/main-thread work begins.
+  setTimeout(() => {
 
   // Canvas sizing and constraints (Full-bleed 100% viewport width & height)
   const canvas = document.createElement('canvas');
@@ -143,12 +147,25 @@ export function initHero3D() {
   let baseScale = 1;
 
   // Procedural woven nylon strap textures (interlaced ballistic nylon webbing)
+  // Uses 256×256 (4× less pixels than 512) to avoid blocking the main thread during preloader.
+  // Pre-cached sin/cos lookup tables further reduce per-pixel cost.
   let wovenTextures = null;
   function getWovenStrapTextures() {
     if (wovenTextures) return wovenTextures;
 
-    const size = 512;
-    const numCells = 16; // 16x16 dense weave pattern cells per unit tile for ultra-fine textile look
+    const size = 256;
+    const numCells = 16;
+
+    // Pre-compute sin/cos lookup tables — avoids repeated trig calls inside the pixel loop
+    const sinTable = new Float32Array(size);
+    const cosTable = new Float32Array(size);
+    const sin4Table = new Float32Array(size);
+    for (let i = 0; i < size; i++) {
+      const f = (i / size) * numCells % 1; // fractional position within cell
+      sinTable[i] = Math.sin(f * Math.PI);
+      cosTable[i] = Math.cos(f * Math.PI);
+      sin4Table[i] = Math.sin(f * Math.PI * 4);
+    }
 
     const colorCanvas = document.createElement('canvas');
     colorCanvas.width = size;
@@ -164,30 +181,26 @@ export function initHero3D() {
     const normalImg = normalCtx.createImageData(size, size);
     const normalData = normalImg.data;
 
-    function getHeight(px, py) {
-      const u = (px / size) * numCells;
-      const v = (py / size) * numCells;
-      const cellX = Math.floor(u);
-      const cellY = Math.floor(v);
-      const fx = u - cellX;
-      const fy = v - cellY;
+    // Cache cell parity per row/col
+    const cellX = new Int32Array(size);
+    const cellY = new Int32Array(size);
+    for (let i = 0; i < size; i++) {
+      cellX[i] = Math.floor((i / size) * numCells);
+      cellY[i] = Math.floor((i / size) * numCells);
+    }
 
-      // Interlocked dense ballistic nylon webbing weave
-      const isWarp = (cellX + cellY) % 2 === 0;
-
-      let h = 0;
+    function getHeight(x, y) {
+      const cx = cellX[x], cy = cellY[y];
+      const isWarp = (cx + cy) % 2 === 0;
+      let h;
       if (isWarp) {
-        const dome = Math.sin(fx * Math.PI);
-        const wave = Math.cos(fy * Math.PI) * 0.16;
-        const micro = Math.sin(fx * Math.PI * 4) * 0.04;
-        h = Math.pow(Math.max(0, dome), 0.72) * 0.88 + wave + micro;
+        const dome = sinTable[x];
+        h = Math.pow(Math.max(0, dome), 0.72) * 0.88 + cosTable[y] * 0.16 + sin4Table[x] * 0.04;
       } else {
-        const dome = Math.sin(fy * Math.PI);
-        const wave = -Math.cos(fx * Math.PI) * 0.16;
-        const micro = Math.sin(fy * Math.PI * 4) * 0.04;
-        h = Math.pow(Math.max(0, dome), 0.72) * 0.88 + wave + micro;
+        const dome = sinTable[y];
+        h = Math.pow(Math.max(0, dome), 0.72) * 0.88 - cosTable[x] * 0.16 + sin4Table[y] * 0.04;
       }
-      return Math.min(1, Math.max(0, h));
+      return h < 0 ? 0 : h > 1 ? 1 : h;
     }
 
     // Authentic woven lime green: #7ca818 -> R: 124, G: 168, B: 24
@@ -198,31 +211,25 @@ export function initHero3D() {
         const idx = (y * size + x) * 4;
         const h = getHeight(x, y);
 
-        // Micro crevice shading: fine yarn grooves with subtle highlight on yarn crowns
         const shade = 0.72 + h * 0.38;
-        colorData[idx] = Math.min(255, Math.round(baseR * shade));
-        colorData[idx + 1] = Math.min(255, Math.round(baseG * shade));
-        colorData[idx + 2] = Math.min(255, Math.round(baseB * shade));
+        colorData[idx]     = Math.min(255, baseR * shade + 0.5 | 0);
+        colorData[idx + 1] = Math.min(255, baseG * shade + 0.5 | 0);
+        colorData[idx + 2] = Math.min(255, baseB * shade + 0.5 | 0);
         colorData[idx + 3] = 255;
 
-        // Tangent-space Normal calculation
-        const x0 = (x - 1 + size) % size;
-        const x1 = (x + 1) % size;
-        const y0 = (y - 1 + size) % size;
-        const y1 = (y + 1) % size;
+        // Tangent-space Normal (sample 4 neighbors)
+        const x0 = (x - 1 + size) & (size - 1);
+        const x1 = (x + 1) & (size - 1);
+        const y0 = (y - 1 + size) & (size - 1);
+        const y1 = (y + 1) & (size - 1);
 
         const dx = (getHeight(x1, y) - getHeight(x0, y)) * 3.5;
         const dy = (getHeight(x, y1) - getHeight(x, y0)) * 3.5;
-        const dz = 1.0;
+        const invLen = 1.0 / Math.sqrt(dx * dx + dy * dy + 1.0);
 
-        const invLen = 1.0 / Math.sqrt(dx * dx + dy * dy + dz * dz);
-        const nx = -dx * invLen;
-        const ny = -dy * invLen;
-        const nz = dz * invLen;
-
-        normalData[idx] = Math.round((nx * 0.5 + 0.5) * 255);
-        normalData[idx + 1] = Math.round((ny * 0.5 + 0.5) * 255);
-        normalData[idx + 2] = Math.round((nz * 0.5 + 0.5) * 255);
+        normalData[idx]     = (-dx * invLen * 0.5 + 0.5) * 255 + 0.5 | 0;
+        normalData[idx + 1] = (-dy * invLen * 0.5 + 0.5) * 255 + 0.5 | 0;
+        normalData[idx + 2] = (invLen * 0.5 + 0.5) * 255 + 0.5 | 0;
         normalData[idx + 3] = 255;
       }
     }
@@ -362,52 +369,47 @@ export function initHero3D() {
   // Load 3D GLB Model with Draco compression support
   const loader = new GLTFLoader();
   const dracoLoader = new DRACOLoader();
-  const isLocalFile = typeof window !== 'undefined' && window.location.protocol === 'file:';
-  dracoLoader.setDecoderPath(
-    isLocalFile 
-      ? 'https://www.gstatic.com/draco/versioned/decoders/1.5.7/' 
-      : './draco/gltf/'
-  );
-  loader.setDRACOLoader(dracoLoader);
-  const MODEL_URL = './reGoggles-render-hq.glb';
 
-  if (typeof window !== 'undefined' && window.__REGOGGLES_MODEL_BASE64__) {
-    try {
-      updatePreloaderTarget(35, 'DECODING MEMORY BUFFER...');
-      const binaryString = atob(window.__REGOGGLES_MODEL_BASE64__);
-      const len = binaryString.length;
-      const bytes = new Uint8Array(len);
-      for (let i = 0; i < len; i++) {
-        bytes[i] = binaryString.charCodeAt(i);
+  // Compute absolute base URL from page location.
+  // This is critical for esbuild IIFE builds where import.meta.url is undefined,
+  // causing DRACOLoader's internal URL resolver to silently produce wrong paths.
+  const _pageBase = (() => {
+    const loc = window.location;
+    // Strip filename from pathname if present (pages served as index.html have trailing /)
+    const dir = loc.pathname.endsWith('/') ? loc.pathname : loc.pathname.replace(/\/[^/]*$/, '/');
+    return loc.origin + dir;
+  })();
+
+  // Pass decoder paths as an explicit object — avoids all import.meta.url / resolveURL issues
+  dracoLoader.setDecoderPath({
+    js:   _pageBase + 'draco/gltf/draco_wasm_wrapper.js',
+    wasm: _pageBase + 'draco/gltf/draco_decoder.wasm'
+  });
+  loader.setDRACOLoader(dracoLoader);
+
+  const MODEL_URL = _pageBase + 'reGoggles-render-hq.glb';
+
+  updatePreloaderTarget(18);
+
+  loader.load(
+    MODEL_URL,
+    setupModel,
+    (progress) => {
+      if (progress.total > 0) {
+        const pct = Math.min(94, Math.floor((progress.loaded / progress.total) * 94));
+        updatePreloaderTarget(pct);
+      } else if (progress.loaded > 0) {
+        // Fallback for servers without Content-Length header (assume ~5.6MB model)
+        const estTotal = 5865000;
+        const pct = Math.min(94, Math.floor((progress.loaded / estTotal) * 94));
+        updatePreloaderTarget(pct);
       }
-      updatePreloaderTarget(65, 'PARSING GEOMETRY & MATERIALS...');
-      loader.parse(bytes.buffer, '', setupModel, (err) => {
-        console.error('Error parsing embedded 3D model:', err);
-        finishPreloader();
-      });
-    } catch (e) {
-      console.warn('Fallback to file loading:', e);
-      loader.load(MODEL_URL, setupModel, null, () => finishPreloader());
+    },
+    (error) => {
+      console.error('Error loading reGoggles 3D model:', error);
+      finishPreloader();
     }
-  } else {
-    updatePreloaderTarget(25, 'REQUESTING 3D ASSETS...');
-    loader.load(
-      MODEL_URL,
-      setupModel,
-      (progress) => {
-        if (progress.total > 0) {
-          const pct = Math.min(92, Math.floor((progress.loaded / progress.total) * 92));
-          updatePreloaderTarget(pct, 'STREAMING 3D MESH ASSETS...');
-        } else {
-          updatePreloaderTarget(Math.min(88, targetPct + 12), 'DOWNLOADING 3D ASSETS...');
-        }
-      },
-      (error) => {
-        console.error('Error loading reGoggles 3D model:', error);
-        finishPreloader();
-      }
-    );
-  }
+  );
 
   // Base Anchor Pose for Y-up HQ model:
   // Tilted down (X=0.28) and turned ~33 deg towards 3/4 isometric view (Y=-0.58)
@@ -558,4 +560,6 @@ export function initHero3D() {
   }
 
   window.addEventListener('resize', onWindowResize);
+
+  }, 0); // end setTimeout — deferred 3D init
 }
