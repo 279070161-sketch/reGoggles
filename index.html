@@ -6,10 +6,11 @@
   <title>reGoggles - Open Wearable AI Platform</title>
   <meta name="description" content="An Open Wearable AI Platform for Industrial Assistance, Egocentric Data Collection, and Intelligent Maker Innovation." />
   
-  <!-- JetBrains Mono Font -->
+  <!-- JetBrains Mono Font with non-blocking load and immediate monospace fallback -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300..800;1,300..800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300..800&display=swap"></noscript>
   
   <!-- ES Module Import Map for native browser module resolution (GitHub Pages support) -->
   
@@ -40,7 +41,7 @@
       pointer-events: none;
     }
     .preloader-counter {
-      font-family: 'JetBrains Mono', monospace !important;
+      font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
       font-size: 0.95rem;
       font-weight: 400;
       color: #97abac;
@@ -72,18 +73,10 @@
           clearInterval(timer);
           return;
         }
-        if (cur < 20) {
+        if (cur < 15) {
           pEl.textContent = (cur + 1) + '';
         }
-      }, 50);
-      setTimeout(function() {
-        var loader = document.getElementById('global-preloader');
-        if (loader && !loader.classList.contains('loaded')) {
-          if (pEl) pEl.textContent = '100';
-          loader.classList.add('loaded');
-          setTimeout(function() { try { loader.remove(); } catch(e){} }, 550);
-        }
-      }, 5000);
+      }, 35);
     })();
   </script>
 
@@ -1241,8 +1234,7 @@
 
   
 
-  <!-- Standalone Zero-Server Offline 3D Engine & Model -->
-  <script src="./assets/model-data.js"></script>
+  <!-- Standalone High-Performance 3D Engine Bundle -->
   <script src="./assets/app.bundle.js"></script>
 </body>
 </html>
