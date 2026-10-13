@@ -61,10 +61,10 @@ export function initHero3D() {
     }, 20);
   }
 
-  // Safety timer to prevent getting stuck if any asset fails
+  // Safety timer to prevent getting stuck if any asset fails (15s for slow networks)
   setTimeout(() => {
     finishPreloader();
-  }, 7000);
+  }, 15000);
 
   // Remove legacy static image if still present
   const existingImg = document.getElementById('product-img');
