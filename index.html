@@ -1218,6 +1218,32 @@
 
   
 
+  <!-- Preloader watchdog: if the main bundle ever crashes at evaluation
+       time, the counter would stay at 0% forever and soft-lock the site.
+       If nothing has advanced the counter after 6 seconds, take over,
+       animate to 100% and remove the preloader. -->
+  <script>
+    (function () {
+      setTimeout(function () {
+        var el = document.getElementById('preloader-percent');
+        if (!el || el.textContent !== '0') return; // real app already running
+        var p = document.getElementById('global-preloader');
+        var n = 0;
+        var iv = setInterval(function () {
+          n += 3;
+          el.textContent = Math.min(100, n);
+          if (n >= 100) {
+            clearInterval(iv);
+            if (p) {
+              p.classList.add('loaded');
+              setTimeout(function () { try { p.remove(); } catch (e) {} }, 600);
+            }
+          }
+        }, 60);
+      }, 6000);
+    })();
+  </script>
+
   <!-- Standalone High-Performance 3D Engine Bundle -->
   <script src="./assets/app.bundle.js"></script>
 </body>
