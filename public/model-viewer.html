@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>reGoggles 模型取角工具</title>
+<style>
+:root { color-scheme: dark; }
+html, body { margin: 0; height: 100%; overflow: hidden; background: #1a1d1f; }
+canvas { display: block; }
+.hud {
+  position: fixed; left: 16px; top: 16px; z-index: 10;
+  display: flex; flex-direction: column; gap: 8px; align-items: flex-start;
+  font-family: system-ui, sans-serif;
+}
+.hud button {
+  padding: 8px 18px; border-radius: 999px; border: 1px solid rgba(255,255,255,.35);
+  background: rgba(255,255,255,.10); color: #fff; cursor: pointer; font-size: 14px;
+}
+.hud button:hover { background: rgba(255,255,255,.22); }
+.hud .tip { color: #9fb0b2; font-size: 12px; max-width: 320px; line-height: 1.5; }
+textarea {
+  position: fixed; left: 16px; bottom: 16px; z-index: 10;
+  width: 420px; height: 90px; background: rgba(0,0,0,.55); color: #c6e53d;
+  border: 1px solid rgba(198,229,61,.35); border-radius: 8px; padding: 8px;
+  font-family: ui-monospace, monospace; font-size: 12px;
+}
+.status { position: fixed; right: 16px; top: 16px; color: #9fb0b2; font-size: 13px; z-index: 10; font-family: system-ui, sans-serif; }
+</style>
+</head>
+<body>
+<div class="hud">
+  <button id="copy-btn">复制当前相机参数</button>
+  <div class="tip">拖拽旋转 / 滚轮缩放 / 右键平移。调好角度后点上方按钮，把弹出的参数发给我即可。</div>
+</div>
+<div class="status" id="status">模型加载中…</div>
+<textarea id="out" readonly placeholder="相机参数会显示在这里"></textarea>
+
+<script type="module">
+import * as THREE from '/node_modules/three/build/three.module.js';
+import { OrbitControls } from '/node_modules/three/examples/jsm/controls/OrbitControls.js';
+import { GLTFLoader } from '/node_modules/three/examples/jsm/loaders/GLTFLoader.js';
+import { DRACOLoader } from '/node_modules/three/examples/jsm/loaders/DRACOLoader.js';
+import { RoomEnvironment } from '/node_modules/three/examples/jsm/environments/RoomEnvironment.js';
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.1;
+document.body.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+scene.environmentIntensity = 0.9;
+
+const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 100);
+camera.position.set(0, 0, 3);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.08;
+
+const loader = new GLTFLoader();
+const draco = new DRACOLoader();
+draco.setDecoderPath('/draco/gltf/');
+loader.setDRACOLoader(draco);
+
+let modelRoot = null;
+
+function frameModel(root) {
+  const box = new THREE.Box3().setFromObject(root);
+  const size = box.getSize(new THREE.Vector3());
+  const center = box.getCenter(new THREE.Vector3());
+  const radius = Math.max(size.x, size.y, size.z) * 0.62;
+  const fitDist = radius / Math.tan(THREE.MathUtils.degToRad(camera.fov * 0.5));
+  const dist = fitDist * 1.25;
+  camera.position.copy(center).add(new THREE.Vector3(dist * 0.55, dist * 0.28, dist * 0.78));
+  camera.lookAt(center);
+  camera.near = Math.max(0.01, dist / 100);
+  camera.far = dist * 20;
+  camera.updateProjectionMatrix();
+  controls.target.copy(center);
+  controls.minDistance = dist * 0.25;
+  controls.maxDistance = dist * 4;
+  controls.update();
+}
+
+// ---- headless 截图模式：?cam={"pos":...,"target":...,"fov":...} ----
+const hashCam = new URLSearchParams(location.search).get('cam');
+let camParams = null;
+if (hashCam) {
+  try { camParams = JSON.parse(decodeURIComponent(hashCam)); } catch (e) { console.error('bad cam params', e); }
+}
+
+loader.load(
+  '/reGoggles-render-hq.glb',
+  (gltf) => {
+    modelRoot = gltf.scene;
+    scene.add(modelRoot);
+    if (camParams) {
+      // 用户相机模式：只借用包围盒估算裁剪面，不覆盖用户角度
+      const box = new THREE.Box3().setFromObject(modelRoot);
+      const center = box.getCenter(new THREE.Vector3());
+      const radius = box.getSize(new THREE.Vector3()).length() * 0.5;
+      const dist = camera.position.distanceTo(center);
+      camera.near = Math.max(0.01, Math.abs(dist - radius) * 0.4);
+      camera.far = Math.max(camera.near * 10, (dist + radius) * 3);
+      camera.fov = camParams.fov || 40;
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      camera.position.set(camParams.pos[0], camParams.pos[1], camParams.pos[2]);
+      camera.lookAt(camParams.target[0], camParams.target[1], camParams.target[2]);
+      controls.target.set(camParams.target[0], camParams.target[1], camParams.target[2]);
+      controls.enabled = false;
+      controls.update();
+      document.querySelector('.hud').style.display = 'none';
+      document.getElementById('out').style.display = 'none';
+      document.body.style.background = 'transparent';
+      document.getElementById('status').textContent = '加载完成（cam 模式）';
+    } else {
+      frameModel(modelRoot);
+      document.getElementById('status').textContent = '加载完成，拖拽调角度';
+    }
+  },
+  (p) => {
+    if (p.total) {
+      document.getElementById('status').textContent = '加载中 ' + Math.round((p.loaded / p.total) * 100) + '%';
+    }
+  },
+  (err) => {
+    document.getElementById('status').textContent = '加载失败: ' + (err && err.message ? err.message : err);
+  }
+);
+
+// ---- 相机参数输出（发给我的格式） ----
+function cameraParams() {
+  const t = controls.target;
+  const p = camera.position;
+  return {
+    pos: [+p.x.toFixed(4), +p.y.toFixed(4), +p.z.toFixed(4)],
+    target: [+t.x.toFixed(4), +t.y.toFixed(4), +t.z.toFixed(4)],
+    fov: +camera.fov.toFixed(2),
+  };
+}
+
+document.getElementById('copy-btn').addEventListener('click', () => {
+  const json = JSON.stringify(cameraParams());
+  const ta = document.getElementById('out');
+  ta.value = json;
+  navigator.clipboard.writeText(json).then(() => {
+    document.getElementById('status').textContent = '参数已复制！发给我即可';
+  }).catch(() => {
+    document.getElementById('status').textContent = '复制失败，请手动复制下方参数';
+  });
+});
+
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+function animate() {
+  requestAnimationFrame(animate);
+  controls.update();
+  renderer.render(scene, camera);
+}
+animate();
+
+// ---- headless 截图模式的 UI 预隐藏（相机本体在模型加载完成回调里应用） ----
+if (camParams) {
+  // 占位：相机在 loader 成功回调中设置；这里不做任何覆盖
+}
+</script>
+</body>
+</html>

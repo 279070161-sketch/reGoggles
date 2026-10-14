@@ -1,11 +1,7 @@
 // ==========================================================================
-// reGoggles Banner - 3D Interactive Model & Section Logic
+// reGoggles Banner - Section Logic (Hero 使用静态图，已移除 3D 模型)
 // ==========================================================================
-import { initHero3D } from './hero3d.js';
-
 function initApp() {
-  // Initialize Three.js interactive 3D hero model viewer
-  initHero3D();
 
   // Modal Elements
   const modalBackdrop = document.getElementById('action-modal');
@@ -135,195 +131,185 @@ function initApp() {
     }
   });
 
-  // VoltPile 100% 梯形 3D 百叶窗吸顶滚动复刻
-  const communityWrapper = document.getElementById('community-builders');
-  const slatBlades = document.querySelectorAll('.slat-blade');
-
-  function updateBlindsOnScroll() {
-    if (!communityWrapper || !slatBlades.length) return;
-
-    const rect = communityWrapper.getBoundingClientRect();
-    const windowHeight = window.innerHeight;
-    const totalScrollableDistance = rect.height - windowHeight;
-
-    // 当用户刚滑动到 Section 2 时，rect.top 为 0，progress 为 0（此时背景为 100% 纯色暗绿，遮挡底层图片）
-    // 当用户在 Section 2 内部继续下拉时，rect.top 从 0 减少到 -totalScrollableDistance，progress 从 0.0 渐变为 1.0
-    let progress = -rect.top / totalScrollableDistance;
-    progress = Math.max(0, Math.min(1, progress));
-
-    const numSlats = slatBlades.length;
-    slatBlades.forEach((blade, index) => {
-      // 级联波浪动画延迟
-      const staggerStart = (index / numSlats) * 0.35;
-      const staggerEnd = staggerStart + 0.65;
-      const slatProgress = Math.max(0, Math.min(1, (progress - staggerStart) / (staggerEnd - staggerStart)));
-
-      // 梯形百叶窗收缩 scaleY (初始 1.38 保证纯色覆盖 -> 渐变收缩至 0 露出高清底层图片)
-      const currentScale = 1.38 * (1 - slatProgress);
-      const opacity = slatProgress >= 0.96 ? (1 - slatProgress) / 0.04 : 1;
-
-      // 初始 slatProgress 为 0 时为 0% 与 100%（纯色平整底，无侧边锯齿），滚动开合时平滑过度到 8% 与 92% 梯形
-      const insetPercent = (slatProgress * 8.0).toFixed(2);
-      const rightPercent = (100 - slatProgress * 8.0).toFixed(2);
-      const clipPath = `polygon(${insetPercent}% 0%, ${rightPercent}% 0%, 100% 100%, 0% 100%)`;
-
-      blade.style.transform = `scaleY(${currentScale.toFixed(4)})`;
-      blade.style.clipPath = clipPath;
-      blade.style.opacity = opacity.toFixed(3);
-    });
-  }
-
-  window.addEventListener('scroll', updateBlindsOnScroll, { passive: true });
-  updateBlindsOnScroll();
-
-  // Section 3: ID Product Iteration Step-by-Step Sensitive Carousel
-  const evolvingWrapper = document.getElementById('evolving');
-  const iterationTrack = document.getElementById('iteration-track');
-  const iterationCards = document.querySelectorAll('.iteration-card');
-
-  function updateIterationOnScroll() {
-    if (!evolvingWrapper || !iterationTrack || !iterationCards.length) return;
-
-    const rect = evolvingWrapper.getBoundingClientRect();
-    const windowHeight = window.innerHeight;
-    const totalScrollableDistance = rect.height - windowHeight;
-
-    if (totalScrollableDistance <= 0) return;
-
-    // 原始滚动进度 (0.0 到 1.0)
-    let rawProgress = -rect.top / totalScrollableDistance;
-    rawProgress = Math.max(0, Math.min(1, rawProgress));
-
-    // 默认是 V1.0 (Index 0) 在正中间，滚一下 (rawProgress > 0) 立刻触发下一个图 V2.0
-    let snappedIndex = 0;
-    if (rawProgress <= 0.001) {
-      snappedIndex = 0; // 默认 V1.0
-    } else if (rawProgress < 0.33) {
-      snappedIndex = 1; // 触发 V2.0
-    } else if (rawProgress < 0.67) {
-      snappedIndex = 2; // 触发 V3.0
-    } else {
-      snappedIndex = 3; // 触发 V4.0
-    }
-
-    const screenCenter = window.innerWidth / 2;
-    const currentCard = iterationCards[snappedIndex];
-
-    // 静态计算绝对屏幕中轴对齐，绝不读取动效中变化的 getBoundingClientRect，彻底消灭抖动跳跃
-    const cardCenterInTrack = currentCard.offsetLeft + currentCard.offsetWidth / 2;
-    const targetTranslate = screenCenter - cardCenterInTrack;
-
-    iterationTrack.style.transform = `translateX(${targetTranslate}px)`;
-
-    // 动态卡片放大：正中央当前选中卡片 100% 居中放大 (scale 2.05)，两侧卡片缩小淡化 (scale 0.72)
-    iterationCards.forEach((card, idx) => {
-      const isCurrent = idx === snappedIndex;
-      const scale = isCurrent ? 2.05 : 0.72;
-      const opacity = isCurrent ? 1 : 0.42;
-
-      card.style.transform = `scale(${scale.toFixed(2)})`;
-      card.style.opacity = opacity.toFixed(2);
-    });
-  }
-
-  if (evolvingWrapper && iterationTrack && iterationCards.length) {
-    window.addEventListener('scroll', updateIterationOnScroll, { passive: true });
-    window.addEventListener('resize', updateIterationOnScroll);
-    updateIterationOnScroll();
-  }
+  // (百叶窗滚动效果与 Section 3 迭代轮播已移除)
 
   // ==========================================================================
-  // Section 4: Versatile Expansion Interactive Accordion & Video Switcher
+  // Section 3: 底部模式按钮 (Vision / Audio / Pose / Extension) 切换静态图
   // ==========================================================================
-  const expansionItems = document.querySelectorAll('.expansion-item');
-  const expansionVideos = document.querySelectorAll('.expansion-video');
-  const hudStatusText = document.getElementById('hud-status-text');
-  const hotspotGeneral = document.getElementById('hotspot-general');
-  const hotspotVision = document.getElementById('hotspot-vision');
-  const videoGen = document.getElementById('video-general');
-  const videoVis = document.getElementById('video-vision');
+  const modeTabs = document.querySelectorAll('.exp-mode-tab');
+  const modeImages = document.querySelectorAll('.expansion-image');
+  const visionAnnotation = document.getElementById('vision-annotation');
+  const poseCallouts = document.querySelectorAll('.pose-callout');
+  const extensionCallouts = document.querySelectorAll('.extension-callout');
+  const audioCallouts = document.querySelectorAll('.audio-callout');
 
-  function updateHotspotsVisibility() {
-    // 02 General Expansion Port Hotspot
-    if (hotspotGeneral && videoGen) {
-      const item02 = document.querySelector('.expansion-item[data-target="video-general"]');
-      const isItem02Active = item02 && item02.classList.contains('active') && videoGen.classList.contains('active');
-      if (isItem02Active && (videoGen.ended || (videoGen.paused && videoGen.currentTime > 0))) {
-        hotspotGeneral.classList.add('active');
-      } else {
-        hotspotGeneral.classList.remove('active');
-      }
-    }
+  if (modeTabs.length) {
+    modeTabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        if (tab.classList.contains('active')) return;
 
-    // 03 Vision Expansion Port Hotspot
-    if (hotspotVision && videoVis) {
-      const item03 = document.querySelector('.expansion-item[data-target="video-vision"]');
-      const isItem03Active = item03 && item03.classList.contains('active') && videoVis.classList.contains('active');
-      if (isItem03Active && (videoVis.ended || (videoVis.paused && videoVis.currentTime > 0))) {
-        hotspotVision.classList.add('active');
-      } else {
-        hotspotVision.classList.remove('active');
-      }
-    }
-  }
+        modeTabs.forEach((t) => t.classList.remove('active'));
+        tab.classList.add('active');
 
-  if (videoGen) {
-    videoGen.addEventListener('ended', updateHotspotsVisibility);
-    videoGen.addEventListener('play', updateHotspotsVisibility);
-    videoGen.addEventListener('playing', updateHotspotsVisibility);
-    videoGen.addEventListener('pause', updateHotspotsVisibility);
-  }
-
-  if (videoVis) {
-    videoVis.addEventListener('ended', updateHotspotsVisibility);
-    videoVis.addEventListener('play', updateHotspotsVisibility);
-    videoVis.addEventListener('playing', updateHotspotsVisibility);
-    videoVis.addEventListener('pause', updateHotspotsVisibility);
-  }
-
-  // Initialize 1.5x speed for all expansion videos
-  expansionVideos.forEach((video) => {
-    video.playbackRate = 1.5;
-    video.addEventListener('play', () => { video.playbackRate = 1.5; });
-    video.addEventListener('playing', () => { video.playbackRate = 1.5; });
-  });
-
-  if (expansionItems.length) {
-    expansionItems.forEach((item) => {
-      item.addEventListener('click', () => {
-        if (item.classList.contains('active')) return;
-
-        // 1. Update active item in left accordion list
-        expansionItems.forEach((el) => el.classList.remove('active'));
-        item.classList.add('active');
-
-        // 2. Switch right video display (plays once & freezes on last frame at 1.5x speed)
-        const targetVideoId = item.dataset.target;
-        const targetStatus = item.dataset.status;
-
-        expansionVideos.forEach((video) => {
-          if (video.id === targetVideoId) {
-            video.classList.add('active');
-            try {
-              video.currentTime = 0;
-              video.playbackRate = 1.5;
-              const p = video.play();
-              if (p && p.catch) p.catch(() => {});
-            } catch (e) {}
-          } else {
-            video.classList.remove('active');
-          }
+        const targetId = tab.dataset.target;
+        modeImages.forEach((img) => {
+          img.classList.toggle('active', img.id === targetId);
         });
 
-        // 3. Immediately evaluate hotspots visibility (hides while playing)
-        updateHotspotsVisibility();
-
-        // 4. Update HUD overlay status badge
-        if (hudStatusText && targetStatus) {
-          hudStatusText.textContent = targetStatus;
+        // 标注联动：Vision 显示摄像头标注，Pose 显示 ToF/IMU 两条标注（切换时自动隐藏并重置动画）
+        if (visionAnnotation) {
+          visionAnnotation.classList.toggle('active', targetId === 'image-vision');
         }
+        poseCallouts.forEach((callout) => {
+          callout.classList.toggle('active', targetId === 'image-pose');
+        });
+        extensionCallouts.forEach((callout) => {
+          callout.classList.toggle('active', targetId === 'image-extension');
+        });
+        audioCallouts.forEach((callout) => {
+          callout.classList.toggle('active', targetId === 'image-audio');
+        });
       });
     });
+  }
+
+  // ==========================================================================
+  // Viture 风格视差引擎（滚动唤醒 + 位置预测量）
+  // 旧版每帧 getBoundingClientRect 采样：即使静止也 60fps 强制整页回流，
+  // 大模糊背景层更新滞后导致滚动时背景"抖动"；且位移公式含上帧位移形成反馈。
+  // 新版：文档位置只在初始化/resize/布局变化时测量一次，滚动过程零布局读取；
+  // 位移直接由滚动位置计算（测量时减去已知位移还原布局位置），与滚动严格同步。
+  // ==========================================================================
+  const parallaxEls = document.querySelectorAll('[data-parallax]');
+
+  const pItems = Array.from(parallaxEls).map((el) => ({
+    el,
+    speed: parseFloat(el.dataset.parallax) || 0.1,
+    top: 0,    // 元素在文档中的布局位置（不含视差位移）
+    height: 0,
+    t: 0,      // 当前已施加的位移，测量时用来还原布局位置
+  }));
+
+  let lastDocHeight = 0;
+  let parallaxRafId = 0;
+  let parallaxIdleFrames = 0;
+
+  function measureParallax() {
+    pItems.forEach((item) => {
+      const rect = item.el.getBoundingClientRect();
+      // rect.top 含视差位移：减去 t 得到未位移的布局位置
+      item.top = rect.top + window.scrollY - item.t;
+      item.height = rect.height;
+    });
+    lastDocHeight = document.body.scrollHeight;
+  }
+
+  function updateParallax() {
+    const vh = window.innerHeight;
+    const scrollY = window.scrollY;
+
+    // 布局高度变化（图片加载、字体就绪等）时重测；滚动不改变布局，不会触发
+    if (document.body.scrollHeight !== lastDocHeight) measureParallax();
+
+    let anyVisible = false;
+
+    pItems.forEach((item) => {
+      const viewTop = item.top - scrollY; // 视口坐标（不含位移）
+      if (viewTop + item.height < -180 || viewTop > vh + 180) return; // 离屏：保持当前值
+
+      anyVisible = true;
+      const offset = (viewTop + item.height / 2 - vh / 2) * item.speed;
+      item.t = -offset;
+      item.el.style.transform = `translate3d(0, ${(-offset).toFixed(2)}px, 0)`;
+    });
+
+    // 全部离屏连续 12 帧后停帧省空转；scroll/resize 时唤醒
+    if (!anyVisible) {
+      parallaxIdleFrames += 1;
+      if (parallaxIdleFrames > 12) {
+        parallaxRafId = 0;
+        parallaxIdleFrames = 0;
+        return;
+      }
+    } else {
+      parallaxIdleFrames = 0;
+    }
+
+    parallaxRafId = requestAnimationFrame(updateParallax);
+  }
+
+  function wakeParallax() {
+    if (!parallaxRafId) {
+      parallaxRafId = requestAnimationFrame(updateParallax);
+    }
+  }
+
+  // 滚动唤醒（passive 不阻碍手势）；resize 后布局必变，重测后再唤醒
+  window.addEventListener('scroll', wakeParallax, { passive: true });
+  window.addEventListener('resize', () => {
+    measureParallax();
+    wakeParallax();
+  });
+  window.addEventListener('load', measureParallax);
+
+  measureParallax();
+  parallaxRafId = requestAnimationFrame(updateParallax);
+
+  // ==========================================================================
+  // 左侧快速切换页面导航（Viture Helix 风格屏幕圆点）
+  // 位置缓存 + 滚动事件同步高亮（布局变化时重测），点击平滑滚动到对应屏
+  // ==========================================================================
+  const screenNavDots = document.querySelectorAll('.screen-nav-dot');
+  let navTops = [];
+  let navDocHeight = 0;
+
+  function measureScreenNav() {
+    navTops = Array.from(screenNavDots).map((dot) => {
+      const section = document.getElementById(dot.dataset.screen);
+      if (!section) return 0;
+      return section.getBoundingClientRect().top + window.scrollY;
+    });
+    navDocHeight = document.body.scrollHeight;
+  }
+
+  function syncScreenNav() {
+    const probe = window.scrollY + window.innerHeight * 0.42;
+    let activeIndex = 0;
+    for (let i = 0; i < navTops.length; i += 1) {
+      if (probe >= navTops[i]) activeIndex = i;
+    }
+    screenNavDots.forEach((dot, i) => {
+      dot.classList.toggle('active', i === activeIndex);
+    });
+  }
+
+  if (screenNavDots.length) {
+    window.addEventListener('scroll', () => {
+      if (document.body.scrollHeight !== navDocHeight) measureScreenNav();
+      syncScreenNav();
+    }, { passive: true });
+
+    window.addEventListener('resize', () => {
+      measureScreenNav();
+      syncScreenNav();
+    });
+
+    window.addEventListener('load', () => {
+      measureScreenNav();
+      syncScreenNav();
+    });
+
+    screenNavDots.forEach((dot) => {
+      dot.addEventListener('click', () => {
+        const section = document.getElementById(dot.dataset.screen);
+        if (!section) return;
+        const top = section.getBoundingClientRect().top + window.scrollY;
+        window.scrollTo({ top, behavior: 'smooth' });
+      });
+    });
+
+    measureScreenNav();
+    syncScreenNav();
   }
 
   // ==========================================================================

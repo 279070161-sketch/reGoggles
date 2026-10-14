@@ -2,3 +2,5 @@ node_modules/
 .DS_Store
 *.local
 backup/
+
+.vite-dev*.log

@@ -6,11 +6,11 @@
   <title>reGoggles - Open Wearable AI Platform</title>
   <meta name="description" content="An Open Wearable AI Platform for Industrial Assistance, Egocentric Data Collection, and Intelligent Maker Innovation." />
   
-  <!-- JetBrains Mono Font with non-blocking load and immediate monospace fallback -->
+  <!-- Montserrat Font with non-blocking load and immediate sans-serif fallback -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300..800;1,300..800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300..800&display=swap"></noscript>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300..800;1,300..800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300..800&display=swap"></noscript>
   
   <!-- ES Module Import Map for native browser module resolution (GitHub Pages support) -->
   <script type="importmap">
@@ -26,51 +26,8 @@
 
   <link rel="icon" type="image/svg+xml" href="./logo.svg" />
   <link rel="stylesheet" href="./src/style.css" />
-  <style>
-    #global-preloader {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 999999;
-      background: #142325;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 1;
-      visibility: visible;
-      transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-      pointer-events: all;
-      user-select: none;
-    }
-    #global-preloader.loaded {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-    }
-    .preloader-counter {
-      font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
-      font-size: 0.95rem;
-      font-weight: 400;
-      color: #97abac;
-      letter-spacing: 0.04em;
-      font-variant-numeric: tabular-nums;
-      opacity: 0.75;
-    }
-    .preloader-symbol {
-      font-size: 0.85rem;
-      opacity: 0.85;
-    }
-  </style>
-</head>
+  </head>
 <body>
-  <!-- Minimal Full-Screen Digital Preloader -->
-  <div id="global-preloader" class="global-preloader">
-    <div class="preloader-counter">
-      <span class="preloader-number" id="preloader-percent">0</span><span class="preloader-symbol">%</span>
-    </div>
-  </div>
 
 
   <div id="app">
@@ -97,10 +54,8 @@
               <ul class="nav-links-list">
                 <li><a href="#hero" class="nav-link-item">Overview</a></li>
                 <li><a href="#community-builders" class="nav-link-item">Community Builders</a></li>
-                <li><a href="#evolving" class="nav-link-item">reGoggles Is Evolving</a></li>
                 <li><a href="#sensing-system" class="nav-link-item">Sensing System</a></li>
                 <li><a href="#data-interface" class="nav-link-item">Data Interface</a></li>
-                <li><a href="#multimodal-data" class="nav-link-item">Multimodal Data</a></li>
                 <li><a href="#protective-design" class="nav-link-item">Protective Design</a></li>
                 <li><a href="#open-sdk" class="nav-link-item">Open SDK & Firmware</a></li>
                 <li><a href="#applications" class="nav-link-item">Applications</a></li>
@@ -123,47 +78,23 @@
     <!-- Main Hero Banner Section -->
     <main class="hero-section" id="hero">
       <div class="banner-wrapper">
-        
-        <!-- 1. Ultra-Slow Scrolling Text Background separated by dots -->
-        <div class="marquee-ticker-wrapper" id="marquee-ticker-wrapper">
-          <div class="marquee-track" id="marquee-track-1">
-            <span class="marquee-item">reGoggles</span>
-            <span class="marquee-dot">•</span>
-            <span class="marquee-item">reGoggles</span>
-            <span class="marquee-dot">•</span>
-            <span class="marquee-item">reGoggles</span>
-            <span class="marquee-dot">•</span>
-            <span class="marquee-item">reGoggles</span>
-            <span class="marquee-dot">•</span>
-          </div>
-          <div class="marquee-track" id="marquee-track-2" aria-hidden="true">
-            <span class="marquee-item">reGoggles</span>
-            <span class="marquee-dot">•</span>
-            <span class="marquee-item">reGoggles</span>
-            <span class="marquee-dot">•</span>
-            <span class="marquee-item">reGoggles</span>
-            <span class="marquee-dot">•</span>
-            <span class="marquee-item">reGoggles</span>
-            <span class="marquee-dot">•</span>
+
+        <!-- 1. Main Content Grid: 左文右图（文字在左，产品静态图在右，图片可超出版面右缘） -->
+        <div class="banner-content-grid" data-parallax="0.12">
+          <div class="hero-split-layout">
+            <div class="top-left-content">
+              <h1 class="hero-brand-title">reGoggles</h1>
+              <p class="hero-intro-text">
+                An Open Wearable AI Platform for Industrial Assistance, Egocentric Data Collection, and Intelligent Maker Innovation.
+              </p>
+            </div>
+            <div class="hero-image-right">
+              <img id="product-img" class="product-image" src="./assets/images/hero-goggles2.webp?v=2" alt="reGoggles Wearable AI Goggles Static Render" />
+            </div>
           </div>
         </div>
 
-        <!-- 2. Main Content Grid (Top Left Headline in JetBrains Mono) -->
-        <div class="banner-content-grid">
-          <div class="top-left-content">
-            <h1 class="hero-intro-text">
-              An Open Wearable AI Platform for Industrial Assistance, Egocentric Data Collection, and Intelligent Maker Innovation.
-            </h1>
-          </div>
-        </div>
-
-        <!-- 3. Centerpiece Product Render Stage (Continuous Floating 3D Render) -->
-        <div class="product-stage-container" id="product-stage">
-          <div class="product-render-wrapper" id="product-wrapper">
-          </div>
-        </div>
-
-        <!-- 4. Bottom Annotation Bar (Placed on Bottom Right) -->
+        <!-- 4. Bottom Annotation Bar (Placed on Bottom Left) -->
         <div class="bottom-annotation-bar">
           <div class="annotation-right">
             <p class="annotation-text">
@@ -175,37 +106,33 @@
       </div>
     </main>
 
-    <!-- Section 2: VoltPile Sticky Venetian Blinds Scroll Transition Section -->
+    <!-- Section 2: Community Builders (百叶窗滚动效果已移除，静态背景直显) -->
     <div class="community-section-wrapper" id="community-builders">
       <section class="community-section-sticky">
-        
-        <!-- Underneath Background Image (Clear and Sharp) -->
-        <div class="section-bg-image">
-          <img src="./assets/images/community-bg.webp" alt="Community Builders Background" />
+
+        <!-- Underneath Background (Video with blur, falls back to the original still while loading) -->
+        <div class="section-bg-image" data-parallax="0.22">
+          <video
+            class="section-bg-video"
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="auto"
+            poster="./assets/images/community-bg.webp"
+            src="./assets/videos/diverse-team-collaborates-on-code-presentation-ind-2026-10-03-05-12-34-utc.mp4"
+          ></video>
         </div>
         <div class="section-bg-overlay"></div>
 
-        <!-- VoltPile Venetian 3D Trapezoid Shutter Blinds Layer (10 组精准梯形) -->
-        <div class="blinds-container" id="blinds-container">
-          <div class="slat-row"><div class="slat-blade"></div></div>
-          <div class="slat-row"><div class="slat-blade"></div></div>
-          <div class="slat-row"><div class="slat-blade"></div></div>
-          <div class="slat-row"><div class="slat-blade"></div></div>
-          <div class="slat-row"><div class="slat-blade"></div></div>
-          <div class="slat-row"><div class="slat-blade"></div></div>
-          <div class="slat-row"><div class="slat-blade"></div></div>
-          <div class="slat-row"><div class="slat-blade"></div></div>
-          <div class="slat-row"><div class="slat-blade"></div></div>
-          <div class="slat-row"><div class="slat-blade"></div></div>
-        </div>
-
-      <div class="community-container">
+      <div class="community-container" data-parallax="0.08">
         
         <!-- Main Content Shell -->
         <div class="community-content">
-          <!-- Top Header Grid (Title Top-Left, Subtitle Top-Right matching VoltPile) -->
+          <!-- Top Header Grid (Title Top-Left, Subtitle Top-Right) -->
           <div class="community-header-grid">
             <div class="header-left">
+              <p class="section-eyebrow-tag">reGoggles Is Evolving</p>
               <h2 class="community-main-title">
                 Be One of the First 100 Community Builders
               </h2>
@@ -222,7 +149,7 @@
             <!-- Card 1 -->
             <div class="role-card">
               <div class="icon-wrapper">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6E53D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path>
                   <path d="M9 18h6"></path>
                   <path d="M10 22h4"></path>
@@ -235,7 +162,7 @@
             <!-- Card 2 -->
             <div class="role-card">
               <div class="icon-wrapper">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6E53D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                 </svg>
               </div>
@@ -246,7 +173,7 @@
             <!-- Card 3 -->
             <div class="role-card">
               <div class="icon-wrapper">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6E53D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
                 </svg>
               </div>
@@ -257,10 +184,6 @@
 
           <!-- Supplementary Text & Action Buttons -->
           <div class="actions-block">
-            <p class="supplementary-text">
-              Subscribe or contact us to receive the latest reGoggles news and updates.
-            </p>
-
             <div class="buttons-group">
               <button class="btn-primary-action" id="join-community-btn">
                 <span>Join Community</span>
@@ -282,449 +205,243 @@
     </section>
   </div>
 
-    <!-- Section 3: ID Product Iteration Scroll-Driven Pinned Carousel -->
-    <div class="evolving-section-wrapper" id="evolving">
-      <section class="evolving-section-sticky">
-        <div class="evolving-container">
-          
-          <!-- Header Grid (Title Left, Subtitle Right - Matching Section 2) -->
-          <div class="evolving-header-grid">
-            <div class="header-left">
-              <h2 class="evolving-title">reGoggles Is Evolving</h2>
-            </div>
-            <div class="header-right">
-              <p class="evolving-subtitle">
-                ReGoggles is still under development, with features and capabilities continuously refined and expanded based on your feedbacks.
-              </p>
-            </div>
-          </div>
-
-          <!-- Scroll-Driven Interactive Stage (100% 下拉交互驱动) -->
-          <div class="iteration-marquee-wrapper" id="iteration-marquee-wrapper">
-            <div class="iteration-track" id="iteration-track">
-              <!-- Card 1 (V1.0) -->
-              <div class="iteration-card" data-version="V1.0">
-                <div class="product-img-wrapper">
-                  <img src="./assets/images/iterations/v1.webp" alt="reGoggles V1.0" class="iteration-img" />
-                </div>
-                <div class="version-tag-bottom">V1.0</div>
-              </div>
-
-              <!-- Card 2 (V2.0) -->
-              <div class="iteration-card" data-version="V2.0">
-                <div class="product-img-wrapper">
-                  <img src="./assets/images/iterations/v2.webp" alt="reGoggles V2.0" class="iteration-img" />
-                </div>
-                <div class="version-tag-bottom">V2.0</div>
-              </div>
-
-              <!-- Card 3 (V3.0) -->
-              <div class="iteration-card" data-version="V3.0">
-                <div class="product-img-wrapper">
-                  <img src="./assets/images/iterations/v3.webp" alt="reGoggles V3.0" class="iteration-img" />
-                </div>
-                <div class="version-tag-bottom">V3.0</div>
-              </div>
-
-              <!-- Card 4 (V4.0) -->
-              <div class="iteration-card" data-version="V4.0">
-                <div class="product-img-wrapper">
-                  <img src="./assets/images/iterations/v4.webp" alt="reGoggles V4.0" class="iteration-img" />
-                </div>
-                <div class="version-tag-bottom">V4.0</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Bottom Right Disclaimer Annotation -->
-          <div class="evolving-footer-annotation">
-            <p class="annotation-text">
-              Currently in development. Product design and features are subject to change before final release.
-            </p>
-          </div>
-
-        </div>
-      </section>
-    </div>
-
-    <!-- Section 4: Versatile Expansion (Sensing System Customization) -->
+    <!-- Section 3: Versatile Expansion (Sensing System Customization) -->
     <div class="expansion-section-wrapper" id="sensing-system">
       <section class="expansion-section">
         <div class="expansion-container">
           
-          <!-- Top Header Grid (Title Left, Subtitle Right - Matching Section 2 & 3) -->
+          <!-- Top Header (Title Centered) -->
           <div class="expansion-header-grid">
             <div class="header-left">
               <h2 class="expansion-title">
-                Define Your Sensing System with Versatile Expansion
-              </h2>
-            </div>
-            <div class="header-right">
-              <p class="expansion-subtitle">
-                Expansion ports support ToF, IMU, IR and more — free experience with different sensor setups.
-              </p>
-            </div>
-          </div>
-
-          <!-- Main Interactive Content Shell (2 Columns: Left Accordion List, Right Video Display) -->
-          <div class="expansion-content-grid">
-            
-            <!-- Left Column: Accordion List (3 Items) -->
-            <div class="expansion-list-wrapper">
-              
-              <!-- Item 1 (Default Active) -->
-              <div class="expansion-item active" data-target="video-original" data-status="Original features • Live System">
-                <div class="item-header">
-                  <div class="item-title-group">
-                    <span class="item-index">01</span>
-                    <h3 class="item-title">Original features</h3>
-                  </div>
-                  <div class="item-toggle-icon">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                  </div>
-                </div>
-                <div class="item-body">
-                  <p class="item-desc">
-                    The reGoggles itself comes with a built-in HD camera, microphones X3, speakers X2, Wi-Fi + BLE connectivity, and an IMU sensor.
-                  </p>
-                </div>
-              </div>
-
-              <!-- Item 2 -->
-              <div class="expansion-item" data-target="video-general" data-status="General Expansion Port • Custom Modules">
-                <div class="item-header">
-                  <div class="item-title-group">
-                    <span class="item-index">02</span>
-                    <h3 class="item-title">General Expansion Port</h3>
-                  </div>
-                  <div class="item-toggle-icon">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                  </div>
-                </div>
-                <div class="item-body">
-                  <p class="item-desc">
-                    The General Expansion Port supports ToF, optical modules, SD cards, environmental sensors, custom modules
-                  </p>
-                </div>
-              </div>
-
-              <!-- Item 3 -->
-              <div class="expansion-item" data-target="video-vision" data-status="Vision Expansion Port • Multi-Camera & IMU">
-                <div class="item-header">
-                  <div class="item-title-group">
-                    <span class="item-index">03</span>
-                    <h3 class="item-title">Vision Expansion Port</h3>
-                  </div>
-                  <div class="item-toggle-icon">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                  </div>
-                </div>
-                <div class="item-body">
-                  <p class="item-desc">
-                    The Vision Expansion Port supports additional Camera, additional Camera + IMU, and other vision module expansions.
-                  </p>
-                </div>
-              </div>
-
-            </div>
-
-            <!-- Right Column: Interactive Video Player Stage -->
-            <div class="expansion-video-wrapper">
-              <div class="video-display-card">
-                
-                <!-- Video 1 (Original features) -->
-                <video 
-                  id="video-original" 
-                  class="expansion-video active" 
-                  autoplay 
-                  muted 
-                  playsinline 
-                  src="./assets/videos/video2.mp4" 
-                  poster="./assets/images/iterations/v2.webp"
-                ></video>
-
-                <!-- Video 2 (General Expansion Port) -->
-                <video 
-                  id="video-general" 
-                  class="expansion-video" 
-                  autoplay 
-                  muted 
-                  playsinline 
-                  src="./assets/videos/video1.mp4" 
-                  poster="./assets/images/hero-goggles.webp"
-                ></video>
-
-                <!-- Video 3 (Vision Expansion Port) -->
-                <video 
-                  id="video-vision" 
-                  class="expansion-video" 
-                  autoplay 
-                  muted 
-                  playsinline 
-                  src="./assets/videos/video3.mp4" 
-                  poster="./assets/images/iterations/v4.webp"
-                ></video>
-
-                <!-- Glowing Hotspot Annotation for Item 02 (General Expansion Port) -->
-                <div class="hotspot-pin hotspot-general-port" id="hotspot-general">
-                  <div class="hotspot-pulse"></div>
-                  <div class="hotspot-core"></div>
-                  <div class="hotspot-tooltip">General Expansion Port</div>
-                </div>
-
-                <!-- Glowing Hotspot Annotation for Item 03 (Vision Expansion Port) -->
-                <div class="hotspot-pin hotspot-vision-port" id="hotspot-vision">
-                  <div class="hotspot-pulse"></div>
-                  <div class="hotspot-core"></div>
-                  <div class="hotspot-tooltip">Vision Expansion Port</div>
-                </div>
-
-              </div>
-            </div>
-
-          </div>
-
-        </div>
-      </section>
-    </div>
-
-    <!-- Section 5: Open & Flexible Data Interface -->
-    <div class="data-section-wrapper" id="data-interface">
-      <section class="data-section">
-        <div class="data-container">
-          
-          <!-- Top Header Grid (Title Left, Subtitle Right - Matching Section 2, 3 & 4) -->
-          <div class="data-header-grid">
-            <div class="header-left">
-              <h2 class="data-title">
-                Open & Flexible Data Interface
-              </h2>
-            </div>
-            <div class="header-right">
-              <p class="data-subtitle">
-                Open device data access for easy integration with custom applications, cloud APIs, and locally deployed models.
-              </p>
-            </div>
-          </div>
-
-          <!-- 3 Feature Cards Grid (Cloud AI Connection, Custom Applications, Locally Deployed AI) -->
-          <div class="data-cards-grid">
-            
-            <!-- Card 1: Cloud AI Connection -->
-            <div class="data-card">
-              <div class="card-visual-wrapper">
-                <img src="./assets/images/cloud-ai.webp" alt="Cloud AI Connection" class="card-visual-img" />
-              </div>
-              <div class="data-card-content">
-                <h3 class="card-title">Cloud AI Connection</h3>
-              </div>
-            </div>
-
-            <!-- Card 2: Custom Applications -->
-            <div class="data-card">
-              <div class="card-visual-wrapper">
-                <img src="./assets/images/ai-ecosystem.webp" alt="Custom Applications" class="card-visual-img" />
-              </div>
-              <div class="data-card-content">
-                <h3 class="card-title">Custom Applications</h3>
-              </div>
-            </div>
-
-            <!-- Card 3: Locally Deployed AI -->
-            <div class="data-card">
-              <div class="card-visual-wrapper">
-                <img src="./assets/images/edge-ai.webp" alt="Locally Deployed AI" class="card-visual-img" />
-              </div>
-              <div class="data-card-content">
-                <h3 class="card-title">Locally Deployed AI</h3>
-              </div>
-            </div>
-
-          </div>
-
-          <!-- Bottom Highlight Banner for reComputer Edge AI Boxes -->
-          <div class="recomputer-banner">
-            <div class="banner-chip-icon">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#c6e53d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="4" y="4" width="16" height="16" rx="2"></rect>
-                <rect x="9" y="9" width="6" height="6"></rect>
-                <line x1="9" y1="1" x2="9" y2="4"></line>
-                <line x1="15" y1="1" x2="15" y2="4"></line>
-                <line x1="9" y1="20" x2="9" y2="23"></line>
-                <line x1="15" y1="20" x2="15" y2="23"></line>
-                <line x1="20" y1="9" x2="23" y2="9"></line>
-                <line x1="20" y1="15" x2="23" y2="15"></line>
-                <line x1="1" y1="9" x2="4" y2="9"></line>
-                <line x1="1" y1="15" x2="4" y2="15"></line>
-              </svg>
-            </div>
-            <div class="banner-text-wrapper">
-              <p class="recomputer-text">
-                Pair <span class="highlight-bold">reGoggles</span> with <span class="highlight-accent">reComputer edge AI boxes</span> for local AI deployment — <span class="highlight-badge">100+ local models</span> to choose from.
-              </p>
-            </div>
-            <a href="https://www.seeedstudio.com/reComputer-Mini-J5011-with-GMSL-Extension-p-6876.html" target="_blank" rel="noopener" class="banner-action-btn">
-              <span>Explore reComputer</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </a>
-          </div>
-
-        </div>
-      </section>
-    </div>
-
-    <!-- Section 6: Capture Rich, Synchronized Multimodal Ego Data -->
-    <div class="multimodal-section-wrapper" id="multimodal-data">
-      <section class="multimodal-section">
-        <div class="multimodal-container">
-          
-          <!-- Top Header Grid (Title Left, Subtitle Right - Matching Brand Design System) -->
-          <div class="multimodal-header-grid">
-            <div class="header-left">
-              <h2 class="multimodal-title">
                 Capture Rich, Synchronized Multimodal Ego Data
               </h2>
             </div>
-            <div class="header-right">
-              <p class="multimodal-subtitle">
-                Hardware synchronization aligns multi-sensor data streams for multimodal data capture, algorithm evaluation, and model training.
-              </p>
-            </div>
           </div>
 
-          <!-- Main Stage: Left Cards | Center Product Render & SVG Leader Lines | Right Cards -->
-          <div class="multimodal-stage-wrapper">
-            
-            <!-- Left Cards Column (RGB, Hand Reconstruction, Object Detection) -->
-            <div class="cards-column column-left">
-              
-              <!-- Card 1: RGB -->
-              <div class="feature-thumb-card">
-                <div class="thumb-img-wrapper">
-                  <img src="./assets/images/sensors/rgb.webp" alt="RGB Sensor" class="thumb-img" />
-                  <div class="thumb-overlay-gradient"></div>
-                </div>
-                <div class="thumb-card-info">
-                  <h3 class="thumb-title">RGB</h3>
-                </div>
-              </div>
+          <!-- Main Interactive Content Shell (视频舞台 + 底部模式按钮切换) -->
+          <div class="expansion-content-grid">
 
-              <!-- Card 2: Hand Reconstruction -->
-              <div class="feature-thumb-card">
-                <div class="thumb-img-wrapper">
-                  <img src="./assets/images/sensors/hand-reconstruction.webp" alt="Hand Reconstruction" class="thumb-img" />
-                  <div class="thumb-overlay-gradient"></div>
-                </div>
-                <div class="thumb-card-info">
-                  <h3 class="thumb-title">Hand Reconstruction</h3>
-                </div>
-              </div>
+            <!-- Video Player Stage -->
+            <div class="expansion-video-wrapper">
+              <div class="video-display-card" data-parallax="0.10">
 
-              <!-- Card 3: Object Detection -->
-              <div class="feature-thumb-card">
-                <div class="thumb-img-wrapper">
-                  <img src="./assets/images/sensors/object-detection.webp" alt="Object Detection" class="thumb-img" />
-                  <div class="thumb-overlay-gradient"></div>
-                </div>
-                <div class="thumb-card-info">
-                  <h3 class="thumb-title">Object Detection</h3>
-                </div>
-              </div>
+                <!-- Image 1 (Vision) -->
+                <img
+                  id="image-vision"
+                  class="expansion-image active"
+                  src="./assets/images/hero-goggles2.webp?v=2"
+                  alt="Vision mode sample"
+                />
 
+                <!-- Image 2 (Audio) -->
+                <img
+                  id="image-audio"
+                  class="expansion-image"
+                  src="./assets/images/front.webp"
+                  alt="Audio mode sample"
+                />
+
+                <!-- Image 3 (Pose) -->
+                <img
+                  id="image-pose"
+                  class="expansion-image"
+                  src="./assets/images/3.1右侧俯视.webp"
+                  alt="Pose mode sample"
+                />
+
+                <!-- Image 4 (Extension) -->
+                <img
+                  id="image-extension"
+                  class="expansion-image"
+                  src="./assets/images/4.1左俯俯视.png"
+                  alt="Extension mode sample"
+                />
+
+                <!-- Vision 模式动态标注：引出线指向右侧摄像头 + 规格文字 —— 随 vision 图 1.2x 重算 -->
+                <div class="v-callout active" id="vision-annotation" style="--dot-x: 58.5%; --dot-y: 30.9%; --txt-x: 83%; --txt-y: -8.2%;">
+                  <svg class="vann-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                    <path class="vann-line" d="M 58.5 30.9 L 71.6 -2.8 L 82.4 -2.8" pathLength="1" fill="none" />
+                  </svg>
+                  <div class="vann-dot"></div>
+                  <div class="vann-text">
+                    <span class="vann-title">RGB 12MP</span>
+                    <span class="vann-sub">30FPS 720P Live Streaming</span>
+                  </div>
+                </div>
+
+                <!-- Pose 模式标注 1：上方镜片中间的插孔 (ToF Sensor) —— 随 pose 图 1.3x 重算 -->
+                <div class="v-callout pose-callout" id="pose-callout-tof" style="--dot-x: 29.9%; --dot-y: 57.4%; --txt-x: -19.3%; --txt-y: 69.2%;">
+                  <svg class="vann-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                    <path class="vann-line" d="M 29.9 57.4 L 5.5 56.2 L -3.8 69.4" pathLength="1" fill="none" />
+                  </svg>
+                  <div class="vann-dot"></div>
+                  <div class="vann-text txt-right">
+                    <span class="vann-title">ToF Sensor</span>
+                    <span class="vann-sub">(Requer Additional module)</span>
+                  </div>
+                </div>
+
+                <!-- Pose 模式标注 2：右边摄像头后面的位置 (6DOF IMU Sensor) —— 随 pose 图 1.3x 重算 -->
+                <div class="v-callout pose-callout" id="pose-callout-imu" style="--dot-x: 72.4%; --dot-y: 74.4%; --txt-x: 95.3%; --txt-y: 83.7%;">
+                  <svg class="vann-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                    <path class="vann-line" d="M 72.4 74.4 L 90.4 73.8 L 96.1 81.7" pathLength="1" fill="none" />
+                  </svg>
+                  <div class="vann-dot"></div>
+                  <div class="vann-text">
+                    <span class="vann-title">6DOF IMU Sensor</span>
+                  </div>
+                </div>
+
+                <!-- Extension 模式标注 1：General Expansion Port —— 随 expansion 图 1.3x 重算 -->
+                <div class="v-callout extension-callout" id="ext-callout-general" style="--dot-x: 73.7%; --dot-y: 58.7%; --txt-x: 97.2%; --txt-y: 10.2%;">
+                  <svg class="vann-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                    <path class="vann-line" d="M 73.7 58.7 L 85.6 14.5 L 93.9 14.5" pathLength="1" fill="none" />
+                  </svg>
+                  <div class="vann-dot"></div>
+                  <div class="vann-text">
+                    <span class="vann-title">General Expansion Port</span>
+                    <span class="vann-sub">Additional Camera, ToF, SD Card<br>and Custom Modules</span>
+                  </div>
+                </div>
+
+                <!-- Extension 模式标注 2：Vision Expansion Port —— 随 expansion 图 1.3x 重算 -->
+                <div class="v-callout extension-callout" id="ext-callout-vision" style="--dot-x: 30%; --dot-y: 75.6%; --txt-x: -12.8%; --txt-y: 92.8%;">
+                  <svg class="vann-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                    <path class="vann-line" d="M 30 75.6 L 12.8 93.6 L 12.7 93.6" pathLength="1" fill="none" />
+                  </svg>
+                  <div class="vann-dot"></div>
+                  <div class="vann-text">
+                    <span class="vann-title">Vision Expansion Port</span>
+                    <span class="vann-sub">Additional Camera+IMU and Custom Modules</span>
+                  </div>
+                </div>
+
+                <!-- Audio 模式标注 1：3-Microphone Array（三点共线，共享拐点与文字） -->
+                <div class="v-callout audio-callout" id="audio-callout-mic" style="--txt-x: 68%; --txt-y: 6.5%;">
+                  <svg class="vann-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                    <path class="vann-line" d="M 6.2 50.3 L 49.9 9.1 L 66.1 9.1" pathLength="1" fill="none" />
+                    <path class="vann-line" d="M 49.9 24.1 L 49.9 9.1 L 66.1 9.1" pathLength="1" fill="none" />
+                    <path class="vann-line" d="M 94.1 50.5 L 49.9 9.1 L 66.1 9.1" pathLength="1" fill="none" />
+                  </svg>
+                  <div class="vann-dot" style="left: 6.2%; top: 50.3%;"></div>
+                  <div class="vann-dot" style="left: 49.9%; top: 24.1%;"></div>
+                  <div class="vann-dot" style="left: 94.1%; top: 50.5%;"></div>
+                  <div class="vann-text">
+                    <span class="vann-title">3-Microphone Array</span>
+                  </div>
+                </div>
+
+                <!-- Audio 模式标注 2：2-Stereo Speaker（两点共线，共享拐点与文字） -->
+                <div class="v-callout audio-callout" id="audio-callout-spk" style="--txt-x: 12.1%; --txt-y: 101.2%;">
+                  <svg class="vann-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                    <path class="vann-line" d="M 11.8 75.1 L 50.7 103.9 L 28.9 103.8" pathLength="1" fill="none" />
+                    <path class="vann-line" d="M 87.9 75.6 L 50.7 103.9 L 28.9 103.8" pathLength="1" fill="none" />
+                  </svg>
+                  <div class="vann-dot" style="left: 11.8%; top: 75.1%;"></div>
+                  <div class="vann-dot" style="left: 87.9%; top: 75.6%;"></div>
+                  <div class="vann-text">
+                    <span class="vann-title">2-Stereo Speaker</span>
+                  </div>
+                </div>
+
+              </div>
             </div>
 
-            <!-- Center Stage: Product Render (2.1右侧仰视带模组.png) with Callout Lines -->
-            <div class="center-product-stage">
-              <div class="product-render-box">
-                <img src="./assets/images/modular-goggles.webp" alt="reGoggles Front Product Render with Expansion Modules" class="center-product-img" />
-                <div class="stage-ambient-glow"></div>
-                
-                <!-- High-Tech Annotation Leader Line SVG Layer -->
-                <svg class="callout-svg-layer" viewBox="0 0 700 520" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-                  <defs>
-                    <filter id="line-glow" x="-20%" y="-20%" width="140%" height="140%">
-                      <feGaussianBlur stdDeviation="1.5" result="blur" />
-                      <feMerge>
-                        <feMergeNode in="blur" />
-                        <feMergeNode in="SourceGraphic" />
-                      </feMerge>
-                    </filter>
-                  </defs>
-
-                  <!-- Connector 1: Left Top (RGB -> Top Front Camera Module) -->
-                  <path d="M 0 75 H 160 L 305 205" stroke="rgba(198, 229, 61, 0.2)" stroke-width="1" />
-                  <path class="flow-line flow-left" d="M 0 75 H 160 L 305 205" stroke="#c6e53d" stroke-width="1.2" stroke-dasharray="5 7" filter="url(#line-glow)" />
-
-                  <!-- Connector 2: Left Mid (Hand Reconstruction -> Top Front Camera Module) -->
-                  <path d="M 0 255 H 140 L 305 205" stroke="rgba(198, 229, 61, 0.2)" stroke-width="1" />
-                  <path class="flow-line flow-left" d="M 0 255 H 140 L 305 205" stroke="#c6e53d" stroke-width="1.2" stroke-dasharray="5 7" filter="url(#line-glow)" />
-
-                  <!-- Connector 3: Left Bottom (Object Detection -> Top Front Camera Module) -->
-                  <path d="M 0 435 H 150 L 305 205" stroke="rgba(198, 229, 61, 0.2)" stroke-width="1" />
-                  <path class="flow-line flow-left" d="M 0 435 H 150 L 305 205" stroke="#c6e53d" stroke-width="1.2" stroke-dasharray="5 7" filter="url(#line-glow)" />
-
-                  <!-- Shared Camera Module Target Node -->
-                  <g class="target-node">
-                    <circle cx="305" cy="205" r="3.5" fill="#c6e53d" filter="url(#line-glow)" />
-                    <circle class="pulse-ring" cx="305" cy="205" r="7" stroke="#c6e53d" stroke-width="1.2" stroke-opacity="0.9" fill="none" />
-                    <circle class="pulse-ring-outer" cx="305" cy="205" r="12" stroke="#c6e53d" stroke-width="0.8" stroke-opacity="0.5" fill="none" />
-                  </g>
-
-                  <!-- Connector 4: Right Top (Depth -> Top Front Camera Module) -->
-                  <path d="M 700 75 H 540 L 305 205" stroke="rgba(198, 229, 61, 0.2)" stroke-width="1" />
-                  <path class="flow-line flow-right" d="M 700 75 H 540 L 305 205" stroke="#c6e53d" stroke-width="1.2" stroke-dasharray="5 7" filter="url(#line-glow)" />
-
-                  <!-- Connector 5: Right Mid (6DOF IMU -> Temple Hinge Module) -->
-                  <path d="M 700 255 H 520 L 400 240" stroke="rgba(198, 229, 61, 0.2)" stroke-width="1" />
-                  <path class="flow-line flow-right" d="M 700 255 H 520 L 400 240" stroke="#c6e53d" stroke-width="1.2" stroke-dasharray="5 7" filter="url(#line-glow)" />
-                  <g class="target-node">
-                    <circle cx="400" cy="240" r="3" fill="#c6e53d" filter="url(#line-glow)" />
-                    <circle class="pulse-ring" cx="400" cy="240" r="6" stroke="#c6e53d" stroke-width="1.2" stroke-opacity="0.9" fill="none" />
-                  </g>
-
-                  <!-- Connector 6: Right Bottom (Audio -> Top Front Camera Module) -->
-                  <path d="M 700 435 H 550 L 305 205" stroke="rgba(198, 229, 61, 0.2)" stroke-width="1" />
-                  <path class="flow-line flow-right" d="M 700 435 H 550 L 305 205" stroke="#c6e53d" stroke-width="1.2" stroke-dasharray="5 7" filter="url(#line-glow)" />
-                </svg>
-              </div>
+            <!-- Bottom Mode Tabs: Vision / Audio / Pose / Extension -->
+            <div class="expansion-tabs" role="tablist" aria-label="Multimodal data modes">
+              <button type="button" class="exp-mode-tab active" data-target="image-vision">Vision</button>
+              <button type="button" class="exp-mode-tab" data-target="image-audio">Audio</button>
+              <button type="button" class="exp-mode-tab" data-target="image-pose">Pose</button>
+              <button type="button" class="exp-mode-tab" data-target="image-extension">Expansion</button>
             </div>
 
-            <!-- Right Cards Column (Depth, 6DOF IMU, Audio) -->
-            <div class="cards-column column-right">
-              
-              <!-- Card 4: Depth -->
-              <div class="feature-thumb-card">
-                <div class="thumb-img-wrapper">
-                  <img src="./assets/images/sensors/depth.webp" alt="Depth Sensor" class="thumb-img" />
-                  <div class="thumb-overlay-gradient"></div>
-                </div>
-                <div class="thumb-card-info">
-                  <h3 class="thumb-title">Depth</h3>
-                </div>
-              </div>
+          </div>
 
-              <!-- Card 5: 6DOF IMU -->
-              <div class="feature-thumb-card">
-                <div class="thumb-img-wrapper">
-                  <img src="./assets/images/sensors/imu.webp" alt="6DOF IMU Sensor" class="thumb-img" />
-                  <div class="thumb-overlay-gradient"></div>
-                </div>
-                <div class="thumb-card-info">
-                  <h3 class="thumb-title">6DOF IMU</h3>
-                </div>
-              </div>
+        </div>
+      </section>
+    </div>
 
-              <!-- Card 6: Audio -->
-              <div class="feature-thumb-card">
-                <div class="thumb-img-wrapper">
-                  <img src="./assets/images/sensors/audio.webp" alt="Audio Microphone Array" class="thumb-img" />
-                  <div class="thumb-overlay-gradient"></div>
-                </div>
-                <div class="thumb-card-info">
-                  <h3 class="thumb-title">Audio</h3>
-                </div>
-              </div>
+    <!-- Section 5: Open Ego Data Gateway for Physical AI -->
+    <div class="data-section-wrapper" id="data-interface">
+      <section class="data-section">
+        <div class="data-container">
 
+          <div class="gateway-grid">
+
+            <!-- 左：产品渲染图（用户选角的模型截图，透明底） -->
+            <div class="gateway-visual-col">
+              <img
+                id="gateway-product"
+                class="gateway-product"
+                src="./assets/images/gateway-render.webp"
+                alt="reGoggles product render"
+              />
+            </div>
+
+            <!-- 右：大标题 + 三张卖点卡 -->
+            <div class="gateway-text-col">
+              <h2 class="gateway-title">
+                Open Ego Data for Your Physical AI
+              </h2>
+
+              <div class="gateway-card-list">
+
+                <div class="gateway-card">
+                  <div class="gateway-card-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#142325" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="6" y="6" width="12" height="12" rx="2"></rect>
+                      <rect x="10" y="10" width="4" height="4"></rect>
+                      <line x1="10" y1="2" x2="10" y2="6"></line>
+                      <line x1="14" y1="2" x2="14" y2="6"></line>
+                      <line x1="10" y1="18" x2="10" y2="22"></line>
+                      <line x1="14" y1="18" x2="14" y2="22"></line>
+                      <line x1="2" y1="10" x2="6" y2="10"></line>
+                      <line x1="2" y1="14" x2="6" y2="14"></line>
+                      <line x1="18" y1="10" x2="22" y2="10"></line>
+                      <line x1="18" y1="14" x2="22" y2="14"></line>
+                    </svg>
+                  </div>
+                  <div class="gateway-card-text">
+                    <h3 class="gateway-card-title">On-chip Video Engine</h3>
+                    <p class="gateway-card-desc">
+                      Powered by Allwinner V881 SoC, reGoggles delivers smooth dual-camera streaming with dedicated ISP and encoding pipelines.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="gateway-card">
+                  <div class="gateway-card-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#142325" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M4.5 12.5a10 10 0 0 1 15 0"></path>
+                      <path d="M7.8 15.6a5.4 5.4 0 0 1 8.4 0"></path>
+                      <circle cx="12" cy="18.8" r="1.2" fill="#142325" stroke="none"></circle>
+                    </svg>
+                  </div>
+                  <div class="gateway-card-text">
+                    <h3 class="gateway-card-title">Dual-Channel Open Connectivity</h3>
+                    <p class="gateway-card-desc">
+                      Open, customizable transport layer with Dual-SoC architecture: V881 runs WiFi6 data streams & WQ7036AX handles BLE control.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="gateway-card">
+                  <div class="gateway-card-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#142325" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M12 3l1.9 5.5L19.5 10.4l-5.6 1.9L12 17.8l-1.9-5.5L4.5 10.4l5.6-1.9z"></path>
+                      <path d="M18.6 3.4l.55 1.65 1.65.55-1.65.55-.55 1.65-.55-1.65-1.65-.55 1.65-.55z"></path>
+                    </svg>
+                  </div>
+                  <div class="gateway-card-text">
+                    <h3 class="gateway-card-title">Open AI Integration</h3>
+                    <p class="gateway-card-desc">
+                      Stream egocentric data to edge AI, cloud models, or your own apps—giving AI a window into the physical world.
+                    </p>
+                  </div>
+                </div>
+
+              </div>
             </div>
 
           </div>
@@ -800,7 +517,7 @@
                 <!-- Feature 1: Hack The Firmware -->
                 <div class="sdk-feature-card">
                   <div class="feature-icon-box">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c6e53d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#142325" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                       <polyline points="16 18 22 12 16 6"></polyline>
                       <polyline points="8 6 2 12 8 18"></polyline>
                     </svg>
@@ -814,7 +531,7 @@
                 <!-- Feature 2: Extend The Sensing Stack -->
                 <div class="sdk-feature-card">
                   <div class="feature-icon-box">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c6e53d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#142325" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                       <line x1="12" y1="5" x2="12" y2="19"></line>
                       <line x1="5" y1="12" x2="19" y2="12"></line>
                     </svg>
@@ -828,7 +545,7 @@
                 <!-- Feature 3: Integrate Into Your Own System -->
                 <div class="sdk-feature-card">
                   <div class="feature-icon-box">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c6e53d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#142325" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                       <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
                       <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
                     </svg>
@@ -878,7 +595,7 @@
               
               <!-- Slide Header -->
               <div class="slide-header-grid">
-                <h3 class="slide-theme-title">Maker<br/>Innovations</h3>
+                <h3 class="slide-theme-title">Maker Innovations</h3>
                 <p class="slide-theme-subtitle">
                   An extensible head-worn development platform for connecting sensors and custom applications, turning ideas into testable wearable prototypes.
                 </p>
@@ -966,7 +683,7 @@
             <!-- Slide 2: Industrial AI Assistance -->
             <div class="theme-slide-card" data-slide-index="1">
               <div class="slide-header-grid">
-                <h3 class="slide-theme-title">Industrial AI<br/>Assistance</h3>
+                <h3 class="slide-theme-title">Industrial AI Assistance</h3>
                 <p class="slide-theme-subtitle">
                   Customizable open glasses built for industrial environments, featuring local AI deployment and personal safety
                 </p>
@@ -1033,7 +750,7 @@
             <!-- Slide 3: Ego Data Collection -->
             <div class="theme-slide-card" data-slide-index="2">
               <div class="slide-header-grid">
-                <h3 class="slide-theme-title">Ego Data<br/>Collection</h3>
+                <h3 class="slide-theme-title">Ego Data Collection</h3>
                 <p class="slide-theme-subtitle">
                   A multimodal Egocentric data capture device built for industrial environments, offering new possibilities for Embodied AI.
                 </p>
@@ -1119,30 +836,18 @@
 
       <section class="build-section">
 
-        <!-- Infinite Running Marquee Title Banner (Matching Reference Image) -->
+        <!-- Static Title Banner (跑马灯已移除) -->
         <div class="marquee-title-wrapper">
-          <div class="marquee-track">
-            <span class="marquee-text">Build it your way<span class="marquee-separator">?</span></span>
-            <span class="marquee-text">Build it your way<span class="marquee-separator">?</span></span>
-            <span class="marquee-text">Build it your way<span class="marquee-separator">?</span></span>
-            <span class="marquee-text">Build it your way<span class="marquee-separator">?</span></span>
-            <span class="marquee-text">Build it your way<span class="marquee-separator">?</span></span>
-            <span class="marquee-text">Build it your way<span class="marquee-separator">?</span></span>
-          </div>
+          <h2 class="build-static-title">Build It Your Way</h2>
         </div>
 
         <!-- Section Content Area -->
         <div class="build-content-container">
-          
+
           <!-- Content Grid Layout -->
           <div class="build-content-grid">
-            
-            <!-- Left Side Category Tag -->
-            <div class="build-grid-left">
-              <span class="build-tag-label">CUSTOMIZATION</span>
-            </div>
 
-            <!-- Right Side Content -->
+            <!-- Content -->
             <div class="build-grid-right">
               
               <!-- Subtitle Description -->
@@ -1210,6 +915,18 @@
 
       </section>
     </div>
+
+    <!-- 左侧快速切换页面导航（Viture Helix 风格圆点，桌面端可见） -->
+    <aside class="screen-nav" id="screen-nav" aria-label="Quick section navigation">
+      <button type="button" class="screen-nav-dot active" data-screen="hero" aria-label="Overview"></button>
+      <button type="button" class="screen-nav-dot" data-screen="community-builders" aria-label="Community"></button>
+      <button type="button" class="screen-nav-dot" data-screen="sensing-system" aria-label="Sensing System"></button>
+      <button type="button" class="screen-nav-dot" data-screen="data-interface" aria-label="Data Interface"></button>
+      <button type="button" class="screen-nav-dot" data-screen="protective-design" aria-label="Protective Design"></button>
+      <button type="button" class="screen-nav-dot" data-screen="open-sdk" aria-label="Open SDK"></button>
+      <button type="button" class="screen-nav-dot" data-screen="applications" aria-label="Applications"></button>
+      <button type="button" class="screen-nav-dot" data-screen="customization" aria-label="Build It Your Way"></button>
+    </aside>
 
     <div class="modal-backdrop" id="action-modal">
       <div class="modal-card">

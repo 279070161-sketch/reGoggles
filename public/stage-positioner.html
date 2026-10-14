@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Section 3 舞台摆位工具</title>
+<style>
+:root { color-scheme: light; }
+body { margin: 0; background: #f3f5f6; color: #142325; font-family: system-ui, sans-serif; padding-bottom: 2rem; }
+h1 { font-size: 1.1rem; margin: 1.2rem 1.5rem 0.4rem; }
+p.tip { font-size: 0.85rem; color: #5a6b6d; margin: 0 1.5rem 1.2rem; line-height: 1.6; max-width: 900px; }
+.stage-wrap { padding: 0 1.5rem; }
+.label { font-size: 0.82rem; font-weight: 700; margin: 0 0 0.4rem; }
+.board-outer { position: relative; width: 963px; height: 409px; background: #fff; border: 1px solid #dde3e4; border-radius: 8px; overflow: auto; }
+.board { position: absolute; left: 0; top: 0; width: 1604px; height: 680px; transform: scale(0.6); transform-origin: 0 0; background: linear-gradient(180deg, #ffffff 0%, #c6ced2 100%); }
+/* 视觉参考：标题带 / 底部 tabs 带 */
+.ref-header { position: absolute; left: 56px; top: 36px; width: 240px; height: 34px; border-radius: 6px; background: rgba(20,35,37,0.08); }
+.ref-tabs { position: absolute; left: 0; right: 0; bottom: 30px; height: 40px; display: flex; justify-content: center; gap: 12px; }
+.ref-tab { width: 92px; height: 26px; border-radius: 999px; background: rgba(20,35,37,0.10); margin-top: 7px; }
+/* 舞台卡片（可拖动/缩放） */
+.stage-card {
+  position: absolute; left: 392px; top: 84px; width: 820px; height: 512px;
+  background: rgba(12, 23, 25, 0.85); border-radius: 10px; cursor: grab;
+  box-shadow: 0 20px 40px rgba(20,35,37,0.25);
+}
+.stage-card:active { cursor: grabbing; }
+.stage-card .ghost { position: absolute; inset: 0; border-radius: 10px; border: 1px dashed rgba(255,255,255,0.5); pointer-events: none; }
+.stage-card .label-in { position: absolute; left: 14px; top: 12px; color: #fff; font-size: 13px; opacity: 0.8; pointer-events: none; }
+.handle {
+  position: absolute; width: 16px; height: 16px; border-radius: 4px;
+  background: #c6e53d; border: 2px solid #0c1719; cursor: nwse-resize; z-index: 5;
+}
+.handle.br { right: -8px; bottom: -8px; cursor: nwse-resize; }
+.handle.bl { left: -8px; bottom: -8px; cursor: nesw-resize; }
+.handle.tr { right: -8px; top: -8px; cursor: nesw-resize; }
+.handle.tl { left: -8px; top: -8px; cursor: nwse-resize; }
+.readout { margin-top: 0.8rem; background: #fff; border: 1px solid #dde3e4; border-radius: 8px; padding: 0.7rem 1rem; font-family: ui-monospace, Consolas, monospace; font-size: 0.8rem; line-height: 1.8; max-width: 963px; }
+button.copy-btn { margin: 0.6rem 0 0; display: block; width: 220px; padding: 0.45rem 0; font-size: 0.85rem; border: 1px solid #142325; border-radius: 999px; background: #fff; cursor: pointer; }
+textarea { margin-top: 0.6rem; width: 963px; max-width: 96vw; height: 70px; box-sizing: border-box; font-family: ui-monospace, monospace; font-size: 0.78rem; border: 1px solid #dde3e4; border-radius: 8px; padding: 0.6rem; }
+</style>
+</head>
+<body>
+<h1>Section 3 舞台摆位工具</h1>
+<p class="tip">拖动深色矩形（=视频舞台）摆位置；拖<b>四角绿色方块</b>等比缩放（保持 16:10）。面板按 1700px 设计宽的空间绘制（缩放 0.6 显示）。摆好后点"复制参数"发给我，我把它写进页面 CSS。</p>
+
+<div class="stage-wrap">
+  <div class="label">Section 3 内容区（缩放模拟）</div>
+  <div class="board-outer" id="outer">
+    <div class="board" id="board">
+      <div class="ref-header"></div>
+      <div class="ref-tabs">
+        <div class="ref-tab"></div><div class="ref-tab"></div><div class="ref-tab"></div><div class="ref-tab"></div>
+      </div>
+      <div class="stage-card" id="card">
+        <div class="ghost"></div>
+        <div class="label-in">视频舞台 820×512（默认）</div>
+        <div class="handle tl" data-h="tl"></div>
+        <div class="handle tr" data-h="tr"></div>
+        <div class="handle bl" data-h="bl"></div>
+        <div class="handle br" data-h="br"></div>
+      </div>
+    </div>
+  </div>
+  <div class="readout" id="out"></div>
+  <button class="copy-btn" id="copy-btn">复制参数</button>
+  <textarea id="summary" readonly></textarea>
+</div>
+
+<script>
+(function () {
+  var BOARD_W = 1604, BOARD_H = 680;   // 设计空间（1700 容器减 padding）
+  var SCALE = 0.6;
+  var card = document.getElementById('card');
+  var board = document.getElementById('board');
+  var stage = { w: 820, h: 512, x: 392, y: 84 };
+
+  function apply() {
+    card.style.width = stage.w + 'px';
+    card.style.height = stage.h + 'px';
+    card.style.left = stage.x + 'px';
+    card.style.top = stage.y + 'px';
+    renderReadout();
+  }
+
+  function renderReadout() {
+    var centerX = (BOARD_W - stage.w) / 2;
+    var centerY = (BOARD_H - stage.h) / 2;
+    var dx = Math.round(stage.x - centerX);
+    var dy = Math.round(stage.y - centerY);
+    document.getElementById('out').innerHTML =
+      '宽度 W: <b>' + Math.round(stage.w) + 'px</b>（原 820）&nbsp;|&nbsp;' +
+      '水平偏移: <b>' + dx + 'px</b>（相对默认居中）&nbsp;|&nbsp;' +
+      '垂直偏移: <b>' + dy + 'px</b>（相对默认居中）&nbsp;|&nbsp;' +
+      '当前默认居中基准 x=392, y=84（y 过后可在真机上再校准）';
+    document.getElementById('summary').value = JSON.stringify({ w: Math.round(stage.w), dx: dx, dy: dy });
+  }
+
+  function toBoard(ev) {
+    var r = board.getBoundingClientRect();
+    var cx = ev.touches ? ev.touches[0].clientX : ev.clientX;
+    var cy = ev.touches ? ev.touches[0].clientY : ev.clientY;
+    return { x: (cx - r.left) / SCALE, y: (cy - r.top) / SCALE };
+  }
+
+  function startDrag(e, mode, anchor) {
+    var start = toBoard(e);
+    var s0 = { w: stage.w, h: stage.h, x: stage.x, y: stage.y };
+    function move(ev) {
+      var p = toBoard(ev);
+      var dx = p.x - start.x, dy = p.y - start.y;
+      if (mode === 'move') {
+        stage.x = Math.min(BOARD_W - stage.w, Math.max(0, s0.x + dx));
+        stage.y = Math.min(BOARD_H - stage.h, Math.max(0, s0.y + dy));
+      } else {
+        var w0 = s0.w, h0 = s0.h, x0 = s0.x, y0 = s0.y;
+        var nw = w0, nh = h0, nx = x0, ny = y0;
+        if (anchor === 'br') { nw = w0 + dx; nh = nw * 10 / 16; }
+        else if (anchor === 'tl') { nw = w0 - dx; nh = nw * 10 / 16; nx = x0 + (w0 - nw); ny = y0 + (h0 - nh); }
+        else if (anchor === 'tr') { nw = w0 + dx; nh = nw * 10 / 16; ny = y0 + (h0 - nh); }
+        else if (anchor === 'bl') { nw = w0 - dx; nh = nw * 10 / 16; nx = x0 + (w0 - nw); }
+        nw = Math.max(300, Math.min(1400, nw));
+        nh = nw * 10 / 16;
+        if (anchor === 'tl' || anchor === 'bl') { nw = Math.max(300, Math.min(1400, w0 - dx)); nh = nw * 10 / 16; nx = x0 + (w0 - nw); }
+        if (anchor === 'tl' || anchor === 'tr') { ny = y0 + (h0 - nh); }
+        stage.w = nw; stage.h = nh; stage.x = nx; stage.y = ny;
+      }
+      apply();
+    }
+    function up() {
+      window.removeEventListener('mousemove', move);
+      window.removeEventListener('mouseup', up);
+      window.removeEventListener('touchmove', move);
+      window.removeEventListener('touchend', up);
+    }
+    window.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', up);
+    window.addEventListener('touchmove', move, { passive: false });
+    window.addEventListener('touchend', up);
+    e.preventDefault();
+  }
+
+  card.addEventListener('mousedown', function (e) { if (e.target === card) startDrag(e, 'move'); });
+  card.addEventListener('touchstart', function (e) { if (e.target === card) startDrag(e, 'move'); }, { passive: false });
+  document.querySelectorAll('.handle').forEach(function (h) {
+    h.addEventListener('mousedown', function (e) { e.stopPropagation(); startDrag(e, 'resize', h.dataset.h); });
+    h.addEventListener('touchstart', function (e) { e.stopPropagation(); startDrag(e, 'resize', h.dataset.h); }, { passive: false });
+  });
+
+  document.getElementById('copy-btn').addEventListener('click', function () {
+    var ta = document.getElementById('summary');
+    ta.select();
+    try { document.execCommand('copy'); this.textContent = '已复制!'; }
+    catch (err) { this.textContent = '请手动复制下方文本'; }
+    setTimeout(function () { document.getElementById('copy-btn').textContent = '复制参数'; }, 1500);
+  });
+
+  apply();
+})();
+</script>
+</body>
+</html>
