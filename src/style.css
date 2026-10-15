@@ -1916,7 +1916,7 @@ html {
 
 .sdk-grid {
   display: grid;
-  grid-template-columns: 1.05fr 1fr;
+  grid-template-columns: 1.15fr 0.95fr; /* 2026-10-15 与 Data Gateway 对齐，两模块图片水平中点一致 */
   gap: 4.5rem;
   align-items: center;
   width: 100%;
@@ -2678,6 +2678,10 @@ html {
     left: calc(-1 * (max(0px, ((100vw / 0.97) - 1700px) / 2) + 3rem));
     width: calc(100% + max(0px, ((100vw / 0.97) - 1700px) / 2) + 3rem);
   }
+  /* 本档 SDK 无 zoom，但上内边距 4rem/下 3rem 使内容中心下移 8px，向上修正 */
+  .sdk-img {
+    top: calc(50% - 8px);
+  }
   .community-container { zoom: 0.98; }
   .protective-container { zoom: 0.92; }
   .carousel-stage-container { zoom: 0.89; }
@@ -2709,6 +2713,7 @@ html {
     left: calc(-1 * (max(0px, ((100vw / 0.95) - 1700px) / 2) + 3rem));
     width: calc(100% + max(0px, ((100vw / 0.95) - 1700px) / 2) + 3rem);
     height: calc(100vh / 0.95);
+    top: calc(50% - 4px); /* 本档上内边距 3rem/下 2.5rem，中心下移 4px，向上修正 */
   }
   .carousel-stage-container { zoom: 0.76; }
 }
@@ -2739,6 +2744,7 @@ html {
     left: calc(-1 * (max(0px, ((100vw / 0.98) - 1700px) / 2) + 3rem));
     width: calc(100% + max(0px, ((100vw / 0.98) - 1700px) / 2) + 3rem);
     height: calc(100vh / 0.98);
+    top: calc(50% - 2px); /* 本档上 2rem/下 1.75rem，中心下移 2px，向上修正 */
   }
   .carousel-stage-container { zoom: 0.74; }
   .build-section { zoom: 1.05; }
@@ -2770,6 +2776,7 @@ html {
     left: calc(-1 * (max(0px, ((100vw / 0.90) - 1700px) / 2) + 3rem));
     width: calc(100% + max(0px, ((100vw / 0.90) - 1700px) / 2) + 3rem);
     height: calc(100vh / 0.90);
+    top: calc(50% - 2px);
   }
   .carousel-stage-container { zoom: 0.68; }
   .build-section { zoom: 1.2; }
@@ -2801,6 +2808,7 @@ html {
     left: calc(-1 * (max(0px, ((100vw / 0.80) - 1700px) / 2) + 3rem));
     width: calc(100% + max(0px, ((100vw / 0.80) - 1700px) / 2) + 3rem);
     height: calc(100vh / 0.80);
+    top: calc(50% - 2px);
   }
   .carousel-stage-container { zoom: 0.59; }
   .build-section { zoom: 1.1; }
@@ -2832,6 +2840,7 @@ html {
     left: calc(-1 * (max(0px, ((100vw / 0.74) - 1700px) / 2) + 3rem));
     width: calc(100% + max(0px, ((100vw / 0.74) - 1700px) / 2) + 3rem);
     height: calc(100vh / 0.74);
+    top: calc(50% - 2px);
   }
   .carousel-stage-container { zoom: 0.54; }
   .build-section { zoom: 0.98; }
@@ -2863,6 +2872,7 @@ html {
     left: calc(-1 * (max(0px, ((100vw / 0.66) - 1700px) / 2) + 3rem));
     width: calc(100% + max(0px, ((100vw / 0.66) - 1700px) / 2) + 3rem);
     height: calc(100vh / 0.66);
+    top: calc(50% - 2px);
   }
   .carousel-stage-container { zoom: 0.48; }
   .build-section { zoom: 0.9; }
