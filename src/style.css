@@ -1321,10 +1321,16 @@ html {
   pointer-events: auto;
 }
 
-/* 各模式产品主体对齐：Vision 放大 1.2x；Pose 放大 1.3x 并上移右移
-   后续 Audio/Expansion 模式在此追加各自的 transform */
+/* 各模式产品主体对齐：Vision 放大 1.2x 并整体右移（2026-10-15，避免左侧标注文字出画）；
+   Pose 放大 1.3x 并上移右移；后续 Audio/Expansion 模式在此追加各自的 transform */
 #image-vision {
-  transform: scale(1.2);
+  transform: translateX(15%) scale(1.2);
+}
+
+/* Vision 两条标注随舞台图同位移，点线文字保持对齐 */
+#vision-annotation,
+#vision-annotation-port {
+  transform: translateX(15%);
 }
 
 #image-pose {
