@@ -383,7 +383,7 @@ html {
   flex: 0 0 auto;
   max-width: 30%; /* 文字约占 3/10 宽度，右侧留出空隙 */
   padding-right: 1rem;
-  transform: translateY(-2.2vh); /* 2026-10-15 大标题+文字介绍整体上移一点点 */
+  transform: translateY(-4vh); /* 2026-10-15 大标题+文字介绍整体上移（先 -2.2vh，用户要求再上移一点 → -4vh） */
 }
 
 /* 眼镜图绝对定位（依据 hero-goggles2.webp 实测 bbox：内容占框宽 96.1%、垂直 99.7%，近满幅）：
@@ -1435,7 +1435,7 @@ html {
 /* Vision 标注（2026-10-15）：与 Extension 标注同款——文字按内容撑开、小标题加粗 */
 #vision-annotation-port .vann-text {
   width: max-content;
-  white-space: nowrap;
+  white-space: normal; /* 2026-10-15 标题过长，允许手动 <br> 换行 */
 }
 #vision-annotation .vann-title,
 #vision-annotation-port .vann-title {
