@@ -139,6 +139,7 @@ function initApp() {
   const modeTabs = document.querySelectorAll('.exp-mode-tab');
   const modeImages = document.querySelectorAll('.expansion-image');
   const visionAnnotation = document.getElementById('vision-annotation');
+  const visionPortAnnotation = document.getElementById('vision-annotation-port');
   const poseCallouts = document.querySelectorAll('.pose-callout');
   const extensionCallouts = document.querySelectorAll('.extension-callout');
   const audioCallouts = document.querySelectorAll('.audio-callout');
@@ -156,9 +157,12 @@ function initApp() {
           img.classList.toggle('active', img.id === targetId);
         });
 
-        // 标注联动：Vision 显示摄像头标注，Pose 显示 ToF/IMU 两条标注（切换时自动隐藏并重置动画）
+        // 标注联动：Vision 显示摄像头+端口两条标注，Pose 显示 ToF/IMU 两条标注（切换时自动隐藏并重置动画）
         if (visionAnnotation) {
           visionAnnotation.classList.toggle('active', targetId === 'image-vision');
+        }
+        if (visionPortAnnotation) {
+          visionPortAnnotation.classList.toggle('active', targetId === 'image-vision');
         }
         poseCallouts.forEach((callout) => {
           callout.classList.toggle('active', targetId === 'image-pose');

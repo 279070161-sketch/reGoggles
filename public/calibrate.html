@@ -15,7 +15,7 @@ p.tip { font-size: 0.85rem; color: #5a6b6d; margin: 0 1.5rem 1.2rem; line-height
 .imgwrap { position: absolute; inset: 0; overflow: visible; border-radius: 8px; background: #0c1719; }
 .card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
 /* 与站点一致的模式对齐变换（用户改站点后记得同步这里） */
-#card-vision .imgwrap img { transform: scale(1.2); }
+#card-vision .imgwrap img, #card-vport .imgwrap img { transform: scale(1.2); }
 #card-tof .imgwrap img, #card-imu .imgwrap img { transform: translate(5%, -12%) scale(1.3); }
 #card-extgen .imgwrap img, #card-extvis .imgwrap img { transform: translateY(-10%) scale(1.3); }
 .card svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
@@ -37,7 +37,7 @@ textarea { width: 100%; height: 130px; box-sizing: border-box; font-family: ui-m
 </head>
 <body>
 <h1>标注位置与线条轨迹校准工具</h1>
-<p class="tip">拖动<b>白圆点</b>＝定位点（线从这出发）；拖<b>绿色方块</b>＝折线拐点；拖<b>虚线圈</b>＝线终点（连到文字）；拖<b>文字块</b>＝标签位置。坐标允许负值和超过 100% 的值（-80% 到 180%），线和文字可以自由向四周延伸，与真实站点行为一致。<b>多点 stage（Audio-Mic×3、Audio-Speaker×2）</b>：每个点都有独立的一套小把手（点上方有编号 M0/M1/M2），共享同一个文字标签。摆好后点"复制全部"发我。</p>
+<p class="tip">拖动<b>白圆点</b>＝定位点（<b>整条线整体平移</b>，圆点精确跟手落位，线形角度保持不变）；拖<b>绿色方块</b>＝折线拐点（拐点吸附到横向/45°线上，<b>虚线圆点会跟着拐点一起动</b>）；拖<b>虚线圈</b>＝线终点（吸附到横向或 45°）；拖<b>文字块</b>＝标签位置。坐标允许负值和超过 100% 的值（-80% 到 180%），线和文字可以自由向四周延伸，与真实站点行为一致。<b>线条约束（2026-10-15）</b>：拐点与终点自动吸附为<b>横向或 45° 斜向</b>，不允许其他角度，保证所有标注线统一。摆好后点"复制全部"发我。</p>
 
 <div id="stages"></div>
 
@@ -50,34 +50,39 @@ textarea { width: 100%; height: 130px; box-sizing: border-box; font-family: ui-m
 (function () {
   // 每个 stage：marks 为 [dot,corner,end]×N，共享一个 text
   var stages = [
-    { key: 'vision', label: 'Vision —— hero-goggles2（1.2x）', img: '/assets/images/hero-goggles2.webp?v=2',
-      text: { x: 83, y: -8.2 }, lines: ['RGB 12MP<br>30FPS 720P Live Streaming'],
-      marks: [ { dot: {x:58.5,y:30.9}, corner: {x:71.6,y:-2.8}, end: {x:82.4,y:-2.8} } ] },
+    { key: 'vision', label: 'Vision-Camera —— hero-goggles2（1.2x）', img: '/assets/images/hero-goggles2.webp?v=2',
+      text: { x: 87.2, y: 11.6 }, lines: ['4K Camera Model<br>12MP HD-RGB'],
+      marks: [ { dot: {x:58.5,y:30.9}, corner: {x:74.6,y:14.8}, end: {x:85.4,y:14.8} } ] },
+    { key: 'vport', label: 'Vision-Port —— hero-goggles2（1.2x）', img: '/assets/images/hero-goggles2.webp?v=2',
+      text: { x: -48, y: 72.8 }, lines: ['Expansion Port for Additional Camera<br>Enabling Dual-Eye Image Data'],
+      marks: [ { dot: {x:14,y:62}, corner: {x:-0.2,y:76.2}, end: {x:-11.2,y:76.2} } ] },
     { key: 'tof', label: 'Pose-ToF —— 3.1右侧俯视（1.3x）', img: '/assets/images/3.1右侧俯视.webp',
-      text: { x: -19.3, y: 69.2 }, lines: ['ToF Sensor<br>(Requer Additional module)'],
+      text: { x: -28.3, y: 70.5 }, lines: ['Expansion Port for TOF Sensor<br>Able to Capture Depth Image'],
       marks: [ { dot: {x:29.9,y:57.4}, corner: {x:5.5,y:56.2}, end: {x:-3.8,y:69.4} } ] },
     { key: 'imu', label: 'Pose-IMU —— 3.1右侧俯视（1.3x）', img: '/assets/images/3.1右侧俯视.webp',
-      text: { x: 95.3, y: 83.7 }, lines: ['6DOF IMU Sensor'],
-      marks: [ { dot: {x:72.4,y:74.4}, corner: {x:90.4,y:73.8}, end: {x:96.1,y:81.7} } ] },
+      text: { x: 97.9, y: 81 }, lines: ['6DOF IMU Sensor<br>Live Detection for Pose Data'],
+      marks: [ { dot: {x:72.4,y:74.4}, corner: {x:87.7,y:74.4}, end: {x:95.5,y:82.2} } ] },
     { key: 'extgen', label: 'Extension-General Port —— 4.1左俯俯视（1.3x/上移10%）', img: '/assets/images/4.1左俯俯视.png',
-      text: { x: 97.2, y: 10.2 }, lines: ['General Expansion Port<br>Additional Camera, ToF, SD Card<br>and Custom Modules'],
-      marks: [ { dot: {x:73.7,y:58.7}, corner: {x:85.6,y:14.5}, end: {x:93.9,y:14.5} } ] },
+      text: { x: 107.9, y: 32 }, lines: ['General Expansion Port<br>Additional Camera, ToF, SD Card<br>and Custom Modules'],
+      marks: [ { dot: {x:73.7,y:58.7}, corner: {x:97.4,y:35}, end: {x:105.7,y:35} } ] },
     { key: 'extvis', label: 'Extension-Vision Port —— 4.1左俯俯视（1.3x/上移10%）', img: '/assets/images/4.1左俯俯视.png',
-      text: { x: -12.8, y: 92.8 }, lines: ['Vision Expansion Port<br>Additional Camera+IMU and Custom Modules'],
-      marks: [ { dot: {x:30,y:75.6}, corner: {x:12.8,y:93.6}, end: {x:12.7,y:93.6} } ] },
-    { key: 'audmic', label: 'Audio-Mic ×3 —— front（3 个点共用一个标签）', img: '/assets/images/front.webp',
-      text: { x: 68, y: 6.5 }, lines: ['3-Microphone Array'],
-      marks: [
-        { dot: {x:6.2,y:50.3}, corner: {x:49.9,y:9.1}, end: {x:66.1,y:9.1} },
-        { dot: {x:49.9,y:24.1}, corner: {x:49.9,y:9.1}, end: {x:66.1,y:9.1} },
-        { dot: {x:94.1,y:50.5}, corner: {x:49.9,y:9.1}, end: {x:66.1,y:9.1} }
-      ] },
-    { key: 'audspk', label: 'Audio-Speaker ×2 —— front（2 个点共用一个标签）', img: '/assets/images/front.webp',
-      text: { x: 12.1, y: 101.2 }, lines: ['2-Stereo Speaker'],
-      marks: [
-        { dot: {x:11.8,y:75.1}, corner: {x:50.7,y:103.9}, end: {x:28.9,y:103.8} },
-        { dot: {x:87.9,y:75.6}, corner: {x:50.7,y:103.9}, end: {x:28.9,y:103.8} }
-      ] }
+      text: { x: -19.9, y: 88.8 }, lines: ['Vision Expansion Port<br>Additional Camera+IMU and Custom Modules'],
+      marks: [ { dot: {x:30,y:75.6}, corner: {x:16.5,y:89.1}, end: {x:7,y:89.1} } ] },
+    { key: 'audmicmid', label: 'Audio-Mid-Microphone —— front（1x）', img: '/assets/images/front.webp',
+      text: { x: 76.1, y: 9 }, lines: ['Mid-Microphone'],
+      marks: [ { dot: {x:49.9,y:24.1}, corner: {x:62.5,y:11.5}, end: {x:74.5,y:11.5} } ] },
+    { key: 'audmicleft', label: 'Audio-Left-Microphone —— front（1x）', img: '/assets/images/front.webp',
+      text: { x: 116.3, y: 37.9 }, lines: ['Left-Microphone'],
+      marks: [ { dot: {x:93.4,y:51}, corner: {x:104,y:40.4}, end: {x:114.1,y:40.4} } ] },
+    { key: 'audmicright', label: 'Audio-Right-Microphone —— front（1x）', img: '/assets/images/front.webp',
+      text: { x: -29.9, y: 39.6 }, lines: ['Right-Microphone'],
+      marks: [ { dot: {x:6.9,y:51}, corner: {x:-1.9,y:42.2}, end: {x:-11.1,y:42.2} } ] },
+    { key: 'audspkright', label: 'Audio-Right-Speaker —— front（1x）', img: '/assets/images/front.webp',
+      text: { x: -21.7, y: 81.2 }, lines: ['Right-Speaker'],
+      marks: [ { dot: {x:11.9,y:75.6}, corner: {x:3.4,y:84.1}, end: {x:-7,y:84.1} } ] },
+    { key: 'audspkleft', label: 'Audio-Left-Speaker —— front（1x）', img: '/assets/images/front.webp',
+      text: { x: 108.6, y: 81.4 }, lines: ['Left-Speaker'],
+      marks: [ { dot: {x:88.5,y:75.4}, corner: {x:97.4,y:84.3}, end: {x:106.4,y:84.3} } ] }
   ];
 
   function build() {
@@ -144,12 +149,79 @@ textarea { width: 100%; height: 130px; box-sizing: border-box; font-family: ui-m
     var handle = document.getElementById(handleId);
     handle.classList.add('dragging');
 
+    // —— 线条约束（2026-10-15）：线段只允许横向或 45° 斜向 ——
+    function snapToLines(px, py, anchor) {
+      // 点 (px,py) 分别投影到过 anchor 的水平线 / +45° / -45° 三条线上，取最近的投影
+      var best = null, bd = Infinity;
+      [0, 1, -1].forEach(function (m) {
+        var c = anchor.y - m * anchor.x;
+        var d = (py - m * px - c) / (1 + m * m);
+        var x = px + m * d, y = py - d;
+        var dd = (x - px) * (x - px) + (y - py) * (y - py);
+        if (dd < bd) { bd = dd; best = { x: x, y: y }; }
+      });
+      return best;
+    }
+    function snapCornerToBoth(dot, end, near) {
+      // 已废弃（2026-10-15 改为「拐点吸附过 end 线 + 圆点刚性跟随」），保留备用
+      var U = [[1, 0], [-1, 0], [1, 1], [1, -1], [-1, 1], [-1, -1]];
+      var best = null, bd = Infinity;
+      for (var i = 0; i < U.length; i++) {
+        for (var j = 0; j < U.length; j++) {
+          var u1 = U[i], u2 = U[j];
+          var det = u1[0] * u2[1] - u1[1] * u2[0];
+          if (Math.abs(det) < 1e-9) continue; // 平行无解
+          var ex = end.x - dot.x, ey = end.y - dot.y;
+          var t1 = (ex * u2[1] - ey * u2[0]) / det;
+          var t2 = (u1[0] * ey - u1[1] * ex) / det;
+          var cx = dot.x + t1 * u1[0], cy = dot.y + t1 * u1[1];
+          if (Math.abs(cx + t2 * u2[0] - end.x) > 1e-6) continue;
+          if (Math.abs(cy + t2 * u2[1] - end.y) > 1e-6) continue;
+          var dd = (cx - near.x) * (cx - near.x) + (cy - near.y) * (cy - near.y);
+          if (dd < bd) { bd = dd; best = { x: cx, y: cy }; }
+        }
+      }
+      return best;
+    }
+
     function move(ev) {
       var rect = card.getBoundingClientRect();
       var cx = (ev.touches ? ev.touches[0].clientX : ev.clientX);
       var cy = (ev.touches ? ev.touches[0].clientY : ev.clientY);
-      target.x = r1(Math.min(180, Math.max(-80, (cx - rect.left) / rect.width * 100)));
-      target.y = r1(Math.min(180, Math.max(-80, (cy - rect.top) / rect.height * 100)));
+      var px = Math.min(180, Math.max(-80, (cx - rect.left) / rect.width * 100));
+      var py = Math.min(180, Math.max(-80, (cy - rect.top) / rect.height * 100));
+      if (part === 'text') {
+        target.x = r1(px);
+        target.y = r1(py);
+      } else if (part === 'dot') {
+        // 定位点：整条线（dot+corner+end）刚性平移，点精确跟手落位，线形与角度保持
+        var mk = s.marks[idx];
+        var loX = Math.max(-80 - mk.dot.x, -80 - mk.corner.x, -80 - mk.end.x);
+        var hiX = Math.min(180 - mk.dot.x, 180 - mk.corner.x, 180 - mk.end.x);
+        var loY = Math.max(-80 - mk.dot.y, -80 - mk.corner.y, -80 - mk.end.y);
+        var hiY = Math.min(180 - mk.dot.y, 180 - mk.corner.y, 180 - mk.end.y);
+        var dx = Math.max(loX, Math.min(hiX, px - mk.dot.x));
+        var dy = Math.max(loY, Math.min(hiY, py - mk.dot.y));
+        mk.dot.x = r1(mk.dot.x + dx); mk.dot.y = r1(mk.dot.y + dy);
+        mk.corner.x = r1(mk.corner.x + dx); mk.corner.y = r1(mk.corner.y + dy);
+        mk.end.x = r1(mk.end.x + dx); mk.end.y = r1(mk.end.y + dy);
+      } else if (part === 'corner') {
+        // 拐点先吸附到过 dot（定位点）的横向或 45° 线上（保证第一段合法）；
+        // 虚线终点按同一位移刚性跟随拐点（第二段线形不变）；
+        // 若第二段角度不合规（旧坐标），终点再就近微吸附到过新拐点的约束线上
+        var mk = s.marks[idx];
+        var cSnap = snapToLines(px, py, mk.dot);
+        var dx = cSnap.x - mk.corner.x, dy = cSnap.y - mk.corner.y;
+        var eRigid = { x: mk.end.x + dx, y: mk.end.y + dy };
+        var eSnap = snapToLines(eRigid.x, eRigid.y, cSnap);
+        mk.corner.x = r1(cSnap.x); mk.corner.y = r1(cSnap.y);
+        mk.end.x = r1(eSnap.x); mk.end.y = r1(eSnap.y);
+      } else {
+        // end：先跟手，再吸附到过拐点的水平或 ±45° 线上最近点
+        var snapped = snapToLines(px, py, s.marks[idx].corner);
+        target.x = r1(snapped.x);
+        target.y = r1(snapped.y);
+      }
       render();
     }
     function up() {
