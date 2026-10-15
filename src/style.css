@@ -1670,13 +1670,14 @@ html {
   width: 100%;
 }
 
-/* 超大产品图：左缘对齐画面左边缘（2026-10-15 用户要求，原为右缘贴图文分界并向左溢出） */
+/* 超大产品图：左缘顶到画面最左边缘（抵消容器内边距与居中偏移），
+   右缘停在图文分界不侵入右侧文字列；宽度随视口自适应 */
 .gateway-product {
   position: absolute;
   top: 50%;
-  left: 0;
+  left: calc(-1 * (max(0px, (100vw - 1700px) / 2) + 3rem));
   transform: translateY(-50%);
-  width: max(68vw, 1100px);
+  width: calc(100% + max(0px, (100vw - 1700px) / 2) + 3rem);
   max-width: none;
   object-fit: contain;
   user-select: none;
