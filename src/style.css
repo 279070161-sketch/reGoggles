@@ -1923,28 +1923,24 @@ html {
 }
 
 .sdk-image-col {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.sdk-img-wrapper {
   position: relative;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 16px;
-  overflow: hidden;
 }
 
+/* 2026-10-15：SDK 配图改为与 Data Gateway 同款——左缘顶画面边缘、右缘停在图文分界、
+   宽度随视口自适应（正方形渲染图按比例撑高） */
 .sdk-img {
-  width: 100%;
-  height: auto;
-  max-height: 560px;
+  position: absolute;
+  top: 50%;
+  left: calc(-1 * (max(0px, (100vw - 1700px) / 2) + 3rem));
+  transform: translateY(-50%);
+  width: calc(100% + max(0px, (100vw - 1700px) / 2) + 3rem);
+  max-width: none;
   object-fit: contain;
-  border-radius: 16px;
+  border-radius: 0;
   filter: none;
   box-shadow: none;
   user-select: none;
@@ -2049,6 +2045,12 @@ html {
   .sdk-grid {
     grid-template-columns: 1fr;
     gap: 3rem;
+  }
+  .sdk-img {
+    position: static;
+    transform: none;
+    width: 100%;
+    max-height: 50vh;
   }
 }
 
@@ -2701,6 +2703,10 @@ html {
   .community-container { zoom: 0.95; }
   .protective-container { zoom: 0.85; }
   .sdk-container { zoom: 0.95; }
+  .sdk-img {
+    left: calc(-1 * (max(0px, ((100vw / 0.95) - 1700px) / 2) + 3rem));
+    width: calc(100% + max(0px, ((100vw / 0.95) - 1700px) / 2) + 3rem);
+  }
   .carousel-stage-container { zoom: 0.76; }
 }
 
@@ -2726,6 +2732,10 @@ html {
   .community-container { zoom: 0.96; }
   .protective-container { zoom: 0.84; }
   .sdk-container { zoom: 0.98; }
+  .sdk-img {
+    left: calc(-1 * (max(0px, ((100vw / 0.98) - 1700px) / 2) + 3rem));
+    width: calc(100% + max(0px, ((100vw / 0.98) - 1700px) / 2) + 3rem);
+  }
   .carousel-stage-container { zoom: 0.74; }
   .build-section { zoom: 1.05; }
 }
@@ -2752,6 +2762,10 @@ html {
   .community-container { zoom: 0.92; }
   .protective-container { zoom: 0.78; }
   .sdk-container { zoom: 0.90; }
+  .sdk-img {
+    left: calc(-1 * (max(0px, ((100vw / 0.90) - 1700px) / 2) + 3rem));
+    width: calc(100% + max(0px, ((100vw / 0.90) - 1700px) / 2) + 3rem);
+  }
   .carousel-stage-container { zoom: 0.68; }
   .build-section { zoom: 1.2; }
 }
@@ -2778,6 +2792,10 @@ html {
   .community-container { zoom: 0.92; }
   .protective-container { zoom: 0.69; }
   .sdk-container { zoom: 0.80; }
+  .sdk-img {
+    left: calc(-1 * (max(0px, ((100vw / 0.80) - 1700px) / 2) + 3rem));
+    width: calc(100% + max(0px, ((100vw / 0.80) - 1700px) / 2) + 3rem);
+  }
   .carousel-stage-container { zoom: 0.59; }
   .build-section { zoom: 1.1; }
 }
@@ -2804,6 +2822,10 @@ html {
   .community-container { zoom: 0.84; }
   .protective-container { zoom: 0.63; }
   .sdk-container { zoom: 0.74; }
+  .sdk-img {
+    left: calc(-1 * (max(0px, ((100vw / 0.74) - 1700px) / 2) + 3rem));
+    width: calc(100% + max(0px, ((100vw / 0.74) - 1700px) / 2) + 3rem);
+  }
   .carousel-stage-container { zoom: 0.54; }
   .build-section { zoom: 0.98; }
 }
@@ -2830,6 +2852,10 @@ html {
   .community-container { zoom: 0.77; }
   .protective-container { zoom: 0.56; }
   .sdk-container { zoom: 0.66; }
+  .sdk-img {
+    left: calc(-1 * (max(0px, ((100vw / 0.66) - 1700px) / 2) + 3rem));
+    width: calc(100% + max(0px, ((100vw / 0.66) - 1700px) / 2) + 3rem);
+  }
   .carousel-stage-container { zoom: 0.48; }
   .build-section { zoom: 0.9; }
 }
