@@ -1670,11 +1670,11 @@ html {
   width: 100%;
 }
 
-/* 超大产品图：右缘贴住图文分界再左移一点，向左溢出画面（无阴影） */
+/* 超大产品图：左缘对齐画面左边缘（2026-10-15 用户要求，原为右缘贴图文分界并向左溢出） */
 .gateway-product {
   position: absolute;
   top: 50%;
-  right: 2vw;
+  left: 0;
   transform: translateY(-50%);
   width: max(68vw, 1100px);
   max-width: none;
@@ -1682,6 +1682,12 @@ html {
   user-select: none;
   -webkit-user-drag: none;
   filter: none;
+}
+
+/* 文字列压在产品图之上（图片右段可能与文字列重叠） */
+.gateway-text-col {
+  position: relative;
+  z-index: 2;
 }
 
 .gateway-text-col {
