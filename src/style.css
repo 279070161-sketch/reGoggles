@@ -383,6 +383,7 @@ html {
   flex: 0 0 auto;
   max-width: 30%; /* 文字约占 3/10 宽度，右侧留出空隙 */
   padding-right: 1rem;
+  transform: translateY(-2.2vh); /* 2026-10-15 大标题+文字介绍整体上移一点点 */
 }
 
 /* 眼镜图绝对定位（依据 hero-goggles2.webp 实测 bbox：内容占框宽 96.1%、垂直 99.7%，近满幅）：
@@ -1327,11 +1328,8 @@ html {
   transform: translateX(15%) scale(1.2);
 }
 
-/* Vision 两条标注随舞台图同位移，点线文字保持对齐 */
-#vision-annotation,
-#vision-annotation-port {
-  transform: translateX(15%);
-}
+/* 注意：Vision 标注容器不再加 translateX——校准页中标注坐标系相对卡片不动、只有图片右移，
+   站点必须完全一致（曾同时平移图片+容器导致坐标双重位移、圆点偏离实物约 14%） */
 
 #image-pose {
   transform: translate(5%, -12%) scale(1.3);
