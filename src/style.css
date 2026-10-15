@@ -1449,9 +1449,23 @@ html {
   width: max-content;
 }
 
-/* 左下角系统文字（2026-10-15）：标题加粗、副行正常 */
+/* 模块左下角系统文字（2026-10-15）：钉在第三模块（expansion-content-grid 层）左下角，
+   与右下角模式按钮相对；标题加粗、副行正常 */
+#audio-callout-sys {
+  z-index: 15;
+}
+#audio-callout-sys .vann-text {
+  left: 3rem;
+  top: auto;
+  bottom: 1.25rem;
+}
 #audio-callout-sys .vann-title {
   font-weight: 600;
+}
+@media (max-width: 900px) {
+  #audio-callout-sys .vann-text {
+    left: 1.25rem;
+  }
 }
 
 .vann-title {

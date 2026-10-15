@@ -250,9 +250,9 @@
                 />
 
                 <!-- Vision 模式标注 1：引出线指向右侧摄像头 + 规格文字 —— 用户校准坐标 2026-10-15 -->
-                <div class="v-callout active" id="vision-annotation" style="--dot-x: 58.5%; --dot-y: 30.9%; --txt-x: 87.2%; --txt-y: 11.6%;">
+                <div class="v-callout active" id="vision-annotation" style="--dot-x: 72.9%; --dot-y: 30.8%; --txt-x: 101.4%; --txt-y: 11.7%;">
                   <svg class="vann-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-                    <path class="vann-line" d="M 58.5 30.9 L 74.6 14.8 L 85.4 14.8" pathLength="1" fill="none" />
+                    <path class="vann-line" d="M 72.9 30.8 L 89 14.7 L 99.8 14.7" pathLength="1" fill="none" />
                   </svg>
                   <div class="vann-dot"></div>
                   <div class="vann-text">
@@ -262,9 +262,9 @@
                 </div>
 
                 <!-- Vision 模式标注 2：扩展端口 —— 用户校准坐标 2026-10-15 -->
-                <div class="v-callout vision-callout active" id="vision-annotation-port" style="--dot-x: 14%; --dot-y: 62%; --txt-x: -48%; --txt-y: 72.8%;">
+                <div class="v-callout vision-callout active" id="vision-annotation-port" style="--dot-x: 8.9%; --dot-y: 61.5%; --txt-x: -44.9%; --txt-y: 68.5%;">
                   <svg class="vann-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-                    <path class="vann-line" d="M 14 62 L -0.2 76.2 L -11.2 76.2" pathLength="1" fill="none" />
+                    <path class="vann-line" d="M 8.9 61.5 L -5.3 75.7 L -16.3 75.7" pathLength="1" fill="none" />
                   </svg>
                   <div class="vann-dot"></div>
                   <div class="vann-text txt-right">
@@ -372,15 +372,14 @@
                   </div>
                 </div>
 
-                <!-- Audio 模式左下角系统文字（2026-10-15 新增，标题加粗） -->
-                <div class="v-callout audio-callout" id="audio-callout-sys" style="--txt-x: 2%; --txt-y: 86%;">
-                  <svg class="vann-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"></svg>
-                  <div class="vann-text">
-                    <span class="vann-title">3-Microphone & 2-Speaker Array</span>
-                    <span class="vann-sub">Stereo Audio I/O System</span>
-                  </div>
-                </div>
+              </div>
+            </div>
 
+            <!-- Audio 模式模块级左下角系统文字（2026-10-15：粗标题+正常副行，位置由 CSS 钉在模块左下） -->
+            <div class="v-callout audio-callout" id="audio-callout-sys">
+              <div class="vann-text">
+                <span class="vann-title">3-Microphone & 2-Speaker Array</span>
+                <span class="vann-sub">Stereo Audio I/O System</span>
               </div>
             </div>
 
