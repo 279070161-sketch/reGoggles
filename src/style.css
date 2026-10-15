@@ -1449,6 +1449,11 @@ html {
   width: max-content;
 }
 
+/* 左下角系统文字（2026-10-15）：标题加粗、副行正常 */
+#audio-callout-sys .vann-title {
+  font-weight: 600;
+}
+
 .vann-title {
   font-family: 'Montserrat', sans-serif !important;
   font-size: 0.95rem; /* 标注文字加大 */
