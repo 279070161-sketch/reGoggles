@@ -2669,6 +2669,11 @@ html {
   }
   .expansion-container { zoom: 0.95; }
   .data-container { zoom: 0.97; }
+  /* zoom 档位下网关图左缘校正：vw 与容器不共坐标系，需按本档 zoom 重算居中偏移 */
+  .gateway-product {
+    left: calc(-1 * (max(0px, ((100vw / 0.97) - 1700px) / 2) + 3rem));
+    width: calc(100% + max(0px, ((100vw / 0.97) - 1700px) / 2) + 3rem);
+  }
   .community-container { zoom: 0.98; }
   .protective-container { zoom: 0.92; }
   .carousel-stage-container { zoom: 0.89; }
@@ -2689,6 +2694,10 @@ html {
   }
   .expansion-container { zoom: 0.92; }
   .data-container { zoom: 0.94; }
+  .gateway-product {
+    left: calc(-1 * (max(0px, ((100vw / 0.94) - 1700px) / 2) + 3rem));
+    width: calc(100% + max(0px, ((100vw / 0.94) - 1700px) / 2) + 3rem);
+  }
   .community-container { zoom: 0.95; }
   .protective-container { zoom: 0.85; }
   .sdk-container { zoom: 0.95; }
@@ -2710,6 +2719,10 @@ html {
   }
   .expansion-container { zoom: 0.90; }
   .data-container { zoom: 0.96; }
+  .gateway-product {
+    left: calc(-1 * (max(0px, ((100vw / 0.96) - 1700px) / 2) + 3rem));
+    width: calc(100% + max(0px, ((100vw / 0.96) - 1700px) / 2) + 3rem);
+  }
   .community-container { zoom: 0.96; }
   .protective-container { zoom: 0.84; }
   .sdk-container { zoom: 0.98; }
@@ -2732,6 +2745,10 @@ html {
   }
   .expansion-container { zoom: 0.86; }
   .data-container { zoom: 0.89; }
+  .gateway-product {
+    left: calc(-1 * (max(0px, ((100vw / 0.89) - 1700px) / 2) + 3rem));
+    width: calc(100% + max(0px, ((100vw / 0.89) - 1700px) / 2) + 3rem);
+  }
   .community-container { zoom: 0.92; }
   .protective-container { zoom: 0.78; }
   .sdk-container { zoom: 0.90; }
@@ -2754,6 +2771,10 @@ html {
   }
   .expansion-container { zoom: 0.76; }
   .data-container { zoom: 0.86; }
+  .gateway-product {
+    left: calc(-1 * (max(0px, ((100vw / 0.86) - 1700px) / 2) + 3rem));
+    width: calc(100% + max(0px, ((100vw / 0.86) - 1700px) / 2) + 3rem);
+  }
   .community-container { zoom: 0.92; }
   .protective-container { zoom: 0.69; }
   .sdk-container { zoom: 0.80; }
@@ -2776,6 +2797,10 @@ html {
   }
   .expansion-container { zoom: 0.70; }
   .data-container { zoom: 0.79; }
+  .gateway-product {
+    left: calc(-1 * (max(0px, ((100vw / 0.79) - 1700px) / 2) + 3rem));
+    width: calc(100% + max(0px, ((100vw / 0.79) - 1700px) / 2) + 3rem);
+  }
   .community-container { zoom: 0.84; }
   .protective-container { zoom: 0.63; }
   .sdk-container { zoom: 0.74; }
@@ -2798,6 +2823,10 @@ html {
   }
   .expansion-container { zoom: 0.64; }
   .data-container { zoom: 0.72; }
+  .gateway-product {
+    left: calc(-1 * (max(0px, ((100vw / 0.72) - 1700px) / 2) + 3rem));
+    width: calc(100% + max(0px, ((100vw / 0.72) - 1700px) / 2) + 3rem);
+  }
   .community-container { zoom: 0.77; }
   .protective-container { zoom: 0.56; }
   .sdk-container { zoom: 0.66; }
