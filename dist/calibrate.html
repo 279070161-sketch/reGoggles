@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>标注位置与线条轨迹校准工具</title>
+<style>
+:root { color-scheme: light; }
+body { margin: 0; background: #f3f5f6; color: #142325; font-family: system-ui, sans-serif; padding-bottom: 4rem; }
+h1 { font-size: 1.1rem; margin: 1.2rem 1.5rem 0.4rem; }
+p.tip { font-size: 0.85rem; color: #5a6b6d; margin: 0 1.5rem 1.2rem; line-height: 1.6; max-width: 980px; }
+.stage { max-width: 1400px; margin: 0 auto 1.5rem; padding: 0 1.5rem; }
+.label { font-size: 0.82rem; font-weight: 700; margin: 0 0 0.4rem; }
+.card { position: relative; width: 100%; max-width: 820px; margin: 130px auto; aspect-ratio: 16 / 10; background: transparent; }
+.imgwrap { position: absolute; inset: 0; overflow: visible; border-radius: 8px; background: #0c1719; }
+.card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
+/* 与站点一致的模式对齐变换（用户改站点后记得同步这里） */
+.card[id^="card-orig-"] .imgwrap img, #card-all-orig .imgwrap img, #card-vision .imgwrap img, #card-vport .imgwrap img { transform: translateX(15%) scale(1.2); }
+#card-extgen .imgwrap img, #card-extvis .imgwrap img { transform: translateY(-10%) scale(1.3); }
+.card svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+.track { stroke: #ffffff; stroke-width: 1.5; fill: none; }
+.dot { position: absolute; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; background: #fff; border: 2px solid #c6e53d; cursor: grab; z-index: 10; touch-action: none; box-sizing: border-box; }
+.corner { position: absolute; width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 3px; background: #c6e53d; border: 2px solid #0c1719; cursor: grab; z-index: 11; touch-action: none; box-sizing: border-box; }
+.hend { position: absolute; width: 12px; height: 12px; margin: -6px 0 0 -6px; background: transparent; border: 2px dashed #ffffff; border-radius: 50%; cursor: grab; z-index: 11; touch-action: none; box-sizing: border-box; }
+.txt { position: absolute; cursor: grab; z-index: 9; user-select: none; touch-action: none; padding: 2px 0; width: max-content; }
+.txt .line { font-size: 0.92rem; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.9); line-height: 1.35; pointer-events: none; }
+.dragging { cursor: grabbing !important; }
+.midx { position: absolute; left: 50%; top: -22px; transform: translateX(-50%); font-size: 10px; background: #c6e53d; color: #0c1719; border-radius: 4px; padding: 0 5px; pointer-events: none; }
+.readout { max-width: 820px; margin: 0.8rem auto 0; background: #fff; border: 1px solid #dde3e4; border-radius: 8px; padding: 0.7rem 1rem; font-family: ui-monospace, Consolas, monospace; font-size: 0.8rem; line-height: 1.75; word-break: break-all; }
+.readout .row { font-weight: 700; margin-bottom: 0.1rem; }
+.out { max-width: 820px; margin: 0.6rem auto; }
+.copy-btn { margin: 0.6rem auto 0; display: block; width: 200px; padding: 0.45rem 0; font-size: 0.85rem; border: 1px solid #142325; border-radius: 999px; background: #fff; cursor: pointer; }
+.copy-btn:hover { background: #142325; color: #fff; }
+textarea { width: 100%; height: 130px; box-sizing: border-box; font-family: ui-monospace, Consolas, monospace; font-size: 0.78rem; border: 1px solid #dde3e4; border-radius: 8px; padding: 0.6rem; }
+.live-all-card { max-width: 1400px; margin: 1rem auto 3rem; padding: 0 1.5rem; }
+.live-preview-box { background: #121c1e; border: 1px solid rgba(198,229,61,0.3); border-radius: 12px; padding: 1.5rem 1rem; }
+.live-all-labels { position: absolute; inset: 0; pointer-events: none; }
+.live-all-label-item { position: absolute; font-size: 0.92rem; font-weight: 600; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.9); white-space: nowrap; }
+.live-all-dot { position: absolute; width: 8px; height: 8px; margin: -4px 0 0 -4px; border-radius: 50%; background: #fff; box-shadow: 0 0 8px rgba(255,255,255,0.8); }
+</style>
+</head>
+<body>
+<h1>标注位置与线条轨迹校准工具</h1>
+<p class="tip">拖动<b>白圆点</b>＝定位点（<b>整条线整体平移</b>，圆点精确跟手落位，线形角度保持不变）；拖<b>绿色方块</b>＝折线拐点（拐点吸附到横向/45°线上，<b>虚线圆点会跟着拐点一起动</b>）；拖<b>虚线圈</b>＝线终点（吸附到横向或 45°）；拖<b>文字块</b>＝标签位置。坐标允许负值和超过 100% 的值（-80% 到 180%），线和文字可以自由向四周延伸，与真实站点行为一致。<b>线条约束（2026-10-15）</b>：拐点与终点自动吸附为<b>横向或 45° 斜向</b>，不允许其他角度，保证所有标注线统一。摆好后点"复制全部"发我。</p>
+
+<div class="live-all-card">
+  <div class="label" style="font-size: 1rem; color: #142325;">⭐ Original 全局 8 标注综合实时联动预览（拖动下方任意标点，此图即时联动）：</div>
+  <div class="live-preview-box">
+    <div class="card" id="card-all-orig" style="margin: 30px auto;">
+      <div class="imgwrap"><img src="./assets/images/hero-goggles2.webp?v=2" alt=""></div>
+      <svg id="svg-all-orig" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
+      <div class="live-all-labels" id="labels-all-orig"></div>
+    </div>
+  </div>
+</div>
+
+<div id="stages"></div>
+
+<div class="out">
+  <button class="copy-btn" id="copy-all">复制全部代码</button>
+  <textarea id="summary" readonly></textarea>
+</div>
+
+<script>
+(function () {
+  // 每个 stage：marks 为 [dot,corner,end]×N，共享一个 text
+  var stages = [
+    { key: 'orig-midmic', label: '1. Original: Mid-Microphone —— hero-goggles2（1.2x）', img: './assets/images/hero-goggles2.webp?v=2',
+      text: { x: -8.1, y: 19.5 }, lines: ['Mid-Microphone'],
+      marks: [ { dot: {x:30.7,y:32.4}, corner: {x:20.2,y:21.9}, end: {x:9.2,y:21.9} } ] },
+    { key: 'orig-rightmic', label: '2. Original: Right-Microphone —— hero-goggles2（1.2x）', img: './assets/images/hero-goggles2.webp?v=2',
+      text: { x: -30, y: 54.8 }, lines: ['Right-Microphone'],
+      marks: [ { dot: {x:10.9,y:68.7}, corner: {x:-0.1,y:57.7}, end: {x:-10.6,y:57.7} } ] },
+    { key: 'orig-usbc', label: '3. Original: USB Type-C —— hero-goggles2（1.2x）', img: './assets/images/hero-goggles2.webp?v=2',
+      text: { x: -0.3, y: 91.9 }, lines: ['USB Type-C'],
+      marks: [ { dot: {x:35.9,y:83.5}, corner: {x:24.9,y:94.5}, end: {x:12.4,y:94.5} } ] },
+    { key: 'orig-rightspk', label: '4. Original: Right-Speaker —— hero-goggles2（1.2x）', img: './assets/images/hero-goggles2.webp?v=2',
+      text: { x: 28.8, y: 97.9 }, lines: ['Right-Speaker'],
+      marks: [ { dot: {x:45.3,y:86.5}, corner: {x:35.3,y:96.5}, end: {x:35.4,y:96.4} } ] },
+    { key: 'orig-maincam', label: '5. Original: Main-Camera 12MP RGB —— hero-goggles2（1.2x）', img: './assets/images/hero-goggles2.webp?v=2',
+      text: { x: 101.4, y: 11.7 }, lines: ['Main-Camera 12MP RGB'],
+      marks: [ { dot: {x:72.9,y:30.8}, corner: {x:89,y:14.7}, end: {x:99.8,y:14.7} } ] },
+    { key: 'orig-mainimu', label: '6. Original: Main-IMU 6DOF —— hero-goggles2（1.2x）', img: './assets/images/hero-goggles2.webp?v=2',
+      text: { x: 101.3, y: 22.3 }, lines: ['Main-IMU 6DOF'],
+      marks: [ { dot: {x:79.7,y:34.8}, corner: {x:89.3,y:25.2}, end: {x:98.8,y:25.2} } ] },
+    { key: 'orig-leftmic', label: '7. Original: Left-Microphone —— hero-goggles2（1.2x）', img: './assets/images/hero-goggles2.webp?v=2',
+      text: { x: 102.4, y: 32.2 }, lines: ['Left-Microphone'],
+      marks: [ { dot: {x:79.5,y:41}, corner: {x:85.8,y:34.7}, end: {x:100.3,y:34.7} } ] },
+    { key: 'orig-leftspk', label: '8. Original: Left-Speaker —— hero-goggles2（1.2x）', img: './assets/images/hero-goggles2.webp?v=2',
+      text: { x: 126.6, y: 68.1 }, lines: ['Left-Speaker'],
+      marks: [ { dot: {x:106.2,y:61.7}, corner: {x:115.2,y:70.7}, end: {x:124.6,y:70.7} } ] },
+    { key: 'extgen', label: 'Extension: General Expansion Port —— 4.1左俯俯视（1.3x/上移10%）', img: './assets/images/4.1左俯俯视.png',
+      text: { x: 109, y: 29.7 }, lines: ['General Expansion Port', 'MIPI CSI B for Additional Camera,', 'ToF, SD Card and Custom Modules'],
+      marks: [ { dot: {x:73.7,y:58.7}, corner: {x:97.4,y:35}, end: {x:105.7,y:35} } ] },
+    { key: 'extvis', label: 'Extension: Vision Expansion Port —— 4.1左俯俯视（1.3x/上移10%）', img: './assets/images/4.1左俯俯视.png',
+      text: { x: -16.1, y: 86.5 }, lines: ['Vision Expansion Port', 'MIPI CSI B for Additional Camera+IMU', 'and Custom Modules'],
+      marks: [ { dot: {x:30,y:75.6}, corner: {x:16.5,y:89.1}, end: {x:7,y:89.1} } ] }
+  ];
+
+  function build() {
+    var wrap = document.getElementById('stages');
+    stages.forEach(function (s) {
+      var html = '<div class="stage"><div class="label">' + s.label + '</div>' +
+        '<div class="card" id="card-' + s.key + '">' +
+        '<div class="imgwrap"><img src="' + s.img + '" alt=""></div>' +
+        '<svg id="svg-' + s.key + '" viewBox="0 0 100 100" preserveAspectRatio="none">' +
+        s.marks.map(function (m, i) {
+          return '<path class="track" data-i="' + i + '" d=""/>';
+        }).join('') + '</svg>' +
+        '<div class="txt" id="txt-' + s.key + '"><span class="line">' + s.lines.join('<br>') + '</span></div>';
+      s.marks.forEach(function (m, i) {
+        html += '<div class="dot" id="dot-' + s.key + '-' + i + '"><div class="midx">M' + i + '</div></div>' +
+          '<div class="corner" id="corner-' + s.key + '-' + i + '"></div>' +
+          '<div class="hend" id="end-' + s.key + '-' + i + '"></div>';
+      });
+      html += '</div><div class="readout" id="out-' + s.key + '"></div></div>';
+      wrap.insertAdjacentHTML('beforeend', html);
+    });
+  }
+
+  function r1(v) { return Math.round(v * 10) / 10; }
+
+  function render() {
+    var summary = '';
+    stages.forEach(function (s) {
+      document.getElementById('txt-' + s.key).style.left = s.text.x + '%';
+      document.getElementById('txt-' + s.key).style.top = s.text.y + '%';
+      s.marks.forEach(function (mark, i) {
+        document.getElementById('dot-' + s.key + '-' + i).style.left = mark.dot.x + '%';
+        document.getElementById('dot-' + s.key + '-' + i).style.top = mark.dot.y + '%';
+        document.getElementById('corner-' + s.key + '-' + i).style.left = mark.corner.x + '%';
+        document.getElementById('corner-' + s.key + '-' + i).style.top = mark.corner.y + '%';
+        document.getElementById('end-' + s.key + '-' + i).style.left = mark.end.x + '%';
+        document.getElementById('end-' + s.key + '-' + i).style.top = mark.end.y + '%';
+        var d = 'M ' + mark.dot.x + ' ' + mark.dot.y + ' L ' + mark.corner.x + ' ' + mark.corner.y + ' L ' + mark.end.x + ' ' + mark.end.y;
+        document.querySelector('#svg-' + s.key + ' [data-i="' + i + '"]').setAttribute('d', d);
+      });
+
+      var out = '<div class="row">' + s.key.toUpperCase() + '</div>';
+      s.marks.forEach(function (mark, i) {
+        out += 'M' + i + ': dot ' + mark.dot.x + '%/' + mark.dot.y + '% &nbsp;|&nbsp; corner ' + mark.corner.x + '%/' + mark.corner.y + '% &nbsp;|&nbsp; end ' + mark.end.x + '%/' + mark.end.y + '%<br>';
+      });
+      out += 'text: ' + s.text.x + '%/' + s.text.y + '%';
+      document.getElementById('out-' + s.key).innerHTML = out;
+
+      summary += s.key.toUpperCase() + ':';
+      s.marks.forEach(function (mark, i) {
+        summary += ' M' + i + ' dot ' + mark.dot.x + '/' + mark.dot.y + ' corner ' + mark.corner.x + '/' + mark.corner.y + ' end ' + mark.end.x + '/' + mark.end.y + ';';
+      });
+      summary += ' text ' + s.text.x + '/' + s.text.y + '\n';
+    });
+    document.getElementById('summary').value = summary;
+
+    // 渲染 Original 全局 8 标注综合实时联动预览
+    var allSvg = '';
+    var allLabels = '';
+    stages.filter(function (s) { return s.key.indexOf('orig-') === 0; }).forEach(function (s) {
+      s.marks.forEach(function (m) {
+        var d = 'M ' + m.dot.x + ' ' + m.dot.y + ' L ' + m.corner.x + ' ' + m.corner.y + ' L ' + m.end.x + ' ' + m.end.y;
+        allSvg += '<path class="track" d="' + d + '"/>';
+        allLabels += '<div class="live-all-dot" style="left:' + m.dot.x + '%; top:' + m.dot.y + '%;"></div>';
+      });
+      allLabels += '<div class="live-all-label-item" style="left:' + s.text.x + '%; top:' + s.text.y + '%;">' + s.lines.join('<br>') + '</div>';
+    });
+    var svgEl = document.getElementById('svg-all-orig');
+    if (svgEl) svgEl.innerHTML = allSvg;
+    var labelsEl = document.getElementById('labels-all-orig');
+    if (labelsEl) labelsEl.innerHTML = allLabels;
+  }
+
+  function startDrag(e, key, part, idx) {
+    e.preventDefault();
+    var s = stages.find(function (x) { return x.key === key; });
+    var target = part === 'text' ? s.text : s.marks[idx][part];
+    var card = document.getElementById('card-' + key);
+    var handleId = part === 'text' ? ('txt-' + key) : (part + '-' + key + '-' + idx);
+    var handle = document.getElementById(handleId);
+    handle.classList.add('dragging');
+
+    // —— 线条约束（2026-10-15）：线段只允许横向或 45° 斜向 ——
+    function snapToLines(px, py, anchor) {
+      // 点 (px,py) 分别投影到过 anchor 的水平线 / +45° / -45° 三条线上，取最近的投影
+      var best = null, bd = Infinity;
+      [0, 1, -1].forEach(function (m) {
+        var c = anchor.y - m * anchor.x;
+        var d = (py - m * px - c) / (1 + m * m);
+        var x = px + m * d, y = py - d;
+        var dd = (x - px) * (x - px) + (y - py) * (y - py);
+        if (dd < bd) { bd = dd; best = { x: x, y: y }; }
+      });
+      return best;
+    }
+    function snapCornerToBoth(dot, end, near) {
+      // 已废弃（2026-10-15 改为「拐点吸附过 end 线 + 圆点刚性跟随」），保留备用
+      var U = [[1, 0], [-1, 0], [1, 1], [1, -1], [-1, 1], [-1, -1]];
+      var best = null, bd = Infinity;
+      for (var i = 0; i < U.length; i++) {
+        for (var j = 0; j < U.length; j++) {
+          var u1 = U[i], u2 = U[j];
+          var det = u1[0] * u2[1] - u1[1] * u2[0];
+          if (Math.abs(det) < 1e-9) continue; // 平行无解
+          var ex = end.x - dot.x, ey = end.y - dot.y;
+          var t1 = (ex * u2[1] - ey * u2[0]) / det;
+          var t2 = (u1[0] * ey - u1[1] * ex) / det;
+          var cx = dot.x + t1 * u1[0], cy = dot.y + t1 * u1[1];
+          if (Math.abs(cx + t2 * u2[0] - end.x) > 1e-6) continue;
+          if (Math.abs(cy + t2 * u2[1] - end.y) > 1e-6) continue;
+          var dd = (cx - near.x) * (cx - near.x) + (cy - near.y) * (cy - near.y);
+          if (dd < bd) { bd = dd; best = { x: cx, y: cy }; }
+        }
+      }
+      return best;
+    }
+
+    function move(ev) {
+      var rect = card.getBoundingClientRect();
+      var cx = (ev.touches ? ev.touches[0].clientX : ev.clientX);
+      var cy = (ev.touches ? ev.touches[0].clientY : ev.clientY);
+      var px = Math.min(180, Math.max(-80, (cx - rect.left) / rect.width * 100));
+      var py = Math.min(180, Math.max(-80, (cy - rect.top) / rect.height * 100));
+      if (part === 'text') {
+        target.x = r1(px);
+        target.y = r1(py);
+      } else if (part === 'dot') {
+        // 定位点：整条线（dot+corner+end）刚性平移，点精确跟手落位，线形与角度保持
+        var mk = s.marks[idx];
+        var loX = Math.max(-80 - mk.dot.x, -80 - mk.corner.x, -80 - mk.end.x);
+        var hiX = Math.min(180 - mk.dot.x, 180 - mk.corner.x, 180 - mk.end.x);
+        var loY = Math.max(-80 - mk.dot.y, -80 - mk.corner.y, -80 - mk.end.y);
+        var hiY = Math.min(180 - mk.dot.y, 180 - mk.corner.y, 180 - mk.end.y);
+        var dx = Math.max(loX, Math.min(hiX, px - mk.dot.x));
+        var dy = Math.max(loY, Math.min(hiY, py - mk.dot.y));
+        mk.dot.x = r1(mk.dot.x + dx); mk.dot.y = r1(mk.dot.y + dy);
+        mk.corner.x = r1(mk.corner.x + dx); mk.corner.y = r1(mk.corner.y + dy);
+        mk.end.x = r1(mk.end.x + dx); mk.end.y = r1(mk.end.y + dy);
+      } else if (part === 'corner') {
+        // 拐点先吸附到过 dot（定位点）的横向或 45° 线上（保证第一段合法）；
+        // 虚线终点按同一位移刚性跟随拐点（第二段线形不变）；
+        // 若第二段角度不合规（旧坐标），终点再就近微吸附到过新拐点的约束线上
+        var mk = s.marks[idx];
+        var cSnap = snapToLines(px, py, mk.dot);
+        var dx = cSnap.x - mk.corner.x, dy = cSnap.y - mk.corner.y;
+        var eRigid = { x: mk.end.x + dx, y: mk.end.y + dy };
+        var eSnap = snapToLines(eRigid.x, eRigid.y, cSnap);
+        mk.corner.x = r1(cSnap.x); mk.corner.y = r1(cSnap.y);
+        mk.end.x = r1(eSnap.x); mk.end.y = r1(eSnap.y);
+      } else {
+        // end：先跟手，再吸附到过拐点的水平或 ±45° 线上最近点
+        var snapped = snapToLines(px, py, s.marks[idx].corner);
+        target.x = r1(snapped.x);
+        target.y = r1(snapped.y);
+      }
+      render();
+    }
+    function up() {
+      handle.classList.remove('dragging');
+      window.removeEventListener('mousemove', move);
+      window.removeEventListener('mouseup', up);
+      window.removeEventListener('touchmove', move);
+      window.removeEventListener('touchend', up);
+    }
+    window.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', up);
+    window.addEventListener('touchmove', move, { passive: false });
+    window.addEventListener('touchend', up);
+  }
+
+  function bind() {
+    stages.forEach(function (s) {
+      ['txt'].forEach(function (part) {
+        var el = document.getElementById(part + '-' + s.key);
+        el.addEventListener('mousedown', function (e) { startDrag(e, s.key, 'text'); });
+        el.addEventListener('touchstart', function (e) { startDrag(e, s.key, 'text'); }, { passive: false });
+      });
+      s.marks.forEach(function (mark, i) {
+        ['dot', 'corner', 'end'].forEach(function (part) {
+          var el = document.getElementById(part + '-' + s.key + '-' + i);
+          el.addEventListener('mousedown', function (e) { startDrag(e, s.key, part, i); });
+          el.addEventListener('touchstart', function (e) { startDrag(e, s.key, part, i); }, { passive: false });
+        });
+      });
+    });
+  }
+
+  document.getElementById('copy-all').addEventListener('click', function () {
+    var ta = document.getElementById('summary');
+    ta.select();
+    try { document.execCommand('copy'); this.textContent = '已复制!'; }
+    catch (err) { this.textContent = '请手动全选下方文本复制'; }
+    setTimeout(function () { document.getElementById('copy-all').textContent = '复制全部代码'; }, 1500);
+  });
+
+  build();
+  bind();
+  render();
+})();
+</script>
+</body>
+</html>

@@ -53,12 +53,13 @@
             <nav class="nav-dropdown-menu" id="nav-dropdown-menu" aria-label="Main Navigation">
               <ul class="nav-links-list">
                 <li><a href="#hero" class="nav-link-item">Overview</a></li>
-                <li><a href="#community-builders" class="nav-link-item">Community Builders</a></li>
+                <li><a href="#field-work" class="nav-link-item">Frontline Intelligence</a></li>
                 <li><a href="#sensing-system" class="nav-link-item">Sensing System</a></li>
-                <li><a href="#data-interface" class="nav-link-item">Data Interface</a></li>
-                <li><a href="#protective-design" class="nav-link-item">Protective Design</a></li>
-                <li><a href="#open-sdk" class="nav-link-item">Open SDK & Firmware</a></li>
-                <li><a href="#applications" class="nav-link-item">Applications</a></li>
+                <li><a href="#protective-design" class="nav-link-item">Frontline Design</a></li>
+                <li><a href="#your-rules" class="nav-link-item">Your Rules</a></li>
+                <li><a href="#open-sdk" class="nav-link-item">Open Source for Makers and Developers</a></li>
+                <li><a href="#customization" class="nav-link-item">Customize to Spec</a></li>
+                <li><a href="#community-builders" class="nav-link-item">Community Builders</a></li>
               </ul>
             </nav>
           </div>
@@ -85,8 +86,23 @@
             <div class="top-left-content">
               <h1 class="hero-brand-title">reGoggles</h1>
               <p class="hero-intro-text">
-                An Open Wearable AI Platform for Industrial Assistance, Egocentric Data Collection, and Intelligent Maker Innovation.
+                Open Smart Goggles For Industrial AI Assistance
               </p>
+
+              <!-- Hero Action Buttons -->
+              <div class="hero-cta-group">
+                <button class="hero-btn hero-btn-primary" id="hero-subscribe-btn" type="button">
+                  <span>Subscribe for Updates</span>
+                  <div class="hero-btn-arrow">
+                    <svg width="12" height="12" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M1 7H13M13 7L7 1M13 7L7 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                </button>
+                <button class="hero-btn hero-btn-secondary" id="hero-join-btn" type="button">
+                  <span>Join Community</span>
+                </button>
+              </div>
             </div>
             <div class="hero-image-right">
               <img id="product-img" class="product-image" src="./assets/images/hero-goggles2.webp?v=2" alt="reGoggles Wearable AI Goggles Static Render" />
@@ -106,7 +122,758 @@
       </div>
     </main>
 
-    <!-- Section 2: Community Builders (百叶窗滚动效果已移除，静态背景直显) -->
+    <!-- Section: Field Worker Intelligence (Sees what the workers see, enables what they couldn't.) -->
+    <div class="fieldwork-section-wrapper" id="field-work">
+      <section class="fieldwork-section">
+
+        <!-- Background Video with blur and dark overlay -->
+        <div class="section-bg-image" data-parallax="0.22">
+          <video
+            class="section-bg-video"
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="auto"
+            poster="./assets/images/fieldwork-bg.webp"
+            src="./assets/videos/fieldwork-bg.mp4"
+          ></video>
+        </div>
+        <div class="section-bg-overlay"></div>
+
+        <div class="fieldwork-container">
+          
+          <!-- Top Section Header -->
+          <div class="fieldwork-header">
+            <h2 class="fieldwork-main-title">
+              Sees What the Workers See, Enables What They Couldn't
+            </h2>
+            <p class="fieldwork-subtitle">
+              Purpose-built for field technicians — an AI-native protective eyewear that makes on-site work smarter, faster, and fully data-driven.
+            </p>
+          </div>
+
+          <!-- Main Interactive Stage: Left Tabs, Right Detail & Viewport -->
+          <div class="fieldwork-stage-grid">
+            
+            <!-- Left Tabs Column (7 items, English only, no numbers) -->
+            <div class="fieldwork-tabs-list" role="tablist" aria-label="Field Intelligence Modules">
+              
+              <button type="button" class="fieldwork-tab-item active" data-fw-target="fw-panel-1" role="tab" aria-selected="true">
+                <span class="tab-en-title">First-Person AI Visual Inspection</span>
+                <div class="tab-indicator-arrow">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 2L10 7L5 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+              </button>
+
+              <button type="button" class="fieldwork-tab-item" data-fw-target="fw-panel-2" role="tab" aria-selected="false">
+                <span class="tab-en-title">Data-Based Performance Improvement</span>
+                <div class="tab-indicator-arrow">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 2L10 7L5 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+              </button>
+
+              <button type="button" class="fieldwork-tab-item" data-fw-target="fw-panel-3" role="tab" aria-selected="false">
+                <span class="tab-en-title">On-Site PPE Monitoring</span>
+                <div class="tab-indicator-arrow">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 2L10 7L5 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+              </button>
+
+              <button type="button" class="fieldwork-tab-item" data-fw-target="fw-panel-4" role="tab" aria-selected="false">
+                <span class="tab-en-title">Hands-Free Expertise Copilot</span>
+                <div class="tab-indicator-arrow">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 2L10 7L5 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+              </button>
+
+              <button type="button" class="fieldwork-tab-item" data-fw-target="fw-panel-5" role="tab" aria-selected="false">
+                <span class="tab-en-title">Live Streaming Remote Collaboration</span>
+                <div class="tab-indicator-arrow">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 2L10 7L5 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+              </button>
+
+              <button type="button" class="fieldwork-tab-item" data-fw-target="fw-panel-6" role="tab" aria-selected="false">
+                <span class="tab-en-title">Real-Time Process Evidence Recording</span>
+                <div class="tab-indicator-arrow">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 2L10 7L5 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+              </button>
+
+              <button type="button" class="fieldwork-tab-item" data-fw-target="fw-panel-7" role="tab" aria-selected="false">
+                <span class="tab-en-title">Ego Data for Embodied AI Training</span>
+                <div class="tab-indicator-arrow">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 2L10 7L5 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+              </button>
+
+            </div>
+
+            <!-- Right Detail Panels Container (7 Panels) -->
+            <div class="fieldwork-panels-container">
+              
+              <!-- Panel 1: First-Person AI Visual Inspection -->
+              <div class="fieldwork-panel active" id="fw-panel-1">
+                <div class="fieldwork-detail-card">
+                  <div class="panel-header-row">
+                    <h3 class="bullets-title">First-Person AI Visual Inspection</h3>
+                  </div>
+
+                  <ul class="fw-bullets-list">
+                    <li class="fw-bullet-item">
+                      <span class="bullet-dot"></span>
+                      <p class="fw-bullet-en">First-person camera catches easily-missed details, improving detection consistency.</p>
+                    </li>
+                    <li class="fw-bullet-item">
+                      <span class="bullet-dot"></span>
+                      <p class="fw-bullet-en">Flags deviations in real time, preventing defects from flowing downstream.</p>
+                    </li>
+                    <li class="fw-bullet-item">
+                      <span class="bullet-dot"></span>
+                      <p class="fw-bullet-en">AI visual inspection complements human QC, removing operator-to-operator variation.</p>
+                    </li>
+                    <li class="fw-bullet-item">
+                      <span class="bullet-dot"></span>
+                      <p class="fw-bullet-en">Every defect is traceable back to the exact SOP step.</p>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- Panel 2: Data-Based Performance Improvement -->
+              <div class="fieldwork-panel" id="fw-panel-2">
+                <div class="fieldwork-detail-card">
+                  <div class="panel-header-row">
+                    <h3 class="bullets-title">Data-Based Performance Improvement</h3>
+                  </div>
+
+                  <ul class="fw-bullets-list">
+                    <li class="fw-bullet-item">
+                      <span class="bullet-dot"></span>
+                      <p class="fw-bullet-en">Verify root causes against real footage, not faded memories.</p>
+                    </li>
+                    <li class="fw-bullet-item">
+                      <span class="bullet-dot"></span>
+                      <p class="fw-bullet-en">First-person data clearly shows real work details for analysis.</p>
+                    </li>
+                    <li class="fw-bullet-item">
+                      <span class="bullet-dot"></span>
+                      <p class="fw-bullet-en">AI auto-tags key events and anomalies — engineers spend less time scrubbing through footage.</p>
+                    </li>
+                    <li class="fw-bullet-item">
+                      <span class="bullet-dot"></span>
+                      <p class="fw-bullet-en">Video, audio, and motion on one synchronized timeline — nothing is taken out of context.</p>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- Panel 3: On-Site PPE Monitoring -->
+              <div class="fieldwork-panel" id="fw-panel-3">
+                <div class="fieldwork-detail-card">
+                  <div class="panel-header-row">
+                    <h3 class="bullets-title">On-Site PPE Monitoring</h3>
+                  </div>
+
+                  <ul class="fw-bullets-list">
+                    <li class="fw-bullet-item">
+                      <span class="bullet-dot"></span>
+                      <p class="fw-bullet-en">Real-time PPE checks flag violations, reducing injuries.</p>
+                    </li>
+                    <li class="fw-bullet-item">
+                      <span class="bullet-dot"></span>
+                      <p class="fw-bullet-en">Posture and movement data captured for ergonomic analysis.</p>
+                    </li>
+                    <li class="fw-bullet-item">
+                      <span class="bullet-dot"></span>
+                      <p class="fw-bullet-en">Proximity alerts fire when workers approach unguarded machinery or hazardous zones.</p>
+                    </li>
+                    <li class="fw-bullet-item">
+                      <span class="bullet-dot"></span>
+                      <p class="fw-bullet-en">First-person incident replay supports safety analysis.</p>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- Panel 4: Hands-Free Expertise Copilot -->
+              <div class="fieldwork-panel" id="fw-panel-4">
+                <div class="fieldwork-detail-card">
+                  <div class="panel-header-row">
+                    <h3 class="bullets-title">Hands-Free Expertise Copilot</h3>
+                  </div>
+
+                  <ul class="fw-bullets-list">
+                    <li class="fw-bullet-item">
+                      <span class="bullet-dot"></span>
+                      <p class="fw-bullet-en">Expert operations are auto-captured and stored in a searchable knowledge base.</p>
+                    </li>
+                    <li class="fw-bullet-item">
+                      <span class="bullet-dot"></span>
+                      <p class="fw-bullet-en">Recorded sessions can be turned into SOPs for new hires.</p>
+                    </li>
+                    <li class="fw-bullet-item">
+                      <span class="bullet-dot"></span>
+                      <p class="fw-bullet-en">Workers get AI feedback hands-free, on the floor.</p>
+                    </li>
+                    <li class="fw-bullet-item">
+                      <span class="bullet-dot"></span>
+                      <p class="fw-bullet-en">Recorded operations become training data that improves your models over time.</p>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- Panel 5: Live Streaming Remote Collaboration -->
+              <div class="fieldwork-panel" id="fw-panel-5">
+                <div class="fieldwork-detail-card">
+                  <div class="panel-header-row">
+                    <h3 class="bullets-title">Live Streaming Remote Collaboration</h3>
+                  </div>
+
+                  <ul class="fw-bullets-list">
+                    <li class="fw-bullet-item">
+                      <span class="bullet-dot"></span>
+                      <p class="fw-bullet-en">First-person video streams to remote experts for guidance.</p>
+                    </li>
+                    <li class="fw-bullet-item">
+                      <span class="bullet-dot"></span>
+                      <p class="fw-bullet-en">Built-in mics and speakers enable real-time two-way voice calls.</p>
+                    </li>
+                    <li class="fw-bullet-item">
+                      <span class="bullet-dot"></span>
+                      <p class="fw-bullet-en">AI auto-summarizes remote guidance calls into searchable notes.</p>
+                    </li>
+                    <li class="fw-bullet-item">
+                      <span class="bullet-dot"></span>
+                      <p class="fw-bullet-en">Guidance sessions are recorded and replayable anytime.</p>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- Panel 6: Real-Time Process Evidence Recording -->
+              <div class="fieldwork-panel" id="fw-panel-6">
+                <div class="fieldwork-detail-card">
+                  <div class="panel-header-row">
+                    <h3 class="bullets-title">Real-Time Process Evidence Recording</h3>
+                  </div>
+
+                  <ul class="fw-bullets-list">
+                    <li class="fw-bullet-item">
+                      <span class="bullet-dot"></span>
+                      <p class="fw-bullet-en">One-click record retrieval for any batch speeds up audits.</p>
+                    </li>
+                    <li class="fw-bullet-item">
+                      <span class="bullet-dot"></span>
+                      <p class="fw-bullet-en">Every batch is linked to its station, operator, and time.</p>
+                    </li>
+                    <li class="fw-bullet-item">
+                      <span class="bullet-dot"></span>
+                      <p class="fw-bullet-en">SOP deviations auto-flagged, enabling faster corrective action loops.</p>
+                    </li>
+                    <li class="fw-bullet-item">
+                      <span class="bullet-dot"></span>
+                      <p class="fw-bullet-en">On-premises storage keeps sensitive data within your infrastructure for data privacy requirements.</p>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- Panel 7: Ego Data for Embodied AI Training -->
+              <div class="fieldwork-panel" id="fw-panel-7">
+                <div class="fieldwork-detail-card">
+                  <div class="panel-header-row">
+                    <h3 class="bullets-title">Ego Data for Embodied AI Training</h3>
+                  </div>
+
+                  <ul class="fw-bullets-list">
+                    <li class="fw-bullet-item">
+                      <span class="bullet-dot"></span>
+                      <p class="fw-bullet-en">Synchronized video, audio, and IMU streams form high-quality training datasets for embodied AI.</p>
+                    </li>
+                    <li class="fw-bullet-item">
+                      <span class="bullet-dot"></span>
+                      <p class="fw-bullet-en">First-person footage of real frontline operations bridges the sim-to-real gap.</p>
+                    </li>
+                    <li class="fw-bullet-item">
+                      <span class="bullet-dot"></span>
+                      <p class="fw-bullet-en">Hands-free goggles capture data passively while workers do their jobs.</p>
+                    </li>
+                    <li class="fw-bullet-item">
+                      <span class="bullet-dot"></span>
+                      <p class="fw-bullet-en">Turns everyday frontline work into a scalable data engine for embodied AI.</p>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+    </div>
+
+
+    <!-- Section 3: Versatile Expansion (Sensing System Customization) -->
+    <div class="expansion-section-wrapper" id="sensing-system">
+      <section class="expansion-section">
+        <div class="expansion-container">
+          
+          <!-- Top Header (Title Centered) -->
+          <div class="expansion-header-grid">
+            <div class="header-left">
+              <h2 class="expansion-title">
+                One Platform, More to Explore
+              </h2>
+            </div>
+          </div>
+
+          <!-- Main Interactive Content Shell (视频舞台 + 底部模式按钮切换) -->
+          <div class="expansion-content-grid">
+
+            <!-- Video Player Stage -->
+            <div class="expansion-video-wrapper">
+              <div class="video-display-card" data-parallax="0.10">
+
+                <!-- Image 1 (Original / Vision) -->
+                <img
+                  id="image-vision"
+                  class="expansion-image active"
+                  src="./assets/images/hero-goggles2.webp?v=2"
+                  alt="Original mode sample"
+                />
+
+                <!-- Image 2 (Expansion) -->
+                <img
+                  id="image-extension"
+                  class="expansion-image"
+                  src="./assets/images/4.1左俯俯视.png"
+                  alt="Expansion mode sample"
+                />
+
+                <!-- Original 模式 8 个定位点标注 —— 用户校准坐标 2026-10-21 -->
+                <!-- 1. Mid-Microphone -->
+                <div class="v-callout original-callout active" id="orig-midmic" style="--dot-x: 30.7%; --dot-y: 32.4%; --txt-x: -8.1%; --txt-y: 19.5%;">
+                  <svg class="vann-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                    <path class="vann-line" d="M 30.7 32.4 L 20.2 21.9 L 9.2 21.9" pathLength="1" fill="none" />
+                  </svg>
+                  <div class="vann-dot"></div>
+                  <div class="vann-text txt-right">
+                    <span class="vann-title">Mid-Microphone</span>
+                  </div>
+                </div>
+
+                <!-- 2. Right-Microphone -->
+                <div class="v-callout original-callout active" id="orig-rightmic" style="--dot-x: 10.9%; --dot-y: 68.7%; --txt-x: -30%; --txt-y: 54.8%;">
+                  <svg class="vann-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                    <path class="vann-line" d="M 10.9 68.7 L -0.1 57.7 L -10.6 57.7" pathLength="1" fill="none" />
+                  </svg>
+                  <div class="vann-dot"></div>
+                  <div class="vann-text txt-right">
+                    <span class="vann-title">Right-Microphone</span>
+                  </div>
+                </div>
+
+                <!-- 3. USB Type-C -->
+                <div class="v-callout original-callout active" id="orig-usbc" style="--dot-x: 35.9%; --dot-y: 83.5%; --txt-x: -0.3%; --txt-y: 91.9%;">
+                  <svg class="vann-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                    <path class="vann-line" d="M 35.9 83.5 L 24.9 94.5 L 12.4 94.5" pathLength="1" fill="none" />
+                  </svg>
+                  <div class="vann-dot"></div>
+                  <div class="vann-text txt-right">
+                    <span class="vann-title">USB Type-C</span>
+                  </div>
+                </div>
+
+                <!-- 4. Right-Speaker -->
+                <div class="v-callout original-callout active" id="orig-rightspk" style="--dot-x: 45.3%; --dot-y: 86.5%; --txt-x: 28.8%; --txt-y: 97.9%;">
+                  <svg class="vann-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                    <path class="vann-line" d="M 45.3 86.5 L 35.3 96.5 L 35.4 96.4" pathLength="1" fill="none" />
+                  </svg>
+                  <div class="vann-dot"></div>
+                  <div class="vann-text">
+                    <span class="vann-title">Right-Speaker</span>
+                  </div>
+                </div>
+
+                <!-- 5. Main-Camera 12MP RGB -->
+                <div class="v-callout original-callout active" id="orig-maincam" style="--dot-x: 72.9%; --dot-y: 30.8%; --txt-x: 101.4%; --txt-y: 11.7%;">
+                  <svg class="vann-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                    <path class="vann-line" d="M 72.9 30.8 L 89 14.7 L 99.8 14.7" pathLength="1" fill="none" />
+                  </svg>
+                  <div class="vann-dot"></div>
+                  <div class="vann-text">
+                    <span class="vann-title">Main-Camera 12MP RGB</span>
+                  </div>
+                </div>
+
+                <!-- 6. Main-IMU 6DOF -->
+                <div class="v-callout original-callout active" id="orig-mainimu" style="--dot-x: 79.7%; --dot-y: 34.8%; --txt-x: 101.3%; --txt-y: 22.3%;">
+                  <svg class="vann-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                    <path class="vann-line" d="M 79.7 34.8 L 89.3 25.2 L 98.8 25.2" pathLength="1" fill="none" />
+                  </svg>
+                  <div class="vann-dot"></div>
+                  <div class="vann-text">
+                    <span class="vann-title">Main-IMU 6DOF</span>
+                  </div>
+                </div>
+
+                <!-- 7. Left-Microphone -->
+                <div class="v-callout original-callout active" id="orig-leftmic" style="--dot-x: 79.5%; --dot-y: 41%; --txt-x: 102.4%; --txt-y: 32.2%;">
+                  <svg class="vann-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                    <path class="vann-line" d="M 79.5 41 L 85.8 34.7 L 100.3 34.7" pathLength="1" fill="none" />
+                  </svg>
+                  <div class="vann-dot"></div>
+                  <div class="vann-text">
+                    <span class="vann-title">Left-Microphone</span>
+                  </div>
+                </div>
+
+                <!-- 8. Left-Speaker -->
+                <div class="v-callout original-callout active" id="orig-leftspk" style="--dot-x: 106.2%; --dot-y: 61.7%; --txt-x: 126.6%; --txt-y: 68.1%;">
+                  <svg class="vann-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                    <path class="vann-line" d="M 106.2 61.7 L 115.2 70.7 L 124.6 70.7" pathLength="1" fill="none" />
+                  </svg>
+                  <div class="vann-dot"></div>
+                  <div class="vann-text">
+                    <span class="vann-title">Left-Speaker</span>
+                  </div>
+                </div>
+
+                <!-- Extension 模式标注 1：General Expansion Port —— 用户校准坐标 2026-10-15 -->
+                <div class="v-callout extension-callout" id="ext-callout-general" style="--dot-x: 73.7%; --dot-y: 58.7%; --txt-x: 109%; --txt-y: 29.7%;">
+                  <svg class="vann-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                    <path class="vann-line" d="M 73.7 58.7 L 97.4 35 L 105.7 35" pathLength="1" fill="none" />
+                  </svg>
+                  <div class="vann-dot"></div>
+                  <div class="vann-text">
+                    <span class="vann-title">General Expansion Port</span>
+                    <span class="vann-sub">MIPI CSI B for Additional Camera,<br>ToF, SD Card and Custom Modules</span>
+                  </div>
+                </div>
+
+                <!-- Extension 模式标注 2：Vision Expansion Port —— 用户校准坐标 2026-10-15 -->
+                <div class="v-callout extension-callout" id="ext-callout-vision" style="--dot-x: 30%; --dot-y: 75.6%; --txt-x: -16.1%; --txt-y: 86.5%;">
+                  <svg class="vann-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                    <path class="vann-line" d="M 30 75.6 L 16.5 89.1 L 7 89.1" pathLength="1" fill="none" />
+                  </svg>
+                  <div class="vann-dot"></div>
+                  <div class="vann-text">
+                    <span class="vann-title">Vision Expansion Port</span>
+                    <span class="vann-sub">MIPI CSI B for Additional Camera+IMU<br>and Custom Modules</span>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Bottom Mode Tabs: Original / Expansion -->
+            <div class="expansion-tabs" role="tablist" aria-label="Expansion modes">
+              <button type="button" class="exp-mode-tab active" data-target="image-vision">Original</button>
+              <button type="button" class="exp-mode-tab" data-target="image-extension">Expansion</button>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+    </div>
+
+    <!-- Section: Protective Design for Industrial Use -->
+    <div class="protective-section-wrapper" id="protective-design">
+      <section class="protective-section">
+        <div class="protective-container">
+          
+          <div class="protective-grid">
+            
+            <!-- Left Text Column -->
+            <div class="protective-text-col">
+              <h2 class="protective-title">
+                Designed for Frontline Use
+              </h2>
+              <p class="protective-subtitle">
+                The goggle-form design delivers a secure fit and eye protection in frontline environments.
+              </p>
+            </div>
+
+            <!-- Right Video Display Column -->
+            <div class="protective-video-col">
+              <div class="protective-video-card">
+                <video 
+                  class="protective-video" 
+                  autoplay 
+                  muted 
+                  loop 
+                  playsinline 
+                  src="./assets/videos/protective-demo.mp4"
+                ></video>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+    </div>
+
+    <!-- Section: Your Data. Your AI. Your Rules. -->
+    <div class="data-section-wrapper" id="your-rules">
+      <section class="data-section">
+        <div class="data-container">
+
+          <div class="gateway-grid">
+
+            <!-- 左：产品渲染图（保留第6板块左侧配图） -->
+            <div class="gateway-visual-col">
+              <img
+                id="gateway-product"
+                class="gateway-product"
+                src="./assets/images/gateway-render-2.webp?v=2"
+                alt="reGoggles product render"
+              />
+            </div>
+
+            <!-- 右：大标题 + 三张特点卡片（原第5板块右侧内容） -->
+            <div class="gateway-text-col">
+              <h2 class="gateway-title">
+                Your Data. Your AI. Your Rules.
+              </h2>
+
+              <div class="rules-card-list">
+
+                <!-- Point 1: Private by Design -->
+                <div class="rules-card">
+                  <div class="rules-card-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#142325" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                      <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                  </div>
+                  <div class="rules-card-text">
+                    <h3 class="rules-card-title">Private by Design</h3>
+                    <p class="rules-card-desc">
+                      Capture video, audio, and IMU data that stays inside your own systems — keeping your workplace data secure.
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Point 2: Connect Your Preferred AI -->
+                <div class="rules-card">
+                  <div class="rules-card-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#142325" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M16 16v1a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v1"></path>
+                      <path d="M18 8h4a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-4"></path>
+                      <circle cx="8" cy="12" r="2"></circle>
+                    </svg>
+                  </div>
+                  <div class="rules-card-text">
+                    <h3 class="rules-card-title">Connect Your Preferred AI</h3>
+                    <p class="rules-card-desc">
+                      Plug in the AI you trust via open data interfaces — from cloud LLMs to fully air-gapped local stacks.
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Point 3: Set Your Own Rules -->
+                <div class="rules-card">
+                  <div class="rules-card-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#142325" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                      <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                      <polyline points="2 17 12 22 22 17"></polyline>
+                      <polyline points="2 12 12 17 22 12"></polyline>
+                    </svg>
+                  </div>
+                  <div class="rules-card-text">
+                    <h3 class="rules-card-title">Set Your Own Rules</h3>
+                    <p class="rules-card-desc">
+                      Works with any AI agent or app — bring your own frontline AI workflow.
+                    </p>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+    </div>
+
+    <!-- Section 8: Open SDK & Firmware -->
+    <div class="sdk-section-wrapper" id="open-sdk">
+      <section class="sdk-section">
+        <div class="sdk-container">
+          
+          <div class="sdk-grid">
+            
+            <!-- Left Column: Product Image (SDK Render, 全幅左栏) -->
+            <div class="sdk-image-col">
+              <img src="./assets/images/sdk-render.webp?v=2" alt="reGoggles SDK Render" class="sdk-img" />
+            </div>
+
+            <!-- Right Column: Content & Feature Tags -->
+            <div class="sdk-content-col">
+              
+              <h2 class="sdk-title">
+                Open Source for Makers and Developers
+              </h2>
+              
+              <p class="sdk-subtitle">
+                Support deep application integration and customization, enabling developers to build on their own terms without being locked into a specific ecosystem.
+              </p>
+
+              <div class="sdk-features-list">
+                
+                <!-- Feature 1: Hack The Firmware -->
+                <div class="sdk-feature-card">
+                  <div class="feature-icon-box">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#142325" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="16 18 22 12 16 6"></polyline>
+                      <polyline points="8 6 2 12 8 18"></polyline>
+                    </svg>
+                  </div>
+                  <div class="feature-text">
+                    <h3 class="feature-title">Hack The Firmware</h3>
+                    <p class="feature-desc">Modify firmware to fit your use case.</p>
+                  </div>
+                </div>
+
+                <!-- Feature 2: Extend The Sensing Stack -->
+                <div class="sdk-feature-card">
+                  <div class="feature-icon-box">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#142325" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="12" y1="5" x2="12" y2="19"></line>
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                  </div>
+                  <div class="feature-text">
+                    <h3 class="feature-title">Extend The Sensing Stack</h3>
+                    <p class="feature-desc">Add new sensors and data pipelines.</p>
+                  </div>
+                </div>
+
+                <!-- Feature 3: Integrate Into Your Own System -->
+                <div class="sdk-feature-card">
+                  <div class="feature-icon-box">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#142325" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                      <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                    </svg>
+                  </div>
+                  <div class="feature-text">
+                    <h3 class="feature-title">Integrate Into Your Own System</h3>
+                    <p class="feature-desc">Connect reGoggles to your existing stack.</p>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+    </div>
+
+
+
+    <!-- Section 10: Build It Your Way (左：标题/文字/联系我们按钮，右：三张特点卡片) -->
+    <div class="build-section-wrapper" id="customization">
+
+      <!-- Background Image Overlay ("SMT Workshop" 覆盖整个 Section 10 包含顶部留白) -->
+      <div class="build-bg-overlay">
+        <img src="./assets/images/smt-workshop.webp" alt="SMT Workshop Background" class="build-bg-img" />
+        <div class="build-bg-gradient"></div>
+      </div>
+
+      <section class="build-section">
+
+        <!-- Section Content Area -->
+        <div class="build-content-container">
+
+          <!-- Left / Right Split Grid -->
+          <div class="build-content-grid">
+
+            <!-- Left Column: Title + Description + Contact Us CTA -->
+            <div class="build-left-col">
+              <h2 class="build-title">Customize to Spec</h2>
+              <p class="build-description">
+                Backed by our supply chain, we deliver OEM and ODM customization for partners of every kind — startups, makers, integrators, and enterprises alike.
+              </p>
+
+              <!-- CTA Button: Contact Us -->
+              <div class="build-cta-wrapper">
+                <button class="btn-build-cta" id="build-contact-btn">
+                  <span>Contact Us</span>
+                  <div class="cta-arrow-circle">
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M1 7H13M13 7L7 1M13 7L7 13" stroke="#142325" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            <!-- Right Column: 3 Feature Cards -->
+            <div class="build-cards-col">
+
+              <!-- Card 1: Agile Development -->
+              <div class="build-feature-card">
+                <div class="feature-icon-circle">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#142325" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                  </svg>
+                </div>
+                <div class="build-card-text">
+                  <h3 class="feature-name">Agile Development</h3>
+                </div>
+              </div>
+
+              <!-- Card 2: Global Manufacturing -->
+              <div class="build-feature-card">
+                <div class="feature-icon-circle">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#142325" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                  </svg>
+                </div>
+                <div class="build-card-text">
+                  <h3 class="feature-name">Global Manufacturing</h3>
+                </div>
+              </div>
+
+              <!-- Card 3: Co-Creation -->
+              <div class="build-feature-card">
+                <div class="feature-icon-circle">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#142325" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                  </svg>
+                </div>
+                <div class="build-card-text">
+                  <h3 class="feature-name">Co-Creation</h3>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+    </div>
+
+    <!-- Section: Community Builders -->
     <div class="community-section-wrapper" id="community-builders">
       <section class="community-section-sticky">
 
@@ -191,7 +958,7 @@
               </button>
 
               <button class="btn-secondary-action" id="subscribe-btn">
-                <span>Subscribe</span>
+                <span>Subscribe for Updates</span>
               </button>
 
               <button class="btn-secondary-action" id="contact-us-btn">
@@ -205,768 +972,16 @@
     </section>
   </div>
 
-    <!-- Section 3: Versatile Expansion (Sensing System Customization) -->
-    <div class="expansion-section-wrapper" id="sensing-system">
-      <section class="expansion-section">
-        <div class="expansion-container">
-          
-          <!-- Top Header (Title Centered) -->
-          <div class="expansion-header-grid">
-            <div class="header-left">
-              <h2 class="expansion-title">
-                Capture Rich, Synchronized Multimodal Ego Data
-              </h2>
-            </div>
-          </div>
-
-          <!-- Main Interactive Content Shell (视频舞台 + 底部模式按钮切换) -->
-          <div class="expansion-content-grid">
-
-            <!-- Video Player Stage -->
-            <div class="expansion-video-wrapper">
-              <div class="video-display-card" data-parallax="0.10">
-
-                <!-- Image 1 (Vision) -->
-                <img
-                  id="image-vision"
-                  class="expansion-image active"
-                  src="./assets/images/hero-goggles2.webp?v=2"
-                  alt="Vision mode sample"
-                />
-
-                <!-- Image 2 (Audio) -->
-                <img
-                  id="image-audio"
-                  class="expansion-image"
-                  src="./assets/images/front.webp"
-                  alt="Audio mode sample"
-                />
-
-                <!-- Image 3 (Pose) -->
-                <img
-                  id="image-pose"
-                  class="expansion-image"
-                  src="./assets/images/3.1右侧俯视.webp"
-                  alt="Pose mode sample"
-                />
-
-                <!-- Image 4 (Extension) -->
-                <img
-                  id="image-extension"
-                  class="expansion-image"
-                  src="./assets/images/4.1左俯俯视.png"
-                  alt="Extension mode sample"
-                />
-
-                <!-- Vision 模式标注 1：引出线指向右侧摄像头 + 规格文字 —— 用户校准坐标 2026-10-15 -->
-                <div class="v-callout active" id="vision-annotation" style="--dot-x: 72.9%; --dot-y: 30.8%; --txt-x: 101.4%; --txt-y: 11.7%;">
-                  <svg class="vann-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-                    <path class="vann-line" d="M 72.9 30.8 L 89 14.7 L 99.8 14.7" pathLength="1" fill="none" />
-                  </svg>
-                  <div class="vann-dot"></div>
-                  <div class="vann-text">
-                    <span class="vann-title">4K Camera</span>
-                    <span class="vann-sub">12MP HD-RGB</span>
-                  </div>
-                </div>
-
-                <!-- Vision 模式标注 2：扩展端口 —— 用户校准坐标 2026-10-15 -->
-                <div class="v-callout vision-callout active" id="vision-annotation-port" style="--dot-x: 8.9%; --dot-y: 61.5%; --txt-x: -41%; --txt-y: 67.1%;">
-                  <svg class="vann-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-                    <path class="vann-line" d="M 8.9 61.5 L 0.4 70 L -8.6 70" pathLength="1" fill="none" />
-                  </svg>
-                  <div class="vann-dot"></div>
-                  <div class="vann-text txt-right">
-                    <span class="vann-title">Expansion Port for<br>Additional Camera</span>
-                    <span class="vann-sub">Enabling Dual-Eye Image Data</span>
-                  </div>
-                </div>
-
-                <!-- Pose 模式标注 1：上方镜片中间的插孔 (ToF Sensor) —— 随 pose 图 1.3x 重算 -->
-                <div class="v-callout pose-callout" id="pose-callout-tof" style="--dot-x: 29.9%; --dot-y: 57.4%; --txt-x: -28.3%; --txt-y: 70.5%;">
-                  <svg class="vann-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-                    <path class="vann-line" d="M 29.9 57.4 L 5.5 56.2 L -3.8 69.4" pathLength="1" fill="none" />
-                  </svg>
-                  <div class="vann-dot"></div>
-                  <div class="vann-text txt-right">
-                    <span class="vann-title">Expansion Port for TOF Sensor</span>
-                    <span class="vann-sub">Able to Capture Depth Image</span>
-                  </div>
-                </div>
-
-                <!-- Pose 模式标注 2：右边摄像头后面的位置 (6DOF IMU Sensor) —— 随 pose 图 1.3x 重算 -->
-                <div class="v-callout pose-callout" id="pose-callout-imu" style="--dot-x: 72.4%; --dot-y: 74.4%; --txt-x: 97.9%; --txt-y: 81%;">
-                  <svg class="vann-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-                    <path class="vann-line" d="M 72.4 74.4 L 87.7 74.4 L 95.5 82.2" pathLength="1" fill="none" />
-                  </svg>
-                  <div class="vann-dot"></div>
-                  <div class="vann-text">
-                    <span class="vann-title">6DOF IMU Sensor</span>
-                    <span class="vann-sub">Live Detection for Pose Data</span>
-                  </div>
-                </div>
-
-                <!-- Extension 模式标注 1：General Expansion Port —— 用户校准坐标 2026-10-15 -->
-                <div class="v-callout extension-callout" id="ext-callout-general" style="--dot-x: 73.7%; --dot-y: 58.7%; --txt-x: 109%; --txt-y: 29.7%;">
-                  <svg class="vann-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-                    <path class="vann-line" d="M 73.7 58.7 L 97.4 35 L 105.7 35" pathLength="1" fill="none" />
-                  </svg>
-                  <div class="vann-dot"></div>
-                  <div class="vann-text">
-                    <span class="vann-title">General Expansion Port</span>
-                    <span class="vann-sub">Additional Camera, ToF, SD Card<br>and Custom Modules</span>
-                  </div>
-                </div>
-
-                <!-- Extension 模式标注 2：Vision Expansion Port —— 用户校准坐标 2026-10-15 -->
-                <div class="v-callout extension-callout" id="ext-callout-vision" style="--dot-x: 30%; --dot-y: 75.6%; --txt-x: -16.1%; --txt-y: 86.5%;">
-                  <svg class="vann-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-                    <path class="vann-line" d="M 30 75.6 L 16.5 89.1 L 7 89.1" pathLength="1" fill="none" />
-                  </svg>
-                  <div class="vann-dot"></div>
-                  <div class="vann-text">
-                    <span class="vann-title">Vision Expansion Port</span>
-                    <span class="vann-sub">Additional Camera+IMU and Custom Modules</span>
-                  </div>
-                </div>
-
-                <!-- Audio 标注（2026-10-15 重做：3 麦克风 + 2 扬声器 = 5 个独立点线；用户校准坐标，注意正面视角左右互为镜像） -->
-                <div class="v-callout audio-callout" id="audio-callout-midmic" style="--dot-x: 49.9%; --dot-y: 24.1%; --txt-x: 76.1%; --txt-y: 9%;">
-                  <svg class="vann-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-                    <path class="vann-line" d="M 49.9 24.1 L 62.5 11.5 L 74.5 11.5" pathLength="1" fill="none" />
-                  </svg>
-                  <div class="vann-dot"></div>
-                  <div class="vann-text">
-                    <span class="vann-title">Mid-Microphone</span>
-                  </div>
-                </div>
-
-                <div class="v-callout audio-callout" id="audio-callout-leftmic" style="--dot-x: 93.4%; --dot-y: 51%; --txt-x: 116.3%; --txt-y: 37.9%;">
-                  <svg class="vann-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-                    <path class="vann-line" d="M 93.4 51 L 104 40.4 L 114.1 40.4" pathLength="1" fill="none" />
-                  </svg>
-                  <div class="vann-dot"></div>
-                  <div class="vann-text">
-                    <span class="vann-title">Left-Microphone</span>
-                  </div>
-                </div>
-
-                <div class="v-callout audio-callout" id="audio-callout-rightmic" style="--dot-x: 6.9%; --dot-y: 51%; --txt-x: -29.9%; --txt-y: 39.6%;">
-                  <svg class="vann-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-                    <path class="vann-line" d="M 6.9 51 L -1.9 42.2 L -11.1 42.2" pathLength="1" fill="none" />
-                  </svg>
-                  <div class="vann-dot"></div>
-                  <div class="vann-text txt-right">
-                    <span class="vann-title">Right-Microphone</span>
-                  </div>
-                </div>
-
-                <div class="v-callout audio-callout" id="audio-callout-rightspk" style="--dot-x: 11.9%; --dot-y: 75.6%; --txt-x: -21.7%; --txt-y: 81.2%;">
-                  <svg class="vann-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-                    <path class="vann-line" d="M 11.9 75.6 L 3.4 84.1 L -7 84.1" pathLength="1" fill="none" />
-                  </svg>
-                  <div class="vann-dot"></div>
-                  <div class="vann-text txt-right">
-                    <span class="vann-title">Right-Speaker</span>
-                  </div>
-                </div>
-
-                <div class="v-callout audio-callout" id="audio-callout-leftspk" style="--dot-x: 88.5%; --dot-y: 75.4%; --txt-x: 108.6%; --txt-y: 81.4%;">
-                  <svg class="vann-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-                    <path class="vann-line" d="M 88.5 75.4 L 97.4 84.3 L 106.4 84.3" pathLength="1" fill="none" />
-                  </svg>
-                  <div class="vann-dot"></div>
-                  <div class="vann-text">
-                    <span class="vann-title">Left-Speaker</span>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-
-            <!-- Audio 模式模块级左下角系统文字（2026-10-15：粗标题+正常副行，位置由 CSS 钉在模块左下） -->
-            <div class="v-callout audio-callout" id="audio-callout-sys">
-              <div class="vann-text">
-                <span class="vann-title">3-Microphone & 2-Speaker Array</span>
-                <span class="vann-sub">Stereo Audio I/O System</span>
-              </div>
-            </div>
-
-            <!-- Bottom Mode Tabs: Vision / Audio / Pose / Extension -->
-            <div class="expansion-tabs" role="tablist" aria-label="Multimodal data modes">
-              <button type="button" class="exp-mode-tab active" data-target="image-vision">Vision</button>
-              <button type="button" class="exp-mode-tab" data-target="image-audio">Audio</button>
-              <button type="button" class="exp-mode-tab" data-target="image-pose">Pose</button>
-              <button type="button" class="exp-mode-tab" data-target="image-extension">Expansion</button>
-            </div>
-
-          </div>
-
-        </div>
-      </section>
-    </div>
-
-    <!-- Section 5: Open Ego Data Gateway for Physical AI -->
-    <div class="data-section-wrapper" id="data-interface">
-      <section class="data-section">
-        <div class="data-container">
-
-          <div class="gateway-grid">
-
-            <!-- 左：产品渲染图（用户选角的模型截图，透明底） -->
-            <div class="gateway-visual-col">
-              <img
-                id="gateway-product"
-                class="gateway-product"
-                src="./assets/images/gateway-render-2.webp?v=2"
-                alt="reGoggles product render"
-              />
-            </div>
-
-            <!-- 右：大标题 + 三张卖点卡 -->
-            <div class="gateway-text-col">
-              <h2 class="gateway-title">
-                Open Ego Data for Your Physical AI
-              </h2>
-
-              <div class="gateway-card-list">
-
-                <div class="gateway-card">
-                  <div class="gateway-card-icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#142325" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                      <rect x="6" y="6" width="12" height="12" rx="2"></rect>
-                      <rect x="10" y="10" width="4" height="4"></rect>
-                      <line x1="10" y1="2" x2="10" y2="6"></line>
-                      <line x1="14" y1="2" x2="14" y2="6"></line>
-                      <line x1="10" y1="18" x2="10" y2="22"></line>
-                      <line x1="14" y1="18" x2="14" y2="22"></line>
-                      <line x1="2" y1="10" x2="6" y2="10"></line>
-                      <line x1="2" y1="14" x2="6" y2="14"></line>
-                      <line x1="18" y1="10" x2="22" y2="10"></line>
-                      <line x1="18" y1="14" x2="22" y2="14"></line>
-                    </svg>
-                  </div>
-                  <div class="gateway-card-text">
-                    <h3 class="gateway-card-title">On-chip Video Engine</h3>
-                    <p class="gateway-card-desc">
-                      Powered by Allwinner V881 SoC, reGoggles delivers smooth dual-camera streaming with dedicated ISP and encoding pipelines.
-                    </p>
-                  </div>
-                </div>
-
-                <div class="gateway-card">
-                  <div class="gateway-card-icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#142325" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M4.5 12.5a10 10 0 0 1 15 0"></path>
-                      <path d="M7.8 15.6a5.4 5.4 0 0 1 8.4 0"></path>
-                      <circle cx="12" cy="18.8" r="1.2" fill="#142325" stroke="none"></circle>
-                    </svg>
-                  </div>
-                  <div class="gateway-card-text">
-                    <h3 class="gateway-card-title">Dual-Channel Open Connectivity</h3>
-                    <p class="gateway-card-desc">
-                      Open, customizable transport layer with Dual-SoC architecture: V881 runs WiFi6 data streams & WQ7036AX handles BLE control.
-                    </p>
-                  </div>
-                </div>
-
-                <div class="gateway-card">
-                  <div class="gateway-card-icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#142325" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M12 3l1.9 5.5L19.5 10.4l-5.6 1.9L12 17.8l-1.9-5.5L4.5 10.4l5.6-1.9z"></path>
-                      <path d="M18.6 3.4l.55 1.65 1.65.55-1.65.55-.55 1.65-.55-1.65-1.65-.55 1.65-.55z"></path>
-                    </svg>
-                  </div>
-                  <div class="gateway-card-text">
-                    <h3 class="gateway-card-title">Open AI Integration</h3>
-                    <p class="gateway-card-desc">
-                      Stream egocentric data to edge AI, cloud models, or your own apps—giving AI a window into the physical world.
-                    </p>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-
-          </div>
-
-        </div>
-      </section>
-    </div>
-
-    <!-- Section 7: Protective Design for Industrial Use -->
-    <div class="protective-section-wrapper" id="protective-design">
-      <section class="protective-section">
-        <div class="protective-container">
-          
-          <div class="protective-grid">
-            
-            <!-- Left Text Column -->
-            <div class="protective-text-col">
-              <h2 class="protective-title">
-                Protective Design for Industrial Use
-              </h2>
-              <p class="protective-subtitle">
-                The enclosed goggles design delivers a secure fit and added protection for demanding industrial environments.
-              </p>
-            </div>
-
-            <!-- Right Video Display Column -->
-            <div class="protective-video-col">
-              <div class="protective-video-card">
-                <video 
-                  class="protective-video" 
-                  autoplay 
-                  muted 
-                  loop 
-                  playsinline 
-                  src="./assets/videos/protective-demo.mp4"
-                ></video>
-              </div>
-            </div>
-
-          </div>
-
-        </div>
-      </section>
-    </div>
-
-    <!-- Section 8: Open SDK & Firmware -->
-    <div class="sdk-section-wrapper" id="open-sdk">
-      <section class="sdk-section">
-        <div class="sdk-container">
-          
-          <div class="sdk-grid">
-            
-            <!-- Left Column: Product Image (SDK Render, 全幅左栏) -->
-            <div class="sdk-image-col">
-              <img src="./assets/images/sdk-render.webp?v=2" alt="reGoggles SDK Render" class="sdk-img" />
-            </div>
-
-            <!-- Right Column: Content & Feature Tags -->
-            <div class="sdk-content-col">
-              
-              <h2 class="sdk-title">
-                Open SDK & Firmware
-              </h2>
-              
-              <p class="sdk-subtitle">
-                Support deep application integration and customization, enabling developers to build on their own terms without being locked into a specific ecosystem.
-              </p>
-
-              <div class="sdk-features-list">
-                
-                <!-- Feature 1: Hack The Firmware -->
-                <div class="sdk-feature-card">
-                  <div class="feature-icon-box">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#142325" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <polyline points="16 18 22 12 16 6"></polyline>
-                      <polyline points="8 6 2 12 8 18"></polyline>
-                    </svg>
-                  </div>
-                  <div class="feature-text">
-                    <h3 class="feature-title">Hack The Firmware</h3>
-                    <p class="feature-desc">Modify firmware to fit your use case.</p>
-                  </div>
-                </div>
-
-                <!-- Feature 2: Extend The Sensing Stack -->
-                <div class="sdk-feature-card">
-                  <div class="feature-icon-box">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#142325" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <line x1="12" y1="5" x2="12" y2="19"></line>
-                      <line x1="5" y1="12" x2="19" y2="12"></line>
-                    </svg>
-                  </div>
-                  <div class="feature-text">
-                    <h3 class="feature-title">Extend The Sensing Stack</h3>
-                    <p class="feature-desc">Add new sensors and data pipelines.</p>
-                  </div>
-                </div>
-
-                <!-- Feature 3: Integrate Into Your Own System -->
-                <div class="sdk-feature-card">
-                  <div class="feature-icon-box">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#142325" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-                      <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
-                    </svg>
-                  </div>
-                  <div class="feature-text">
-                    <h3 class="feature-title">Integrate Into Your Own System</h3>
-                    <p class="feature-desc">Connect reGoggles to your existing stack.</p>
-                  </div>
-                </div>
-
-              </div>
-
-            </div>
-
-          </div>
-
-        </div>
-      </section>
-    </div>
-
-    <!-- Section 9: Applications (3D Bento Grid Stage Carousel) -->
-    <div class="applications-section-wrapper" id="applications">
-      <section class="applications-section">
-        
-        <!-- Top Section Header -->
-        <div class="applications-container">
-          <h2 class="applications-main-title">Applications</h2>
-        </div>
-
-
-        <!-- 3D Stage Carousel Track Container -->
-        <div class="carousel-stage-container">
-          
-          <!-- Left / Right Navigation Arrow Buttons -->
-          <button class="stage-arrow arrow-prev" id="stage-arrow-prev" aria-label="Previous Slide">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
-          </button>
-          <button class="stage-arrow arrow-next" id="stage-arrow-next" aria-label="Next Slide">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-          </button>
-
-          <!-- Sliding Track -->
-          <div class="carousel-track" id="stage-carousel-track">
-            
-            <!-- Slide 1: Maker Innovations (Active) -->
-            <div class="theme-slide-card active" data-slide-index="0">
-              
-              <!-- Slide Header -->
-              <div class="slide-header-grid">
-                <h3 class="slide-theme-title">Maker Innovations</h3>
-                <p class="slide-theme-subtitle">
-                  An extensible head-worn development platform for connecting sensors and custom applications, turning ideas into testable wearable prototypes.
-                </p>
-              </div>
-
-              <!-- 3-Column Bento Grid Matching User's Reference Layout -->
-              <div class="slide-bento-grid">
-                
-                <!-- Column 1 (Left: 165px + 220px + 165px + 32px = 582px) -->
-                <div class="bento-col col-1">
-                  <!-- 1. Wearable Sensory Extension -->
-                  <div class="bento-card-unit h-short-3col">
-                    <img src="./assets/images/applications/wearable-sensory-extension.webp" alt="Wearable Sensory Extension" class="card-img" />
-                    <div class="card-gradient"></div>
-                    <div class="card-center-label">
-                      <h4 class="card-title-bold">Wearable Sensory<br/>Extension</h4>
-                    </div>
-                  </div>
-
-                  <!-- 2. Hands-Free Interaction Experiment -->
-                  <div class="bento-card-unit h-medium-3col">
-                    <img src="./assets/images/applications/hands-free-interaction.webp" alt="Hands-Free Interaction Experiment" class="card-img" />
-                    <div class="card-gradient"></div>
-                    <div class="card-center-label">
-                      <h4 class="card-title-bold">Hands-Free<br/>Interaction<br/>Experiment</h4>
-                    </div>
-                  </div>
-
-                  <!-- 3. Real-time Workflow Monitoring -->
-                  <div class="bento-card-unit h-short-3col">
-                    <img src="./assets/images/applications/real-time-workflow.webp" alt="Real-time Workflow Monitoring" class="card-img" />
-                    <div class="card-gradient"></div>
-                    <div class="card-center-label">
-                      <h4 class="card-title-bold">Real-time Workflow<br/>Monitoring</h4>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Column 2 (Center: 346px + 220px + 16px = 582px) -->
-                <div class="bento-col col-2">
-                  <!-- 4. First-Person AI prototype (Tall Hero) -->
-                  <div class="bento-card-unit h-hero-col2">
-                    <img src="./assets/images/applications/first-person-ai.webp" alt="First-Person AI prototype" class="card-img" />
-                    <div class="card-gradient"></div>
-                    <div class="card-center-label">
-                      <h4 class="card-title-bold">First-Person AI<br/>prototype</h4>
-                    </div>
-                  </div>
-
-                  <!-- 5. Multimodal Data Capture & Processing -->
-                  <div class="bento-card-unit h-medium-3col">
-                    <img src="./assets/images/applications/multimodal-data.webp" alt="Multimodal Data Capture & Processing" class="card-img" />
-                    <div class="card-gradient"></div>
-                    <div class="card-center-label">
-                      <h4 class="card-title-bold">Multimodal Data<br/>Capture &<br/>Processing</h4>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Column 3 (Right: 283px + 283px + 16px = 582px) -->
-                <div class="bento-col col-3">
-                  <!-- 6. Spatial AI Perception -->
-                  <div class="bento-card-unit h-equal-2col">
-                    <img src="./assets/images/applications/spatial-ai-perception.webp" alt="Spatial AI Perception" class="card-img" />
-                    <div class="card-gradient"></div>
-                    <div class="card-center-label">
-                      <h4 class="card-title-bold">Spatial AI Perception</h4>
-                    </div>
-                  </div>
-
-                  <!-- 7. On-Site Collaboration & Documentation -->
-                  <div class="bento-card-unit h-equal-2col">
-                    <img src="./assets/images/applications/on-site-collaboration.webp" alt="On-Site Collaboration & Documentation" class="card-img" />
-                    <div class="card-gradient"></div>
-                    <div class="card-center-label">
-                      <h4 class="card-title-bold">On-Site<br/>Collaboration &<br/>Documentation</h4>
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-
-            </div>
-
-            <!-- Slide 2: Industrial AI Assistance -->
-            <div class="theme-slide-card" data-slide-index="1">
-              <div class="slide-header-grid">
-                <h3 class="slide-theme-title">Industrial AI Assistance</h3>
-                <p class="slide-theme-subtitle">
-                  Customizable open glasses built for industrial environments, featuring local AI deployment and personal safety
-                </p>
-              </div>
-
-              <!-- 3-Column Bento Grid (Col 1: 1:3 ratio = 215px & 351px, Col 2: 1:1 ratio = 283px & 283px, Col 3: 3:1 ratio = 351px & 215px) -->
-              <div class="slide-bento-grid">
-                <!-- Col 1: ratio 1:3 -> 215px + 351px + 16px = 582px -->
-                <div class="bento-col col-1">
-                  <div class="bento-card-unit h-short-2col">
-                    <img src="./assets/images/applications/medic-health.webp" alt="Medic & Health" class="card-img" />
-                    <div class="card-gradient"></div>
-                    <div class="card-center-label">
-                      <h4 class="card-title-bold">Medic & Health</h4>
-                    </div>
-                  </div>
-                  <div class="bento-card-unit h-tall-2col">
-                    <img src="./assets/images/applications/education-training.webp" alt="Education & Training" class="card-img" />
-                    <div class="card-gradient"></div>
-                    <div class="card-center-label">
-                      <h4 class="card-title-bold">Education & Training</h4>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Col 2: ratio 1:1 -> 283px + 283px + 16px = 582px -->
-                <div class="bento-col col-2">
-                  <div class="bento-card-unit h-equal-2col">
-                    <img src="./assets/images/applications/industrial-inspection.webp" alt="Industrial Inspection" class="card-img" />
-                    <div class="card-gradient"></div>
-                    <div class="card-center-label">
-                      <h4 class="card-title-bold">Industrial Inspection</h4>
-                    </div>
-                  </div>
-                  <div class="bento-card-unit h-equal-2col">
-                    <img src="./assets/images/applications/agriculture.webp" alt="Agriculture" class="card-img" />
-                    <div class="card-gradient"></div>
-                    <div class="card-center-label">
-                      <h4 class="card-title-bold">Agriculture</h4>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Col 3: ratio 3:1 -> 351px + 215px + 16px = 582px -->
-                <div class="bento-col col-3">
-                  <div class="bento-card-unit h-tall-2col">
-                    <img src="./assets/images/applications/construction.webp" alt="Construction" class="card-img" />
-                    <div class="card-gradient"></div>
-                    <div class="card-center-label">
-                      <h4 class="card-title-bold">Construction</h4>
-                    </div>
-                  </div>
-                  <div class="bento-card-unit h-short-2col">
-                    <img src="./assets/images/applications/security.webp" alt="Security" class="card-img" />
-                    <div class="card-gradient"></div>
-                    <div class="card-center-label">
-                      <h4 class="card-title-bold">Security</h4>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Slide 3: Ego Data Collection -->
-            <div class="theme-slide-card" data-slide-index="2">
-              <div class="slide-header-grid">
-                <h3 class="slide-theme-title">Ego Data Collection</h3>
-                <p class="slide-theme-subtitle">
-                  A multimodal Egocentric data capture device built for industrial environments, offering new possibilities for Embodied AI.
-                </p>
-              </div>
-
-              <!-- 3-Column Bento Grid (All columns: 283px + 283px + 16px = 582px) -->
-              <div class="slide-bento-grid">
-                <div class="bento-col col-1">
-                  <div class="bento-card-unit h-equal-2col">
-                    <img src="./assets/images/applications/metalworking.webp" alt="Metalworking" class="card-img" />
-                    <div class="card-gradient"></div>
-                    <div class="card-center-label">
-                      <h4 class="card-title-bold">Metalworking</h4>
-                    </div>
-                  </div>
-                  <div class="bento-card-unit h-equal-2col">
-                    <img src="./assets/images/applications/industrial-coating.webp" alt="Industrial Coating" class="card-img" />
-                    <div class="card-gradient"></div>
-                    <div class="card-center-label">
-                      <h4 class="card-title-bold">Industrial Coating</h4>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="bento-col col-2">
-                  <div class="bento-card-unit h-equal-2col">
-                    <img src="./assets/images/applications/construction-heavy.webp" alt="Construction" class="card-img" />
-                    <div class="card-gradient"></div>
-                    <div class="card-center-label">
-                      <h4 class="card-title-bold">Construction</h4>
-                    </div>
-                  </div>
-                  <div class="bento-card-unit h-equal-2col">
-                    <img src="./assets/images/applications/electronic-assembly.webp" alt="Electronic Assembly" class="card-img" />
-                    <div class="card-gradient"></div>
-                    <div class="card-center-label">
-                      <h4 class="card-title-bold">Electronic Assembly</h4>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="bento-col col-3">
-                  <div class="bento-card-unit h-equal-2col">
-                    <img src="./assets/images/applications/biochemical-exposure.webp" alt="Bio/Chemical Exposure" class="card-img" />
-                    <div class="card-gradient"></div>
-                    <div class="card-center-label">
-                      <h4 class="card-title-bold">Bio/Chemical<br/>Exposure</h4>
-                    </div>
-                  </div>
-                  <div class="bento-card-unit h-equal-2col">
-                    <img src="./assets/images/applications/equipment-repair.webp" alt="Equipment Repair" class="card-img" />
-                    <div class="card-gradient"></div>
-                    <div class="card-center-label">
-                      <h4 class="card-title-bold">Equipment Repair</h4>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-
-          <!-- Bottom Stage Indicators (Dots) -->
-          <div class="stage-indicators" id="stage-indicators">
-            <span class="indicator-dot active" data-index="0"></span>
-            <span class="indicator-dot" data-index="1"></span>
-            <span class="indicator-dot" data-index="2"></span>
-          </div>
-
-        </div>
-
-      </section>
-    </div>
-
-    <!-- Section 10: Build It Your Way (左：标题/文字/联系我们按钮，右：三张特点卡片) -->
-    <div class="build-section-wrapper" id="customization">
-
-      <!-- Background Image Overlay ("SMT Workshop" 覆盖整个 Section 10 包含顶部留白) -->
-      <div class="build-bg-overlay">
-        <img src="./assets/images/smt-workshop.webp" alt="SMT Workshop Background" class="build-bg-img" />
-        <div class="build-bg-gradient"></div>
-      </div>
-
-      <section class="build-section">
-
-        <!-- Section Content Area -->
-        <div class="build-content-container">
-
-          <!-- Left / Right Split Grid -->
-          <div class="build-content-grid">
-
-            <!-- Left Column: Title + Description + Contact Us CTA -->
-            <div class="build-left-col">
-              <h2 class="build-title">Build It Your Way</h2>
-              <p class="build-description">
-                Our open hardware architecture makes feature expansion and software adaptation effortless. Backed by our supply chain, we deliver OEM and ODM customization for industrial customers.
-              </p>
-
-              <!-- CTA Button: Contact Us -->
-              <div class="build-cta-wrapper">
-                <button class="btn-build-cta" id="build-contact-btn">
-                  <span>Contact Us</span>
-                  <div class="cta-arrow-circle">
-                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M1 7H13M13 7L7 1M13 7L7 13" stroke="#142325" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                  </div>
-                </button>
-              </div>
-            </div>
-
-            <!-- Right Column: 3 Feature Cards -->
-            <div class="build-cards-col">
-
-              <!-- Card 1: Agile Development -->
-              <div class="build-feature-card">
-                <div class="feature-icon-circle">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#142325" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-                  </svg>
-                </div>
-                <div class="build-card-text">
-                  <h3 class="feature-name">Agile Development</h3>
-                </div>
-              </div>
-
-              <!-- Card 2: Global Manufacturing -->
-              <div class="build-feature-card">
-                <div class="feature-icon-circle">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#142325" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <line x1="2" y1="12" x2="22" y2="12"></line>
-                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-                  </svg>
-                </div>
-                <div class="build-card-text">
-                  <h3 class="feature-name">Global Manufacturing</h3>
-                </div>
-              </div>
-
-              <!-- Card 3: Co-Creation -->
-              <div class="build-feature-card">
-                <div class="feature-icon-circle">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#142325" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                    <circle cx="9" cy="7" r="4"></circle>
-                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                  </svg>
-                </div>
-                <div class="build-card-text">
-                  <h3 class="feature-name">Co-Creation</h3>
-                </div>
-              </div>
-
-            </div>
-
-          </div>
-
-        </div>
-
-      </section>
-    </div>
-
     <!-- 左侧快速切换页面导航（Viture Helix 风格圆点，桌面端可见） -->
     <aside class="screen-nav" id="screen-nav" aria-label="Quick section navigation">
       <button type="button" class="screen-nav-dot active" data-screen="hero" aria-label="Overview"></button>
-      <button type="button" class="screen-nav-dot" data-screen="community-builders" aria-label="Community"></button>
+      <button type="button" class="screen-nav-dot" data-screen="field-work" aria-label="Frontline Intelligence"></button>
       <button type="button" class="screen-nav-dot" data-screen="sensing-system" aria-label="Sensing System"></button>
-      <button type="button" class="screen-nav-dot" data-screen="data-interface" aria-label="Data Interface"></button>
-      <button type="button" class="screen-nav-dot" data-screen="protective-design" aria-label="Protective Design"></button>
-      <button type="button" class="screen-nav-dot" data-screen="open-sdk" aria-label="Open SDK"></button>
-      <button type="button" class="screen-nav-dot" data-screen="applications" aria-label="Applications"></button>
-      <button type="button" class="screen-nav-dot" data-screen="customization" aria-label="Build It Your Way"></button>
+      <button type="button" class="screen-nav-dot" data-screen="protective-design" aria-label="Frontline Design"></button>
+      <button type="button" class="screen-nav-dot" data-screen="your-rules" aria-label="Your Rules"></button>
+      <button type="button" class="screen-nav-dot" data-screen="open-sdk" aria-label="Open Source for Makers and Developers"></button>
+      <button type="button" class="screen-nav-dot" data-screen="customization" aria-label="Customize to Spec"></button>
+      <button type="button" class="screen-nav-dot" data-screen="community-builders" aria-label="Community"></button>
     </aside>
 
     <div class="modal-backdrop" id="action-modal">

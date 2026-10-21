@@ -15,8 +15,7 @@ p.tip { font-size: 0.85rem; color: #5a6b6d; margin: 0 1.5rem 1.2rem; line-height
 .imgwrap { position: absolute; inset: 0; overflow: visible; border-radius: 8px; background: #0c1719; }
 .card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
 /* 与站点一致的模式对齐变换（用户改站点后记得同步这里） */
-#card-vision .imgwrap img, #card-vport .imgwrap img { transform: translateX(15%) scale(1.2); }
-#card-tof .imgwrap img, #card-imu .imgwrap img { transform: translate(5%, -12%) scale(1.3); }
+.card[id^="card-orig-"] .imgwrap img, #card-all-orig .imgwrap img, #card-vision .imgwrap img, #card-vport .imgwrap img { transform: translateX(15%) scale(1.2); }
 #card-extgen .imgwrap img, #card-extvis .imgwrap img { transform: translateY(-10%) scale(1.3); }
 .card svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
 .track { stroke: #ffffff; stroke-width: 1.5; fill: none; }
@@ -33,11 +32,27 @@ p.tip { font-size: 0.85rem; color: #5a6b6d; margin: 0 1.5rem 1.2rem; line-height
 .copy-btn { margin: 0.6rem auto 0; display: block; width: 200px; padding: 0.45rem 0; font-size: 0.85rem; border: 1px solid #142325; border-radius: 999px; background: #fff; cursor: pointer; }
 .copy-btn:hover { background: #142325; color: #fff; }
 textarea { width: 100%; height: 130px; box-sizing: border-box; font-family: ui-monospace, Consolas, monospace; font-size: 0.78rem; border: 1px solid #dde3e4; border-radius: 8px; padding: 0.6rem; }
+.live-all-card { max-width: 1400px; margin: 1rem auto 3rem; padding: 0 1.5rem; }
+.live-preview-box { background: #121c1e; border: 1px solid rgba(198,229,61,0.3); border-radius: 12px; padding: 1.5rem 1rem; }
+.live-all-labels { position: absolute; inset: 0; pointer-events: none; }
+.live-all-label-item { position: absolute; font-size: 0.92rem; font-weight: 600; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.9); white-space: nowrap; }
+.live-all-dot { position: absolute; width: 8px; height: 8px; margin: -4px 0 0 -4px; border-radius: 50%; background: #fff; box-shadow: 0 0 8px rgba(255,255,255,0.8); }
 </style>
 </head>
 <body>
 <h1>标注位置与线条轨迹校准工具</h1>
 <p class="tip">拖动<b>白圆点</b>＝定位点（<b>整条线整体平移</b>，圆点精确跟手落位，线形角度保持不变）；拖<b>绿色方块</b>＝折线拐点（拐点吸附到横向/45°线上，<b>虚线圆点会跟着拐点一起动</b>）；拖<b>虚线圈</b>＝线终点（吸附到横向或 45°）；拖<b>文字块</b>＝标签位置。坐标允许负值和超过 100% 的值（-80% 到 180%），线和文字可以自由向四周延伸，与真实站点行为一致。<b>线条约束（2026-10-15）</b>：拐点与终点自动吸附为<b>横向或 45° 斜向</b>，不允许其他角度，保证所有标注线统一。摆好后点"复制全部"发我。</p>
+
+<div class="live-all-card">
+  <div class="label" style="font-size: 1rem; color: #142325;">⭐ Original 全局 8 标注综合实时联动预览（拖动下方任意标点，此图即时联动）：</div>
+  <div class="live-preview-box">
+    <div class="card" id="card-all-orig" style="margin: 30px auto;">
+      <div class="imgwrap"><img src="./assets/images/hero-goggles2.webp?v=2" alt=""></div>
+      <svg id="svg-all-orig" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
+      <div class="live-all-labels" id="labels-all-orig"></div>
+    </div>
+  </div>
+</div>
 
 <div id="stages"></div>
 
@@ -50,39 +65,36 @@ textarea { width: 100%; height: 130px; box-sizing: border-box; font-family: ui-m
 (function () {
   // 每个 stage：marks 为 [dot,corner,end]×N，共享一个 text
   var stages = [
-    { key: 'vision', label: 'Vision-Camera —— hero-goggles2（1.2x）', img: '/assets/images/hero-goggles2.webp?v=2',
-      text: { x: 101.4, y: 11.7 }, lines: ['4K Camera<br>12MP HD-RGB'],
+    { key: 'orig-midmic', label: '1. Original: Mid-Microphone —— hero-goggles2（1.2x）', img: './assets/images/hero-goggles2.webp?v=2',
+      text: { x: -8.1, y: 19.5 }, lines: ['Mid-Microphone'],
+      marks: [ { dot: {x:30.7,y:32.4}, corner: {x:20.2,y:21.9}, end: {x:9.2,y:21.9} } ] },
+    { key: 'orig-rightmic', label: '2. Original: Right-Microphone —— hero-goggles2（1.2x）', img: './assets/images/hero-goggles2.webp?v=2',
+      text: { x: -30, y: 54.8 }, lines: ['Right-Microphone'],
+      marks: [ { dot: {x:10.9,y:68.7}, corner: {x:-0.1,y:57.7}, end: {x:-10.6,y:57.7} } ] },
+    { key: 'orig-usbc', label: '3. Original: USB Type-C —— hero-goggles2（1.2x）', img: './assets/images/hero-goggles2.webp?v=2',
+      text: { x: -0.3, y: 91.9 }, lines: ['USB Type-C'],
+      marks: [ { dot: {x:35.9,y:83.5}, corner: {x:24.9,y:94.5}, end: {x:12.4,y:94.5} } ] },
+    { key: 'orig-rightspk', label: '4. Original: Right-Speaker —— hero-goggles2（1.2x）', img: './assets/images/hero-goggles2.webp?v=2',
+      text: { x: 28.8, y: 97.9 }, lines: ['Right-Speaker'],
+      marks: [ { dot: {x:45.3,y:86.5}, corner: {x:35.3,y:96.5}, end: {x:35.4,y:96.4} } ] },
+    { key: 'orig-maincam', label: '5. Original: Main-Camera 12MP RGB —— hero-goggles2（1.2x）', img: './assets/images/hero-goggles2.webp?v=2',
+      text: { x: 101.4, y: 11.7 }, lines: ['Main-Camera 12MP RGB'],
       marks: [ { dot: {x:72.9,y:30.8}, corner: {x:89,y:14.7}, end: {x:99.8,y:14.7} } ] },
-    { key: 'vport', label: 'Vision-Port —— hero-goggles2（1.2x）', img: '/assets/images/hero-goggles2.webp?v=2',
-      text: { x: -41, y: 67.1 }, lines: ['Expansion Port for<br>Additional Camera<br>Enabling Dual-Eye Image Data'],
-      marks: [ { dot: {x:8.9,y:61.5}, corner: {x:0.4,y:70}, end: {x:-8.6,y:70} } ] },
-    { key: 'tof', label: 'Pose-ToF —— 3.1右侧俯视（1.3x）', img: '/assets/images/3.1右侧俯视.webp',
-      text: { x: -28.3, y: 70.5 }, lines: ['Expansion Port for TOF Sensor<br>Able to Capture Depth Image'],
-      marks: [ { dot: {x:29.9,y:57.4}, corner: {x:5.5,y:56.2}, end: {x:-3.8,y:69.4} } ] },
-    { key: 'imu', label: 'Pose-IMU —— 3.1右侧俯视（1.3x）', img: '/assets/images/3.1右侧俯视.webp',
-      text: { x: 97.9, y: 81 }, lines: ['6DOF IMU Sensor<br>Live Detection for Pose Data'],
-      marks: [ { dot: {x:72.4,y:74.4}, corner: {x:87.7,y:74.4}, end: {x:95.5,y:82.2} } ] },
-    { key: 'extgen', label: 'Extension-General Port —— 4.1左俯俯视（1.3x/上移10%）', img: '/assets/images/4.1左俯俯视.png',
-      text: { x: 109, y: 29.7 }, lines: ['General Expansion Port<br>Additional Camera, ToF, SD Card<br>and Custom Modules'],
+    { key: 'orig-mainimu', label: '6. Original: Main-IMU 6DOF —— hero-goggles2（1.2x）', img: './assets/images/hero-goggles2.webp?v=2',
+      text: { x: 101.3, y: 22.3 }, lines: ['Main-IMU 6DOF'],
+      marks: [ { dot: {x:79.7,y:34.8}, corner: {x:89.3,y:25.2}, end: {x:98.8,y:25.2} } ] },
+    { key: 'orig-leftmic', label: '7. Original: Left-Microphone —— hero-goggles2（1.2x）', img: './assets/images/hero-goggles2.webp?v=2',
+      text: { x: 102.4, y: 32.2 }, lines: ['Left-Microphone'],
+      marks: [ { dot: {x:79.5,y:41}, corner: {x:85.8,y:34.7}, end: {x:100.3,y:34.7} } ] },
+    { key: 'orig-leftspk', label: '8. Original: Left-Speaker —— hero-goggles2（1.2x）', img: './assets/images/hero-goggles2.webp?v=2',
+      text: { x: 126.6, y: 68.1 }, lines: ['Left-Speaker'],
+      marks: [ { dot: {x:106.2,y:61.7}, corner: {x:115.2,y:70.7}, end: {x:124.6,y:70.7} } ] },
+    { key: 'extgen', label: 'Extension: General Expansion Port —— 4.1左俯俯视（1.3x/上移10%）', img: './assets/images/4.1左俯俯视.png',
+      text: { x: 109, y: 29.7 }, lines: ['General Expansion Port', 'MIPI CSI B for Additional Camera,', 'ToF, SD Card and Custom Modules'],
       marks: [ { dot: {x:73.7,y:58.7}, corner: {x:97.4,y:35}, end: {x:105.7,y:35} } ] },
-    { key: 'extvis', label: 'Extension-Vision Port —— 4.1左俯俯视（1.3x/上移10%）', img: '/assets/images/4.1左俯俯视.png',
-      text: { x: -16.1, y: 86.5 }, lines: ['Vision Expansion Port<br>Additional Camera+IMU and Custom Modules'],
-      marks: [ { dot: {x:30,y:75.6}, corner: {x:16.5,y:89.1}, end: {x:7,y:89.1} } ] },
-    { key: 'audmicmid', label: 'Audio-Mid-Microphone —— front（1x）', img: '/assets/images/front.webp',
-      text: { x: 76.1, y: 9 }, lines: ['Mid-Microphone'],
-      marks: [ { dot: {x:49.9,y:24.1}, corner: {x:62.5,y:11.5}, end: {x:74.5,y:11.5} } ] },
-    { key: 'audmicleft', label: 'Audio-Left-Microphone —— front（1x）', img: '/assets/images/front.webp',
-      text: { x: 116.3, y: 37.9 }, lines: ['Left-Microphone'],
-      marks: [ { dot: {x:93.4,y:51}, corner: {x:104,y:40.4}, end: {x:114.1,y:40.4} } ] },
-    { key: 'audmicright', label: 'Audio-Right-Microphone —— front（1x）', img: '/assets/images/front.webp',
-      text: { x: -29.9, y: 39.6 }, lines: ['Right-Microphone'],
-      marks: [ { dot: {x:6.9,y:51}, corner: {x:-1.9,y:42.2}, end: {x:-11.1,y:42.2} } ] },
-    { key: 'audspkright', label: 'Audio-Right-Speaker —— front（1x）', img: '/assets/images/front.webp',
-      text: { x: -21.7, y: 81.2 }, lines: ['Right-Speaker'],
-      marks: [ { dot: {x:11.9,y:75.6}, corner: {x:3.4,y:84.1}, end: {x:-7,y:84.1} } ] },
-    { key: 'audspkleft', label: 'Audio-Left-Speaker —— front（1x）', img: '/assets/images/front.webp',
-      text: { x: 108.6, y: 81.4 }, lines: ['Left-Speaker'],
-      marks: [ { dot: {x:88.5,y:75.4}, corner: {x:97.4,y:84.3}, end: {x:106.4,y:84.3} } ] }
+    { key: 'extvis', label: 'Extension: Vision Expansion Port —— 4.1左俯俯视（1.3x/上移10%）', img: './assets/images/4.1左俯俯视.png',
+      text: { x: -16.1, y: 86.5 }, lines: ['Vision Expansion Port', 'MIPI CSI B for Additional Camera+IMU', 'and Custom Modules'],
+      marks: [ { dot: {x:30,y:75.6}, corner: {x:16.5,y:89.1}, end: {x:7,y:89.1} } ] }
   ];
 
   function build() {
@@ -138,6 +150,22 @@ textarea { width: 100%; height: 130px; box-sizing: border-box; font-family: ui-m
       summary += ' text ' + s.text.x + '/' + s.text.y + '\n';
     });
     document.getElementById('summary').value = summary;
+
+    // 渲染 Original 全局 8 标注综合实时联动预览
+    var allSvg = '';
+    var allLabels = '';
+    stages.filter(function (s) { return s.key.indexOf('orig-') === 0; }).forEach(function (s) {
+      s.marks.forEach(function (m) {
+        var d = 'M ' + m.dot.x + ' ' + m.dot.y + ' L ' + m.corner.x + ' ' + m.corner.y + ' L ' + m.end.x + ' ' + m.end.y;
+        allSvg += '<path class="track" d="' + d + '"/>';
+        allLabels += '<div class="live-all-dot" style="left:' + m.dot.x + '%; top:' + m.dot.y + '%;"></div>';
+      });
+      allLabels += '<div class="live-all-label-item" style="left:' + s.text.x + '%; top:' + s.text.y + '%;">' + s.lines.join('<br>') + '</div>';
+    });
+    var svgEl = document.getElementById('svg-all-orig');
+    if (svgEl) svgEl.innerHTML = allSvg;
+    var labelsEl = document.getElementById('labels-all-orig');
+    if (labelsEl) labelsEl.innerHTML = allLabels;
   }
 
   function startDrag(e, key, part, idx) {

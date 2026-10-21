@@ -14,6 +14,11 @@ function initApp() {
   const contactBtn = document.getElementById('contact-us-btn');
   const buildContactBtn = document.getElementById('build-contact-btn');
 
+  // Hero Banner Action Buttons
+  const heroContactBtn = document.getElementById('hero-contact-btn');
+  const heroSubscribeBtn = document.getElementById('hero-subscribe-btn');
+  const heroJoinBtn = document.getElementById('hero-join-btn');
+
   function openModal(title, desc) {
     if (modalTitle) modalTitle.textContent = title;
     if (modalDesc) modalDesc.textContent = desc;
@@ -24,23 +29,19 @@ function initApp() {
     if (modalBackdrop) modalBackdrop.classList.remove('active');
   }
 
-  if (joinBtn) {
-    joinBtn.addEventListener('click', () => {
-      openModal(
-        'Join 100 Community Builders',
-        'Be among the first developers, makers, and AI roboticists shaping reGoggles. Enter your email below:'
-      );
-    });
-  }
+  const handleJoinClick = () => {
+    openModal(
+      'Join 100 Community Builders',
+      'Be among the first developers, makers, and AI roboticists shaping reGoggles. Enter your email below:'
+    );
+  };
 
-  if (subscribeBtn) {
-    subscribeBtn.addEventListener('click', () => {
-      openModal(
-        'Subscribe to reGoggles Updates',
-        'Stay updated with the latest news, hardware builds, and developer releases.'
-      );
-    });
-  }
+  const handleSubscribeClick = () => {
+    openModal(
+      'Subscribe to reGoggles Updates',
+      'Stay updated with the latest news, hardware builds, and developer releases.'
+    );
+  };
 
   const handleContactClick = () => {
     openModal(
@@ -49,13 +50,15 @@ function initApp() {
     );
   };
 
-  if (contactBtn) {
-    contactBtn.addEventListener('click', handleContactClick);
-  }
+  if (joinBtn) joinBtn.addEventListener('click', handleJoinClick);
+  if (heroJoinBtn) heroJoinBtn.addEventListener('click', handleJoinClick);
 
-  if (buildContactBtn) {
-    buildContactBtn.addEventListener('click', handleContactClick);
-  }
+  if (subscribeBtn) subscribeBtn.addEventListener('click', handleSubscribeClick);
+  if (heroSubscribeBtn) heroSubscribeBtn.addEventListener('click', handleSubscribeClick);
+
+  if (contactBtn) contactBtn.addEventListener('click', handleContactClick);
+  if (heroContactBtn) heroContactBtn.addEventListener('click', handleContactClick);
+  if (buildContactBtn) buildContactBtn.addEventListener('click', handleContactClick);
 
   if (modalCloseBtn) {
     modalCloseBtn.addEventListener('click', closeModal);
@@ -131,18 +134,39 @@ function initApp() {
     }
   });
 
-  // (百叶窗滚动效果与 Section 3 迭代轮播已移除)
+  // ==========================================================================
+  // Section: Field Worker Intelligence (7 Tabs Switching)
+  // ==========================================================================
+  const fwTabs = document.querySelectorAll('.fieldwork-tab-item');
+  const fwPanels = document.querySelectorAll('.fieldwork-panel');
+
+  if (fwTabs.length && fwPanels.length) {
+    fwTabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        if (tab.classList.contains('active')) return;
+        const targetId = tab.dataset.fwTarget;
+
+        fwTabs.forEach((t) => {
+          t.classList.remove('active');
+          t.setAttribute('aria-selected', 'false');
+        });
+        tab.classList.add('active');
+        tab.setAttribute('aria-selected', 'true');
+
+        fwPanels.forEach((panel) => {
+          panel.classList.toggle('active', panel.id === targetId);
+        });
+      });
+    });
+  }
 
   // ==========================================================================
   // Section 3: 底部模式按钮 (Vision / Audio / Pose / Extension) 切换静态图
   // ==========================================================================
   const modeTabs = document.querySelectorAll('.exp-mode-tab');
   const modeImages = document.querySelectorAll('.expansion-image');
-  const visionAnnotation = document.getElementById('vision-annotation');
-  const visionPortAnnotation = document.getElementById('vision-annotation-port');
-  const poseCallouts = document.querySelectorAll('.pose-callout');
+  const originalCallouts = document.querySelectorAll('.original-callout');
   const extensionCallouts = document.querySelectorAll('.extension-callout');
-  const audioCallouts = document.querySelectorAll('.audio-callout');
 
   if (modeTabs.length) {
     modeTabs.forEach((tab) => {
@@ -157,21 +181,12 @@ function initApp() {
           img.classList.toggle('active', img.id === targetId);
         });
 
-        // 标注联动：Vision 显示摄像头+端口两条标注，Pose 显示 ToF/IMU 两条标注（切换时自动隐藏并重置动画）
-        if (visionAnnotation) {
-          visionAnnotation.classList.toggle('active', targetId === 'image-vision');
-        }
-        if (visionPortAnnotation) {
-          visionPortAnnotation.classList.toggle('active', targetId === 'image-vision');
-        }
-        poseCallouts.forEach((callout) => {
-          callout.classList.toggle('active', targetId === 'image-pose');
+        // 标注联动：Original 显示 8 条标注，Expansion 显示扩展标注（切换时平滑重置动画）
+        originalCallouts.forEach((callout) => {
+          callout.classList.toggle('active', targetId === 'image-vision');
         });
         extensionCallouts.forEach((callout) => {
           callout.classList.toggle('active', targetId === 'image-extension');
-        });
-        audioCallouts.forEach((callout) => {
-          callout.classList.toggle('active', targetId === 'image-audio');
         });
       });
     });
