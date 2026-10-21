@@ -3049,6 +3049,7 @@ html {
     padding-top: 2.5rem;
     padding-bottom: 3rem;
   }
+  .fieldwork-container { zoom: 0.98; }
   .expansion-container { zoom: 0.95; }
   .data-container { zoom: 0.97; }
   /* zoom 档位下网关图左缘校正：vw 与容器不共坐标系，需按本档 zoom 重算居中偏移 */
@@ -3079,6 +3080,7 @@ html {
     padding-top: 2.5rem;
     padding-bottom: 2.5rem;
   }
+  .fieldwork-container { zoom: 0.95; }
   .expansion-container { zoom: 0.92; }
   .data-container { zoom: 0.94; }
   .gateway-product {
@@ -3112,6 +3114,7 @@ html {
     padding-top: 2rem;
     padding-bottom: 2rem;
   }
+  .fieldwork-container { zoom: 0.90; }
   .expansion-container { zoom: 0.90; }
   .data-container { zoom: 0.96; }
   .gateway-product {
@@ -3146,6 +3149,7 @@ html {
     padding-top: 1.75rem;
     padding-bottom: 1.75rem;
   }
+  .fieldwork-container { zoom: 0.85; }
   .expansion-container { zoom: 0.86; }
   .data-container { zoom: 0.89; }
   .gateway-product {
@@ -3180,6 +3184,7 @@ html {
     padding-top: 1.5rem;
     padding-bottom: 1.5rem;
   }
+  .fieldwork-container { zoom: 0.78; }
   .expansion-container { zoom: 0.76; }
   .data-container { zoom: 0.86; }
   .gateway-product {
@@ -3214,6 +3219,7 @@ html {
     padding-top: 1.25rem;
     padding-bottom: 1.25rem;
   }
+  .fieldwork-container { zoom: 0.72; }
   .expansion-container { zoom: 0.70; }
   .data-container { zoom: 0.79; }
   .gateway-product {
@@ -3248,6 +3254,7 @@ html {
     padding-top: 1rem;
     padding-bottom: 1rem;
   }
+  .fieldwork-container { zoom: 0.65; }
   .expansion-container { zoom: 0.64; }
   .data-container { zoom: 0.72; }
   .gateway-product {
@@ -3364,11 +3371,15 @@ html {
   box-sizing: border-box;
 }
 
-/* 针对笔记本/较小桌面尺寸（宽 821px ~ 1440px）大标题适度收窄，避免两端留白过窄且排版更聚焦 */
+/* 针对笔记本/较小桌面尺寸（宽 821px ~ 1440px）大标题适度收窄，选项与右侧卡片等宽 (1fr 1fr) */
 @media (min-width: 821px) and (max-width: 1440px) {
   .fieldwork-container {
     padding: 0 clamp(2.5rem, 5vw, 5rem);
     max-width: 1340px;
+  }
+  .fieldwork-stage-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(1.4rem, 2vw, 2.2rem);
   }
   .fieldwork-main-title {
     max-width: 760px;
@@ -3418,15 +3429,12 @@ html {
   text-align: center;
 }
 
-/* Main Interactive Stage Grid (左右等宽 1:1 比例关系，大屏与笔记本尺寸保持一致) */
+/* Main Interactive Stage Grid (大屏状态：保持原本优美比例关系 minmax(380px, 480px) 1fr) */
 .fieldwork-stage-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: clamp(1.5rem, 2.5vw, 2.6rem);
+  grid-template-columns: minmax(380px, 480px) 1fr;
+  gap: clamp(1.5rem, 3vw, 3.2rem);
   align-items: stretch;
-  max-width: 1080px;
-  margin: 0 auto;
-  width: 100%;
 }
 
 /* Left Tabs List */
