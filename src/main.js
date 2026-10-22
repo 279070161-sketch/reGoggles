@@ -134,6 +134,40 @@ function initApp() {
     }
   });
 
+  // Update Active Link on Scroll (Scrollspy for Nav Menu)
+  const menuSections = Array.from(navLinkItems).map(link => {
+    const hash = link.getAttribute('href');
+    return hash && hash.startsWith('#') ? document.querySelector(hash) : null;
+  }).filter(Boolean);
+
+  function updateActiveNavLink() {
+    const scrollPos = window.pageYOffset + 140;
+    let currentId = null;
+
+    for (let i = menuSections.length - 1; i >= 0; i--) {
+      const sec = menuSections[i];
+      if (sec && sec.offsetTop <= scrollPos) {
+        currentId = '#' + sec.id;
+        break;
+      }
+    }
+
+    if (!currentId && menuSections.length > 0) {
+      currentId = '#' + menuSections[0].id;
+    }
+
+    navLinkItems.forEach(link => {
+      if (link.getAttribute('href') === currentId) {
+        link.classList.add('active');
+      } else {
+        link.classList.remove('active');
+      }
+    });
+  }
+
+  window.addEventListener('scroll', updateActiveNavLink, { passive: true });
+  updateActiveNavLink();
+
   // ==========================================================================
   // Section: Field Worker Intelligence (7 Tabs Switching)
   // ==========================================================================
@@ -410,6 +444,97 @@ function initApp() {
 
     // Handle window resize
     window.addEventListener('resize', () => update3DCarousel(currentSlideIndex));
+  }
+
+  // Initialize Section 3 Features Dynamic Noise Grain
+  initFeaturesNoise();
+}
+
+// ==========================================================================
+// Section 3: Features Dynamic Noise Grain Overlay & Radial Spotlight
+// ==========================================================================
+function initFeaturesNoise() {
+  const canvas = document.getElementById('features-noise-canvas');
+  if (!canvas) return;
+
+  const ctx = canvas.getContext('2d', { alpha: true });
+  if (!ctx) return;
+
+  let animationId = 0;
+  let frame = 0;
+  const canvasSize = 1024;
+  canvas.width = canvasSize;
+  canvas.height = canvasSize;
+
+  const patternRefreshInterval = 2;
+  const patternAlpha = 18; // 0-255
+
+  // Pre-generate 8 frames of noise for high performance and zero GC pauses
+  const framePoolCount = 8;
+  const noiseFrames = [];
+
+  for (let f = 0; f < framePoolCount; f++) {
+    const imgData = ctx.createImageData(canvasSize, canvasSize);
+    const buf = new Uint32Array(imgData.data.buffer);
+    const len = buf.length;
+    for (let i = 0; i < len; i++) {
+      const v = (Math.random() * 255) | 0;
+      // Little-endian RGBA: (A << 24) | (B << 16) | (G << 8) | R
+      buf[i] = (patternAlpha << 24) | (v << 16) | (v << 8) | v;
+    }
+    noiseFrames.push(imgData);
+  }
+
+  let currentFrameIdx = 0;
+  const drawGrain = () => {
+    ctx.putImageData(noiseFrames[currentFrameIdx], 0, 0);
+    currentFrameIdx = (currentFrameIdx + 1) % framePoolCount;
+  };
+
+  // Initial draw
+  drawGrain();
+
+  let isVisible = false;
+
+  const loop = () => {
+    if (!isVisible) return;
+    if (frame % patternRefreshInterval === 0) {
+      drawGrain();
+    }
+    frame++;
+    animationId = window.requestAnimationFrame(loop);
+  };
+
+  const startLoop = () => {
+    if (!isVisible) {
+      isVisible = true;
+      animationId = window.requestAnimationFrame(loop);
+    }
+  };
+
+  const stopLoop = () => {
+    isVisible = false;
+    if (animationId) {
+      window.cancelAnimationFrame(animationId);
+      animationId = 0;
+    }
+  };
+
+  // Only animate when features section is visible in viewport
+  const section = document.getElementById('features');
+  if (section && 'IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          startLoop();
+        } else {
+          stopLoop();
+        }
+      });
+    }, { threshold: 0.05 });
+    observer.observe(section);
+  } else {
+    startLoop();
   }
 }
 
