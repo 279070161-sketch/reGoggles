@@ -1247,10 +1247,10 @@ html {
 }
 
 .features-container {
-  max-width: 1700px;
+  max-width: 1560px;
   width: 100%;
   margin: 0 auto;
-  padding: 0 3rem;
+  padding: 0 clamp(1.5rem, 4vw, 3rem);
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -1414,19 +1414,65 @@ html {
   margin: 0;
 }
 
-/* Responsive Breakpoints */
-@media (max-width: 1024px) {
-  .features-bento-grid {
-    grid-template-columns: repeat(2, 1fr);
+/* Responsive Breakpoints: 小屏幕内容宽度收拢优化 */
+@media (max-width: 1600px) {
+  .features-container {
+    max-width: 1320px;
   }
 }
 
-@media (max-width: 680px) {
+@media (max-width: 1440px) {
+  .features-container {
+    max-width: 1140px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .features-container {
+    max-width: 980px;
+  }
+  .fbento-card {
+    padding: 1.45rem 1.35rem;
+    gap: 0.9rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  .features-container {
+    max-width: 740px;
+  }
+  .features-bento-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.15rem;
+  }
+  .fbento-card {
+    padding: 1.4rem 1.4rem;
+  }
+}
+
+@media (max-width: 768px) {
   .features-section-wrapper {
-    padding: 3.5rem 0;
+    padding: 4rem 0 3.5rem;
+    height: auto;
+    min-height: 100vh;
+  }
+  .features-container {
+    max-width: 460px;
   }
   .features-bento-grid {
     grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .fbento-card {
+    padding: 1.35rem 1.35rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .features-container {
+    max-width: 100%;
+    padding-left: 1.25rem !important;
+    padding-right: 1.25rem !important;
   }
 }
 
