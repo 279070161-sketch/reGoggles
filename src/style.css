@@ -3932,7 +3932,7 @@ html {
   transform: translateX(4px);
 }
 
-/* Right Panels Container: 使用 CSS Grid 单单元格堆叠，自动锁定为 7 个面板中最高面板的统一样式，彻底消除切换选项时的高度抖动 */
+/* Right Panels Container: 固定的外层毛玻璃卡片框体，backdrop-filter 恒定处于 opacity: 1 状态，永不闪烁、永不掉帧 */
 .fieldwork-panels-container {
   display: grid;
   grid-template-columns: 1fr;
@@ -3940,6 +3940,14 @@ html {
   position: relative;
   width: 100%;
   height: 100%;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border-radius: 14px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+  padding: clamp(1.4rem, 2.5vh, 2rem) clamp(1.6rem, 2.4vw, 2.4rem);
+  box-sizing: border-box;
 }
 
 .fieldwork-panel {
@@ -3950,7 +3958,7 @@ html {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transition: opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.28s ease;
+  transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.22s ease;
 }
 
 .fieldwork-panel.active {
@@ -3960,21 +3968,21 @@ html {
   z-index: 2;
 }
 
-/* Right Detail Card - 与选项卡片一致的精致毛玻璃效果（frosted glass） */
+/* Right Detail Card - 内层内容容器（移除背景与毛玻璃，只保留弹性布局，保证切换时文字平滑淡入淡出且毛玻璃底壳恒定不闪烁） */
 .fieldwork-detail-card {
-  background: rgba(255, 255, 255, 0.07);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  backdrop-filter: blur(28px) saturate(180%);
-  -webkit-backdrop-filter: blur(28px) saturate(180%);
-  border-radius: 14px;
-  padding: clamp(1.4rem, 2.5vh, 2rem) clamp(1.6rem, 2.4vw, 2.4rem);
+  background: transparent;
+  border: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
   gap: clamp(0.9rem, 1.8vh, 1.35rem);
   height: 100%;
   box-sizing: border-box;
   justify-content: flex-start;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.22);
 }
 
 .panel-header-row {
@@ -4066,8 +4074,8 @@ html {
     flex-direction: column;
     gap: 0.5rem;
   }
-  .fieldwork-detail-card {
-    padding: 0;
+  .fieldwork-panels-container {
+    padding: 1.35rem 1.4rem;
   }
 }
 
