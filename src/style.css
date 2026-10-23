@@ -2301,7 +2301,7 @@ html {
   top: 0;
   right: 0;
   bottom: 0;
-  width: 82%;
+  width: 92%;
   height: 100%;
   overflow: hidden;
   pointer-events: none;
@@ -2324,12 +2324,12 @@ html {
   box-shadow: none;
   pointer-events: none;
   user-select: none;
-  /* 宽幅渐变淡入，彻底消除左侧突兀硬切切线 */
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.5) 18%, #000000 38%);
-  mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.5) 18%, #000000 38%);
+  /* 紧凑渐变羽化：跨度更小，露出更宽幅的视频内容 */
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.5) 6%, #000000 16%);
+  mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.5) 6%, #000000 16%);
 }
 
-/* 向右自然扩散的暗色阴影层：使气流柔和浮现，深邃衬托左侧文案，右侧主体清晰通透 */
+/* 向右过渡更短促平滑的暗色阴影层：仅衬托左侧文案，让右侧大面积视频内容完全展现 */
 .protective-fade-overlay {
   position: absolute;
   inset: 0;
@@ -2340,18 +2340,17 @@ html {
   background: linear-gradient(
     to right,
     #111417 0%,
-    rgba(17, 20, 23, 0.98) 12%,
-    rgba(17, 20, 23, 0.82) 24%,
-    rgba(17, 20, 23, 0.45) 38%,
-    rgba(17, 20, 23, 0.12) 52%,
-    rgba(17, 20, 23, 0) 66%
+    rgba(17, 20, 23, 0.95) 8%,
+    rgba(17, 20, 23, 0.65) 18%,
+    rgba(17, 20, 23, 0.2) 28%,
+    rgba(17, 20, 23, 0) 36%
   ),
   linear-gradient(
     to bottom,
-    rgba(17, 20, 23, 0.6) 0%,
+    rgba(17, 20, 23, 0.5) 0%,
     transparent 8%,
     transparent 92%,
-    rgba(17, 20, 23, 0.6) 100%
+    rgba(17, 20, 23, 0.5) 100%
   );
 }
 
