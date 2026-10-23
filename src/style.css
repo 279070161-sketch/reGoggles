@@ -462,9 +462,9 @@ html {
   position: relative;
   z-index: 6; /* 保证文字永远压在眼镜图层之上 */
   flex: 0 0 auto;
-  max-width: min(580px, 42vw); /* 放宽以便容纳 3 个操作按钮并排或灵活折行 */
+  max-width: min(720px, 48vw); /* 放宽以便容纳更大字号的 reGoggles 与操作按钮 */
   padding-right: 1rem;
-  transform: translateY(-4vh); /* 2026-10-15 大标题+文字介绍整体上移（先 -2.2vh，用户要求再上移一点 → -4vh） */
+  transform: translateY(-4vh);
 }
 
 /* 眼镜图绝对定位（依据 hero-goggles2.webp 实测 bbox：内容占框宽 96.1%、垂直 99.7%，近满幅）：
@@ -488,8 +488,6 @@ html {
   filter: none; /* 眼镜不加阴影 */
   animation: none; /* 静态展示 */
 }
-
-
 
 /* 移动端降级：文字在上、图片沉底居中（仍大图裁切，文字压在图上方） */
 @media (max-width: 900px) {
@@ -519,13 +517,17 @@ html {
 
 .hero-brand-title {
   font-family: 'Montserrat', sans-serif !important;
-  font-size: clamp(3.2rem, 6.2vw, 6.4rem); /* 放大字号，增强视觉冲击力 */
-  font-weight: 500;
-  line-height: 1.05;
-  letter-spacing: -0.03em;
+  font-size: clamp(3.4rem, 7.6vw, 7.8rem); /* 进一步放大字号，大屏极致冲击力 */
+  font-weight: 600;
+  line-height: 1.02;
+  letter-spacing: -0.035em;
   color: var(--accent-lime);
-  margin: 0 0 1.1rem;
-  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+  background: linear-gradient(135deg, #f0ff9e 0%, #C6E53D 45%, #9bc41b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0 0 1.2rem;
+  filter: drop-shadow(0 4px 24px rgba(0, 0, 0, 0.45)) drop-shadow(0 0 20px rgba(198, 229, 61, 0.22));
 }
 
 .hero-intro-text {
