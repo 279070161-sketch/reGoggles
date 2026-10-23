@@ -2695,6 +2695,7 @@ html {
   max-width: none;
   max-height: 85vh;
   object-fit: contain;
+  object-position: left center;
   border-radius: 0;
   filter: drop-shadow(0 20px 40px rgba(20, 35, 37, 0.08));
   box-shadow: none;
@@ -2793,20 +2794,41 @@ html {
   line-height: 1.4;
 }
 
-@media (max-width: 820px) {
+@media (max-width: 900px) {
+  .sdk-section-wrapper {
+    padding: clamp(4.5rem, 8vh, 6rem) 0;
+  }
   .sdk-container {
-    padding: 0 clamp(2rem, 6vw, 3.5rem);
+    padding-left: 0 !important;
+    padding-right: clamp(2rem, 6vw, 3.5rem) !important;
   }
   .sdk-grid {
     grid-template-columns: 1fr;
-    gap: 3rem;
+    gap: 2.5rem;
+  }
+  .sdk-image-col {
+    position: relative;
+    width: 100%;
+    min-height: auto;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
   }
   .sdk-img {
     position: static;
     transform: none;
     width: 100%;
+    max-width: 580px;
     height: auto;
-    max-height: 50vh;
+    max-height: 52vh;
+    object-fit: contain;
+    object-position: left center;
+    margin-left: 0;
+    margin-right: auto;
+    display: block;
+  }
+  .sdk-content-col {
+    padding-left: clamp(2rem, 6vw, 3.5rem);
   }
 }
 
@@ -4103,9 +4125,9 @@ html {
     padding-right: clamp(2rem, 6vw, 3.5rem) !important;
   }
 
-  /* 7. Open SDK & Firmware */
+  /* 7. Open SDK & Firmware: 左侧配图贴住左边缘，右侧文案保持边距 */
   .sdk-container {
-    padding-left: clamp(2rem, 6vw, 3.5rem) !important;
+    padding-left: 0 !important;
     padding-right: clamp(2rem, 6vw, 3.5rem) !important;
   }
 
