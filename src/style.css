@@ -519,11 +519,11 @@ html {
 
 .hero-brand-title {
   font-family: 'Montserrat', sans-serif !important;
-  font-size: clamp(2.4rem, 4.6vw, 4.9rem); /* 2026-10-15 放大一档，原 clamp(2.1rem,4vw,4.2rem) */
+  font-size: clamp(3.2rem, 6.2vw, 6.4rem); /* 放大字号，增强视觉冲击力 */
   font-weight: 500;
   line-height: 1.05;
   letter-spacing: -0.03em;
-  color: var(--accent-lime); /* 2026-10-15 改为品牌绿，原 #ffffff */
+  color: var(--accent-lime);
   margin: 0 0 1.1rem;
   text-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
 }
@@ -566,43 +566,23 @@ html {
   white-space: nowrap;
 }
 
-.hero-btn-primary {
-  background: var(--accent-lime);
-  color: #142325;
-  border: 1px solid var(--accent-lime);
-  box-shadow: 0 8px 24px rgba(198, 229, 61, 0.25);
-}
-
-.hero-btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(198, 229, 61, 0.38);
-  background: #d4f248;
-  border-color: #d4f248;
-}
-
-.hero-btn-primary .hero-btn-arrow {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.25s ease;
-}
-
-.hero-btn-primary:hover .hero-btn-arrow {
-  transform: translateX(3px);
-}
-
+/* 按钮样式统一采用精致通透的毛玻璃效果 */
+.hero-btn-primary,
 .hero-btn-secondary {
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.24);
   color: #ffffff;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
+  box-shadow: none;
 }
 
+.hero-btn-primary:hover,
 .hero-btn-secondary:hover {
   background: rgba(255, 255, 255, 0.16);
   border-color: rgba(255, 255, 255, 0.5);
   transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
 }
 
 /* Product Stage (Full Viewport Stage for 3D Canvas - Zero Clipping) */
