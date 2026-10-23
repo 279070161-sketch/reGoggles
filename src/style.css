@@ -2125,20 +2125,22 @@ html {
   padding: 0 clamp(2rem, 5vw, 5rem);
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   box-sizing: border-box;
 }
 
-/* 居中大标题与副标题说明区 */
+/* 标题与副标题说明区：左对齐 */
 .rules-header {
   width: 100%;
   max-width: 960px;
-  text-align: center;
+  text-align: left;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   gap: 1.1rem;
   margin-bottom: clamp(2.8rem, 5.5vh, 4.2rem);
+  margin-left: 0;
+  margin-right: auto;
 }
 
 .rules-main-title {
@@ -2149,7 +2151,7 @@ html {
   line-height: 1.15;
   letter-spacing: -0.03em;
   margin: 0;
-  text-align: center;
+  text-align: left;
   text-wrap: balance;
 }
 
@@ -2159,13 +2161,13 @@ html {
   font-weight: 400;
   color: #435457;
   line-height: 1.62;
-  margin: 0 auto;
+  margin: 0;
   max-width: 860px;
-  text-align: center;
+  text-align: left;
   text-wrap: balance;
 }
 
-/* 3 张特点毛玻璃卡片横向 3 列等高排布 */
+/* 3 张特点毛玻璃卡片横向 3 列等高排布（恢复经典浅色磨砂玻璃 frosted glass 质感） */
 .rules-cards-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -2178,29 +2180,30 @@ html {
   display: flex;
   flex-direction: column;
   gap: 1.35rem;
-  background: rgba(255, 255, 255, 0.72);
-  backdrop-filter: blur(24px) saturate(190%);
-  -webkit-backdrop-filter: blur(24px) saturate(190%);
-  border: 1px solid rgba(255, 255, 255, 0.95);
-  border-radius: 20px;
-  padding: clamp(2rem, 3.6vh, 2.6rem) clamp(1.8rem, 2.2vw, 2.4rem);
-  box-shadow: 0 16px 36px rgba(20, 35, 37, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.55); /* 半透明磨砂底色，透出板块背景图深度 */
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(20, 35, 37, 0.12);
+  border-radius: 18px;
+  padding: clamp(1.8rem, 3.2vh, 2.4rem) clamp(1.6rem, 2vw, 2.2rem);
+  box-shadow: 0 8px 24px rgba(20, 35, 37, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.6);
   box-sizing: border-box;
-  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s ease, border-color 0.28s ease;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s ease, border-color 0.28s ease, background 0.28s ease;
 }
 
 .rules-feature-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 24px 48px rgba(20, 35, 37, 0.10), inset 0 1px 0 rgba(255, 255, 255, 1);
-  border-color: rgba(198, 229, 61, 0.6);
+  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 18px 36px rgba(20, 35, 37, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  border-color: rgba(20, 35, 37, 0.24);
 }
 
 .rules-card-icon {
-  width: 50px;
-  height: 50px;
-  border-radius: 14px;
-  background: rgba(20, 35, 37, 0.05);
-  border: 1px solid rgba(20, 35, 37, 0.09);
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(20, 35, 37, 0.06);
+  border: 1px solid rgba(20, 35, 37, 0.10);
   display: flex;
   align-items: center;
   justify-content: center;
