@@ -3250,6 +3250,7 @@ html {
   line-height: 1.45;
   letter-spacing: -0.01em;
   margin: 0;
+  max-width: 480px;
 }
 
 /* Right Column: 3 张特点卡片（纵向堆叠） */
