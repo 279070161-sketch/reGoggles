@@ -1259,10 +1259,12 @@ html {
 
 .features-header {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center; /* 标题正中对齐 */
+  justify-content: center; /* 标题与说明文案居中对齐 */
   text-align: center;
   width: 100%;
+  gap: clamp(0.65rem, 1.2vh, 0.95rem);
 }
 
 .features-main-title {
@@ -1274,6 +1276,19 @@ html {
   letter-spacing: -0.03em;
   text-align: center;
   margin: 0;
+}
+
+.features-subtitle {
+  font-family: 'Montserrat', sans-serif !important;
+  font-size: clamp(0.92rem, 1.05vw, 1.08rem);
+  font-weight: 400;
+  color: #a6bbbc;
+  line-height: 1.55;
+  max-width: 960px;
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  text-wrap: balance;
 }
 
 /* 3-Column Uniform Grid */
