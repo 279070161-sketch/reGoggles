@@ -82,6 +82,13 @@ function initApp() {
       modalDiscordInput.value = '';
     }
 
+    const errorMsgEl = document.getElementById('modal-error-msg');
+    if (errorMsgEl) {
+      errorMsgEl.style.display = 'none';
+      errorMsgEl.textContent = '';
+    }
+    if (modalSubmitBtn) modalSubmitBtn.disabled = false;
+
     if (modalForm) modalForm.style.display = 'flex';
     if (modalSuccess) modalSuccess.style.display = 'none';
     if (modalEmailInput) {
@@ -96,7 +103,56 @@ function initApp() {
       clearTimeout(modalAutoCloseTimer);
       modalAutoCloseTimer = null;
     }
+    const errorMsgEl = document.getElementById('modal-error-msg');
+    if (errorMsgEl) {
+      errorMsgEl.style.display = 'none';
+      errorMsgEl.textContent = '';
+    }
+    if (modalSubmitBtn) modalSubmitBtn.disabled = false;
     if (modalBackdrop) modalBackdrop.classList.remove('active');
+  }
+
+  function subscribeToMailchimp(email, discordName) {
+    return new Promise((resolve) => {
+      const callbackName = 'mc_cb_' + Date.now() + '_' + Math.floor(Math.random() * 10000);
+      const url = new URL('https://seeedstudio.us11.list-manage.com/subscribe/post-json');
+      url.searchParams.set('u', '0c272aa6642cc5d058579205f');
+      url.searchParams.set('id', '4b071a49e3');
+      url.searchParams.set('f_id', '0093fde0f0');
+      url.searchParams.set('c', callbackName);
+      url.searchParams.set('EMAIL', email);
+      url.searchParams.set('b_0c272aa6642cc5d058579205f_4b071a49e3', '');
+      if (discordName) {
+        url.searchParams.set('NAME', discordName);
+      }
+
+      let timeoutId = null;
+      const script = document.createElement('script');
+
+      const cleanup = () => {
+        if (timeoutId) clearTimeout(timeoutId);
+        delete window[callbackName];
+        if (script.parentNode) script.parentNode.removeChild(script);
+      };
+
+      window[callbackName] = function(resp) {
+        cleanup();
+        resolve(resp);
+      };
+
+      script.onerror = function() {
+        cleanup();
+        resolve({ result: 'fallback', msg: 'Network or adblock error' });
+      };
+
+      timeoutId = setTimeout(() => {
+        cleanup();
+        resolve({ result: 'fallback', msg: 'Timeout' });
+      }, 6000);
+
+      script.src = url.toString();
+      document.head.appendChild(script);
+    });
   }
 
   const handleJoinClick = (e) => {
@@ -145,7 +201,7 @@ function initApp() {
   if (heroSubscribeBtn) heroSubscribeBtn.addEventListener('click', handleSubscribeClick);
 
   if (modalForm) {
-    modalForm.addEventListener('submit', (e) => {
+    modalForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const email = modalEmailInput ? modalEmailInput.value.trim() : '';
       if (!email) return;
@@ -155,18 +211,60 @@ function initApp() {
         return;
       }
 
-      if (modalSuccessTitle) modalSuccessTitle.textContent = currentSuccessConfig.title;
-      if (modalSuccessDesc) modalSuccessDesc.textContent = currentSuccessConfig.desc;
+      const discord = modalDiscordInput ? modalDiscordInput.value.trim() : '';
+      const errorMsgEl = document.getElementById('modal-error-msg');
+      if (errorMsgEl) {
+        errorMsgEl.style.display = 'none';
+        errorMsgEl.textContent = '';
+      }
 
-      // In-card success state feedback
-      if (modalForm) modalForm.style.display = 'none';
-      if (modalTitle) modalTitle.style.display = 'none';
-      if (modalDesc) modalDesc.style.display = 'none';
-      if (modalSuccess) modalSuccess.style.display = 'flex';
+      const originalBtnText = modalBtnText ? modalBtnText.textContent : 'Subscribe';
+      if (modalBtnText) modalBtnText.textContent = 'Subscribing...';
+      if (modalSubmitBtn) modalSubmitBtn.disabled = true;
 
-      modalAutoCloseTimer = setTimeout(() => {
-        closeModal();
-      }, 2600);
+      const triggerSuccess = () => {
+        if (modalSuccessTitle) modalSuccessTitle.textContent = currentSuccessConfig.title;
+        if (modalSuccessDesc) modalSuccessDesc.textContent = currentSuccessConfig.desc;
+
+        // In-card success state feedback
+        if (modalForm) modalForm.style.display = 'none';
+        if (modalTitle) modalTitle.style.display = 'none';
+        if (modalDesc) modalDesc.style.display = 'none';
+        if (modalSuccess) modalSuccess.style.display = 'flex';
+
+        modalAutoCloseTimer = setTimeout(() => {
+          closeModal();
+        }, 3200);
+      };
+
+      try {
+        const resp = await subscribeToMailchimp(email, discord);
+        if (modalSubmitBtn) modalSubmitBtn.disabled = false;
+        if (modalBtnText) modalBtnText.textContent = originalBtnText;
+
+        if (resp && resp.result === 'success') {
+          triggerSuccess();
+        } else if (resp && resp.result === 'fallback') {
+          // JSONP 回退：调用原生 form 提交并呈现成功反馈
+          modalForm.submit();
+          triggerSuccess();
+        } else {
+          // 显示 Mailchimp 返回的校验提示
+          const rawMsg = (resp && resp.msg) ? resp.msg : 'Subscription failed. Please check your email.';
+          const cleanMsg = rawMsg.replace(/^\d+\s*-\s*/, '');
+          if (errorMsgEl) {
+            errorMsgEl.innerHTML = cleanMsg;
+            errorMsgEl.style.display = 'block';
+          } else {
+            alert(cleanMsg);
+          }
+        }
+      } catch (err) {
+        if (modalSubmitBtn) modalSubmitBtn.disabled = false;
+        if (modalBtnText) modalBtnText.textContent = originalBtnText;
+        modalForm.submit();
+        triggerSuccess();
+      }
     });
   }
 

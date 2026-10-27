@@ -1116,7 +1116,7 @@
         <h3 class="modal-title" id="modal-title-text">Subscribe for Updates</h3>
         <p class="modal-subtitle" id="modal-desc-text">Be the first to know about reGoggles launch and early access.</p>
         
-        <form class="modal-form" id="subscribe-form">
+        <form class="modal-form" id="subscribe-form" action="https://seeedstudio.us11.list-manage.com/subscribe/post?u=0c272aa6642cc5d058579205f&amp;id=4b071a49e3&amp;f_id=0093fde0f0" method="post" target="_blank">
           <div class="modal-field-group">
             <label for="modal-email-input" class="modal-label">Email Address</label>
             <div class="modal-input-wrapper">
@@ -1124,7 +1124,7 @@
                 <rect width="20" height="16" x="2" y="4" rx="2"></rect>
                 <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
               </svg>
-              <input type="email" id="modal-email-input" placeholder="Enter your email" required class="modal-input" autocomplete="email" />
+              <input type="email" name="EMAIL" id="modal-email-input" placeholder="Enter your email" required class="modal-input" autocomplete="email" />
             </div>
           </div>
           <div class="modal-field-group" id="modal-discord-group" style="display: none;">
@@ -1133,9 +1133,17 @@
               <svg class="modal-input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M18 6h-2c-2 0-3 1-3 3v2h5l-1 4h-4v7h-4v-7H7v-4h2V9c0-3 2-5 5-5h4v2z"></path>
               </svg>
-              <input type="text" id="modal-discord-input" placeholder="e.g. maker#1234" class="modal-input" autocomplete="username" />
+              <input type="text" name="NAME" id="modal-discord-input" placeholder="e.g. maker#1234" class="modal-input" autocomplete="username" />
             </div>
           </div>
+
+          <!-- Mailchimp anti-bot honeypot field -->
+          <div aria-hidden="true" style="position: absolute; left: -5000px;">
+            <input type="text" name="b_0c272aa6642cc5d058579205f_4b071a49e3" tabindex="-1" value="" />
+          </div>
+
+          <div class="modal-error-msg" id="modal-error-msg" style="display: none; color: #ff6b6b; font-size: 0.82rem; margin-top: -0.2rem; line-height: 1.4;"></div>
+
           <div class="modal-privacy-row" id="modal-privacy-row">
             <label class="modal-privacy-label" for="modal-privacy-checkbox">
               <input type="checkbox" id="modal-privacy-checkbox" checked required class="modal-checkbox" />
