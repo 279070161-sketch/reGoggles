@@ -47,8 +47,8 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   /* 关键：body 有 overflow-x:hidden 时 Chrome 会把 body 当作滚动容器，
-     scroll-snap 必须同时在 html 和 body 上声明才生效 */
-  scroll-snap-type: y proximity;
+     scroll-snap 必须同时在 html 和 body 上声明 mandatory 严格吸附 */
+  scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
   display: flex;
   flex-direction: column;
@@ -177,13 +177,14 @@ body {
   width: max-content;
   min-width: 280px;
   max-width: min(360px, calc(100vw - 2.5rem));
-  background: rgba(18, 33, 35, 0.96);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 12px;
-  padding: 0.5rem;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.65);
+  background: linear-gradient(165deg, rgba(20, 35, 37, 0.78) 0%, rgba(9, 18, 19, 0.88) 100%);
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-top: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 16px;
+  padding: 0.6rem;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.12);
   opacity: 0;
   visibility: hidden;
   transform: translateY(-8px) scale(0.98);
@@ -368,13 +369,14 @@ body {
 }
 
 /* ==========================================================================
-   Viture Helix 风格：整屏分页滚动（scroll snap）+ 平滑滚动
+   整屏分页滚动（Full-Page Scroll Snap）：自动覆盖全屏，杜绝停滞在中间
    ========================================================================== */
 html {
   scroll-behavior: smooth;
-  scroll-snap-type: y proximity;
+  scroll-snap-type: y mandatory;
 }
 
+.hero-section,
 .fieldwork-section-wrapper,
 .features-section-wrapper,
 .community-section-wrapper,
@@ -386,7 +388,12 @@ html {
 .applications-section-wrapper,
 .build-section-wrapper {
   scroll-snap-align: start;
+  scroll-snap-stop: always;
+  height: 100vh;
+  height: 100dvh;
   min-height: 100vh;
+  max-height: 100vh;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: center; /* 回退：老浏览器不支持 safe 关键字时使用 */
@@ -407,12 +414,17 @@ html {
   margin-top: calc(-1 * var(--header-height)); /* 上移顶到页面最顶，渐变延伸到透明导航栏后面 */
   padding-top: var(--header-height); /* 内容避让导航栏高度 */
   width: 100%;
+  height: 100vh;
+  height: 100dvh;
   min-height: 100vh;
+  max-height: 100vh;
   position: relative;
   display: flex;
   flex-direction: column;
   overflow: hidden;
   isolation: isolate; /* 独立层叠上下文 */
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
   background:
     radial-gradient(circle at 30% 22%, #2e3235 0%, #181b1d 45%, #07080a 100%),
     linear-gradient(135deg, rgba(255, 255, 255, 0.10) 0%, transparent 36%, rgba(0, 0, 0, 0.6) 100%);
@@ -692,21 +704,26 @@ html {
    Section 2: VoltPile Style Interactive Community Section
    ========================================================================== */
 
-/* Section 2 普通流式区块（百叶窗滚动效果已移除） */
+/* Section 2 普通流式区块（整屏高度） */
 .community-section-wrapper {
   position: relative;
   width: 100%;
-  height: auto;
+  height: 100vh;
+  height: 100dvh;
+  min-height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
 }
 
 .community-section-sticky {
   position: relative;
   width: 100%;
-  min-height: 100vh;
+  height: 100%;
+  min-height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 6rem 0;
+  padding: 0;
   overflow: hidden;
   background-color: var(--bg-primary);
   border-top: 1px solid rgba(255, 255, 255, 0.08);
@@ -1017,7 +1034,7 @@ html {
   font-family: 'Montserrat', sans-serif !important;
   font-size: clamp(1.4rem, 2vw, 1.65rem);
   font-weight: 600;
-  color: #ffffff;
+  color: var(--accent-lime);
   letter-spacing: -0.025em;
   line-height: 1.25;
   margin-top: 0.3rem;
@@ -1274,7 +1291,7 @@ html {
   font-family: 'Montserrat', sans-serif !important;
   font-size: 1.25rem;
   font-weight: 600;
-  color: #ffffff;
+  color: var(--accent-lime);
   letter-spacing: -0.02em;
   margin: 0;
 }
@@ -2116,6 +2133,7 @@ html {
   width: 100%;
   height: 100%;
   overflow: visible;
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 2px rgba(0, 0, 0, 0.9));
 }
 
 .vann-line {
@@ -2123,6 +2141,7 @@ html {
   stroke-width: 0.22;
   stroke-dasharray: 1;
   stroke-dashoffset: 1; /* 初始不可见，激活后描画出现 */
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.95));
 }
 
 .vann-dot {
@@ -2134,7 +2153,9 @@ html {
   margin: -4px 0 0 -4px;
   border-radius: 50%;
   background: #ffffff;
-  box-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.7),
+              0 2px 6px rgba(0, 0, 0, 0.95),
+              0 0 4px rgba(0, 0, 0, 0.9);
   opacity: 0;
   transform: scale(0);
 }
@@ -2145,6 +2166,7 @@ html {
   inset: -5px;
   border-radius: 50%;
   border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.8);
 }
 
 .vann-text {
@@ -2155,6 +2177,7 @@ html {
   flex-direction: column;
   gap: 0.25rem;
   text-align: left;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.85));
 }
 
 /* 右对齐变体（左侧引线标注：文字位于折线左端点左侧，严格右对齐且与线端保留呼吸间距，绝不叠在线上） */
@@ -2242,6 +2265,9 @@ html {
   font-weight: 400; /* 与副行一致，不加粗 */
   letter-spacing: 0.02em;
   color: #ffffff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95),
+               0 1px 3px rgba(0, 0, 0, 0.95),
+               0 0 12px rgba(0, 0, 0, 0.85);
   opacity: 0;
   transform: translateY(10px);
 }
@@ -2252,6 +2278,9 @@ html {
   font-weight: 400;
   letter-spacing: 0.02em;
   color: #ffffff; /* 全部白色 */
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95),
+               0 1px 3px rgba(0, 0, 0, 0.95),
+               0 0 12px rgba(0, 0, 0, 0.85);
   opacity: 0;
   transform: translateY(10px);
 }
@@ -3014,7 +3043,7 @@ html {
   position: absolute;
   top: 50%;
   right: clamp(2.5rem, 4vw, 5.2rem);
-  transform: translateY(-50%) rotate(-9deg);
+  transform: translateY(calc(-50% + 50px)) rotate(-9deg);
   transform-origin: center center;
   height: clamp(380px, 48vh, 540px);
   width: auto;
@@ -3147,7 +3176,7 @@ html {
     position: absolute;
     top: 50%;
     right: clamp(0.5rem, 3vw, 2.5rem);
-    transform: translateY(-50%) rotate(-9deg);
+    transform: translateY(calc(-50% + 50px)) rotate(-9deg);
     transform-origin: center center;
     height: clamp(300px, 38vh, 460px);
     width: auto;
@@ -4064,15 +4093,7 @@ html {
    左侧快速切换页面导航（Viture Helix 风格屏幕圆点：无标签、极小、素净）
    ========================================================================== */
 .screen-nav {
-  position: fixed;
-  left: 1.1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 95;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.7rem;
+  display: none !important;
 }
 
 .screen-nav-dot {
@@ -4081,7 +4102,7 @@ html {
   align-items: center;
   justify-content: center;
   width: 16px;
-  height: 16px;
+  height: 20px;
   padding: 0;
   background: transparent;
   border: none;
@@ -4089,26 +4110,30 @@ html {
   -webkit-tap-highlight-color: transparent;
 }
 
+.screen-nav-dot::before,
 .sn-dot {
+  content: '';
   display: block;
   width: 6px;
   height: 6px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.26);
-  border: 1px solid rgba(255, 255, 255, 0.38);
+  background: rgba(255, 255, 255, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.40);
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+.screen-nav-dot:hover::before,
 .screen-nav-dot:hover .sn-dot {
-  background: rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.65);
 }
 
+.screen-nav-dot.active::before,
 .screen-nav-dot.active .sn-dot {
   width: 6px;
-  height: 16px;
+  height: 18px;
   background: #ffffff;
   border-color: #ffffff;
-  box-shadow: 0 0 6px rgba(255, 255, 255, 0.45);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.55);
 }
 
 @media (max-width: 900px) {

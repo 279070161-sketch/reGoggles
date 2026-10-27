@@ -456,20 +456,49 @@ function initApp() {
   parallaxRafId = requestAnimationFrame(updateParallax);
 
   // ==========================================================================
-  // 左侧快速切换页面导航（Viture Helix 风格屏幕圆点）
-  // 位置缓存 + 滚动事件同步高亮（布局变化时重测），点击平滑滚动到对应屏
+  // 全屏整屏自动吸附轮播滚动引擎（Full-Page Snap Scroll Controller）
+  // 杜绝卡在两屏中间，滚轮/键盘/滑动手势均自动覆盖整屏（100vh）
   // ==========================================================================
   const screenNavDots = document.querySelectorAll('.screen-nav-dot');
+  const sectionIds = [
+    'hero',
+    'field-work',
+    'features',
+    'sensing-system',
+    'protective-design',
+    'your-rules',
+    'open-sdk',
+    'community-builders',
+    'customization'
+  ];
+
+  const sections = sectionIds
+    .map((id) => document.getElementById(id))
+    .filter(Boolean);
+
   let navTops = [];
-  let navDocHeight = 0;
+  let isWheelLocked = false;
+  let wheelUnlockTimer = null;
+  let scrollSnapDebounceTimer = null;
 
   function measureScreenNav() {
-    navTops = Array.from(screenNavDots).map((dot) => {
-      const section = document.getElementById(dot.dataset.screen);
-      if (!section) return 0;
-      return section.getBoundingClientRect().top + window.scrollY;
+    navTops = sections.map((sec) => {
+      return sec.getBoundingClientRect().top + window.scrollY;
     });
-    navDocHeight = document.body.scrollHeight;
+  }
+
+  function getClosestIndex() {
+    const currentY = window.scrollY;
+    let closestIndex = 0;
+    let minDiff = Infinity;
+    for (let i = 0; i < navTops.length; i += 1) {
+      const diff = Math.abs(currentY - navTops[i]);
+      if (diff < minDiff) {
+        minDiff = diff;
+        closestIndex = i;
+      }
+    }
+    return closestIndex;
   }
 
   function syncScreenNav() {
@@ -483,34 +512,161 @@ function initApp() {
     });
   }
 
-  if (screenNavDots.length) {
-    window.addEventListener('scroll', () => {
-      if (document.body.scrollHeight !== navDocHeight) measureScreenNav();
-      syncScreenNav();
-    }, { passive: true });
-
-    window.addEventListener('resize', () => {
-      measureScreenNav();
-      syncScreenNav();
+  function scrollToSection(index, smooth = true) {
+    if (index < 0 || index >= sections.length) return;
+    measureScreenNav();
+    const targetTop = navTops[index];
+    screenNavDots.forEach((dot, i) => {
+      dot.classList.toggle('active', i === index);
     });
-
-    window.addEventListener('load', () => {
-      measureScreenNav();
-      syncScreenNav();
+    window.scrollTo({
+      top: targetTop,
+      behavior: smooth ? 'smooth' : 'auto'
     });
+  }
 
-    screenNavDots.forEach((dot) => {
-      dot.addEventListener('click', () => {
-        const section = document.getElementById(dot.dataset.screen);
-        if (!section) return;
-        const top = section.getBoundingClientRect().top + window.scrollY;
-        window.scrollTo({ top, behavior: 'smooth' });
+  // 1. 桌面端滚轮整屏切换（杜绝停滞在中间）
+  window.addEventListener('wheel', (e) => {
+    const modal = document.getElementById('action-modal');
+    if (modal && modal.classList.contains('active')) return;
+
+    const navDropdownMenu = document.getElementById('nav-dropdown-menu');
+    if (navDropdownMenu && navDropdownMenu.classList.contains('active')) return;
+
+    // 过滤极微小颤动
+    if (Math.abs(e.deltaY) < 18) return;
+
+    // 阻止浏览器默认零碎停顿滚动
+    e.preventDefault();
+
+    if (isWheelLocked) {
+      clearTimeout(wheelUnlockTimer);
+      wheelUnlockTimer = setTimeout(() => {
+        isWheelLocked = false;
+      }, 160);
+      return;
+    }
+
+    const currentIndex = getClosestIndex();
+    let nextIndex = currentIndex;
+
+    if (e.deltaY > 0) {
+      nextIndex = Math.min(sections.length - 1, currentIndex + 1);
+    } else {
+      nextIndex = Math.max(0, currentIndex - 1);
+    }
+
+    isWheelLocked = true;
+    scrollToSection(nextIndex, true);
+
+    clearTimeout(wheelUnlockTimer);
+    wheelUnlockTimer = setTimeout(() => {
+      isWheelLocked = false;
+    }, 700);
+  }, { passive: false });
+
+  // 2. 键盘上/下/空格键整屏切换
+  window.addEventListener('keydown', (e) => {
+    const modal = document.getElementById('action-modal');
+    if (modal && modal.classList.contains('active')) return;
+
+    const activeEl = document.activeElement;
+    const tag = activeEl ? activeEl.tagName.toLowerCase() : '';
+    if (tag === 'input' || tag === 'textarea' || (activeEl && activeEl.isContentEditable)) return;
+
+    if (['ArrowDown', 'PageDown', ' '].includes(e.key) && !e.shiftKey) {
+      e.preventDefault();
+      const curr = getClosestIndex();
+      if (curr < sections.length - 1) scrollToSection(curr + 1, true);
+    } else if (['ArrowUp', 'PageUp'].includes(e.key) || (e.key === ' ' && e.shiftKey)) {
+      e.preventDefault();
+      const curr = getClosestIndex();
+      if (curr > 0) scrollToSection(curr - 1, true);
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      scrollToSection(0, true);
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      scrollToSection(sections.length - 1, true);
+    }
+  });
+
+  // 3. 触屏滑动手势支持
+  let touchStartY = 0;
+  let touchStartX = 0;
+  let isTouching = false;
+
+  window.addEventListener('touchstart', (e) => {
+    const modal = document.getElementById('action-modal');
+    if (modal && modal.classList.contains('active')) return;
+    if (e.touches.length === 1) {
+      touchStartY = e.touches[0].clientY;
+      touchStartX = e.touches[0].clientX;
+      isTouching = true;
+    }
+  }, { passive: true });
+
+  window.addEventListener('touchend', (e) => {
+    if (!isTouching) return;
+    isTouching = false;
+    const modal = document.getElementById('action-modal');
+    if (modal && modal.classList.contains('active')) return;
+
+    if (e.changedTouches.length === 1) {
+      const deltaY = e.changedTouches[0].clientY - touchStartY;
+      const deltaX = e.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(deltaY) > 45 && Math.abs(deltaY) > Math.abs(deltaX)) {
+        const curr = getClosestIndex();
+        if (deltaY < 0 && curr < sections.length - 1) {
+          scrollToSection(curr + 1, true);
+        } else if (deltaY > 0 && curr > 0) {
+          scrollToSection(curr - 1, true);
+        }
+      }
+    }
+  }, { passive: true });
+
+  // 4. 左侧圆点点击切换
+  screenNavDots.forEach((dot, index) => {
+    dot.addEventListener('click', () => {
+      scrollToSection(index, true);
+    });
+  });
+
+  // 5. 滚动同步与停滞自动吸附校准
+  function autoSnapToNearest() {
+    if (isWheelLocked) return;
+    measureScreenNav();
+    const currentY = window.scrollY;
+    const closestIdx = getClosestIndex();
+    const targetY = navTops[closestIdx];
+    if (Math.abs(currentY - targetY) > 4) {
+      window.scrollTo({
+        top: targetY,
+        behavior: 'smooth'
       });
-    });
+      screenNavDots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === closestIdx);
+      });
+    }
+  }
 
+  window.addEventListener('scroll', () => {
+    syncScreenNav();
+    if (!isWheelLocked) {
+      clearTimeout(scrollSnapDebounceTimer);
+      scrollSnapDebounceTimer = setTimeout(autoSnapToNearest, 180);
+    }
+  }, { passive: true });
+
+  window.addEventListener('resize', measureScreenNav);
+  window.addEventListener('load', () => {
     measureScreenNav();
     syncScreenNav();
-  }
+  });
+
+  measureScreenNav();
+  syncScreenNav();
 
   // ==========================================================================
   // Section 9: Applications 3D Infinite Circular Loop Carousel Logic
