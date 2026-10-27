@@ -126,16 +126,11 @@ function initApp() {
   };
 
   const handleContactClick = (e) => {
+    if (e && e.currentTarget && e.currentTarget.tagName === 'A') {
+      return; // 允许 <a> 标签原生通过 target="_blank" 打开页面
+    }
     if (e && e.preventDefault) e.preventDefault();
-    openModal({
-      title: 'Contact reGoggles Team',
-      desc: 'Have technical inquiries, partnership proposals, or media questions? Leave your email and we will reach out.',
-      btnText: 'Contact Us',
-      showDiscord: false,
-      showPrivacy: true,
-      successTitle: 'Thank you for reaching out!',
-      successDesc: 'Our team will review your inquiry and get back to you shortly.'
-    });
+    window.open('https://www.seeedstudio.com/contacts', '_blank', 'noopener,noreferrer');
   };
 
   if (navContactBtn) navContactBtn.addEventListener('click', handleContactClick);

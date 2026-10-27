@@ -3785,6 +3785,7 @@ html {
   gap: 0.8rem;
   background: var(--accent-lime);
   color: #142325;
+  text-decoration: none;
   padding: 0.35rem 0.35rem 0.35rem 1.4rem;
   border-radius: 100px;
   border: 1px solid var(--accent-lime);
