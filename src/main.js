@@ -8,6 +8,15 @@ function initApp() {
   const modalCloseBtn = document.getElementById('modal-close-btn');
   const modalTitle = document.getElementById('modal-title-text');
   const modalDesc = document.getElementById('modal-desc-text');
+  const modalForm = document.getElementById('subscribe-form');
+  const modalEmailInput = document.getElementById('modal-email-input');
+  const modalDiscordGroup = document.getElementById('modal-discord-group');
+  const modalDiscordInput = document.getElementById('modal-discord-input');
+  const modalPrivacy = document.getElementById('modal-privacy-text');
+  const modalSubmitBtn = document.getElementById('modal-submit-btn');
+  const modalSuccess = document.getElementById('modal-success-state');
+  const modalSuccessTitle = document.getElementById('modal-success-title-text');
+  const modalSuccessDesc = document.getElementById('modal-success-desc-text');
 
   const joinBtn = document.getElementById('join-community-btn');
   const subscribeBtn = document.getElementById('subscribe-btn');
@@ -19,35 +28,99 @@ function initApp() {
   const heroSubscribeBtn = document.getElementById('hero-subscribe-btn');
   const heroJoinBtn = document.getElementById('hero-join-btn');
 
-  function openModal(title, desc) {
-    if (modalTitle) modalTitle.textContent = title;
-    if (modalDesc) modalDesc.textContent = desc;
+  let modalAutoCloseTimer = null;
+  let currentSuccessConfig = {
+    title: 'Thank you for subscribing!',
+    desc: 'Be the first to know about reGoggles launch and early access.'
+  };
+
+  function openModal(options = {}) {
+    const {
+      title = 'Subscribe for Updates',
+      desc = 'Be the first to know about reGoggles launch and early access.',
+      btnText = 'Subscribe',
+      showDiscord = false,
+      showPrivacy = true,
+      successTitle = 'Thank you for subscribing!',
+      successDesc = 'Be the first to know about reGoggles launch and early access.'
+    } = options;
+
+    currentSuccessConfig = { title: successTitle, desc: successDesc };
+
+    if (modalAutoCloseTimer) {
+      clearTimeout(modalAutoCloseTimer);
+      modalAutoCloseTimer = null;
+    }
+    if (modalTitle) {
+      modalTitle.textContent = title;
+      modalTitle.style.display = 'block';
+    }
+    if (modalDesc) {
+      modalDesc.textContent = desc;
+      modalDesc.style.display = 'block';
+    }
+    if (modalSubmitBtn) modalSubmitBtn.textContent = btnText;
+    if (modalPrivacy) modalPrivacy.style.display = showPrivacy ? 'block' : 'none';
+
+    if (modalDiscordGroup) {
+      modalDiscordGroup.style.display = showDiscord ? 'flex' : 'none';
+    }
+    if (modalDiscordInput) {
+      modalDiscordInput.required = !!showDiscord;
+      modalDiscordInput.value = '';
+    }
+
+    if (modalForm) modalForm.style.display = 'flex';
+    if (modalSuccess) modalSuccess.style.display = 'none';
+    if (modalEmailInput) {
+      modalEmailInput.value = '';
+      setTimeout(() => modalEmailInput.focus(), 80);
+    }
     if (modalBackdrop) modalBackdrop.classList.add('active');
   }
 
   function closeModal() {
+    if (modalAutoCloseTimer) {
+      clearTimeout(modalAutoCloseTimer);
+      modalAutoCloseTimer = null;
+    }
     if (modalBackdrop) modalBackdrop.classList.remove('active');
   }
 
   const handleJoinClick = () => {
-    openModal(
-      'Join 100 Community Builders',
-      'Be among the first developers, makers, and AI roboticists shaping reGoggles. Enter your email below:'
-    );
+    openModal({
+      title: 'Join Community',
+      desc: 'Subscribe and Join Our Discord Community.',
+      btnText: 'Subscribe & Join Community',
+      showDiscord: true,
+      showPrivacy: true,
+      successTitle: 'Welcome to the Community!',
+      successDesc: 'Thank you for joining our Discord community. We will be in touch with your access invite shortly!'
+    });
   };
 
   const handleSubscribeClick = () => {
-    openModal(
-      'Subscribe to reGoggles Updates',
-      'Stay updated with the latest news, hardware builds, and developer releases.'
-    );
+    openModal({
+      title: 'Subscribe for Updates',
+      desc: 'Be the first to know about reGoggles launch and early access.',
+      btnText: 'Subscribe',
+      showDiscord: false,
+      showPrivacy: true,
+      successTitle: 'Thank you for subscribing!',
+      successDesc: 'Be the first to know about reGoggles launch and early access.'
+    });
   };
 
   const handleContactClick = () => {
-    openModal(
-      'Contact reGoggles Team',
-      'Have technical inquiries, partnership proposals, or media questions? Leave your email and we will reach out.'
-    );
+    openModal({
+      title: 'Contact reGoggles Team',
+      desc: 'Have technical inquiries, partnership proposals, or media questions? Leave your email and we will reach out.',
+      btnText: 'Contact Us',
+      showDiscord: false,
+      showPrivacy: false,
+      successTitle: 'Thank you for reaching out!',
+      successDesc: 'Our team will review your inquiry and get back to you shortly.'
+    });
   };
 
   if (joinBtn) joinBtn.addEventListener('click', handleJoinClick);
@@ -60,6 +133,27 @@ function initApp() {
   if (heroContactBtn) heroContactBtn.addEventListener('click', handleContactClick);
   if (buildContactBtn) buildContactBtn.addEventListener('click', handleContactClick);
 
+  if (modalForm) {
+    modalForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = modalEmailInput ? modalEmailInput.value.trim() : '';
+      if (!email) return;
+
+      if (modalSuccessTitle) modalSuccessTitle.textContent = currentSuccessConfig.title;
+      if (modalSuccessDesc) modalSuccessDesc.textContent = currentSuccessConfig.desc;
+
+      // In-card success state feedback
+      if (modalForm) modalForm.style.display = 'none';
+      if (modalTitle) modalTitle.style.display = 'none';
+      if (modalDesc) modalDesc.style.display = 'none';
+      if (modalSuccess) modalSuccess.style.display = 'flex';
+
+      modalAutoCloseTimer = setTimeout(() => {
+        closeModal();
+      }, 2600);
+    });
+  }
+
   if (modalCloseBtn) {
     modalCloseBtn.addEventListener('click', closeModal);
   }
@@ -69,6 +163,12 @@ function initApp() {
       if (e.target === modalBackdrop) closeModal();
     });
   }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modalBackdrop && modalBackdrop.classList.contains('active')) {
+      closeModal();
+    }
+  });
 
   // ==========================================================================
   // Header Navigation Menu Toggle & Smooth Anchor Scroll Logic
@@ -169,15 +269,33 @@ function initApp() {
   updateActiveNavLink();
 
   // ==========================================================================
-  // Section: Field Worker Intelligence (7 Tabs Switching)
+  // Section: Field Worker Intelligence (6 Tabs Switching + On-Demand Expand)
   // ==========================================================================
   const fwTabs = document.querySelectorAll('.fieldwork-tab-item');
   const fwPanels = document.querySelectorAll('.fieldwork-panel');
+  const fwPanelsContainer = document.querySelector('.fieldwork-panels-container');
+  const fwCloseBtn = document.getElementById('fw-close-btn');
+
+  function closeFieldworkDetails() {
+    fwTabs.forEach((t) => {
+      t.classList.remove('active');
+      t.setAttribute('aria-selected', 'false');
+    });
+    fwPanels.forEach((p) => p.classList.remove('active'));
+    if (fwPanelsContainer) {
+      fwPanelsContainer.classList.remove('active');
+    }
+  }
 
   if (fwTabs.length && fwPanels.length) {
     fwTabs.forEach((tab) => {
       tab.addEventListener('click', () => {
-        if (tab.classList.contains('active')) return;
+        const isAlreadyActive = tab.classList.contains('active');
+        if (isAlreadyActive) {
+          closeFieldworkDetails();
+          return;
+        }
+
         const targetId = tab.dataset.fwTarget;
 
         fwTabs.forEach((t) => {
@@ -187,11 +305,19 @@ function initApp() {
         tab.classList.add('active');
         tab.setAttribute('aria-selected', 'true');
 
+        if (fwPanelsContainer) {
+          fwPanelsContainer.classList.add('active');
+        }
+
         fwPanels.forEach((panel) => {
           panel.classList.toggle('active', panel.id === targetId);
         });
       });
     });
+
+    if (fwCloseBtn) {
+      fwCloseBtn.addEventListener('click', closeFieldworkDetails);
+    }
   }
 
   // ==========================================================================

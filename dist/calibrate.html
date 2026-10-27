@@ -47,7 +47,7 @@ textarea { width: 100%; height: 130px; box-sizing: border-box; font-family: ui-m
   <div class="label" style="font-size: 1rem; color: #142325;">⭐ Original 全局 8 标注综合实时联动预览（拖动下方任意标点，此图即时联动）：</div>
   <div class="live-preview-box">
     <div class="card" id="card-all-orig" style="margin: 30px auto;">
-      <div class="imgwrap"><img src="./assets/images/hero-goggles2.webp?v=2" alt=""></div>
+      <div class="imgwrap"><img src="./assets/images/1-1-右侧仰视无镜片.webp" alt=""></div>
       <svg id="svg-all-orig" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
       <div class="live-all-labels" id="labels-all-orig"></div>
     </div>
@@ -65,36 +65,36 @@ textarea { width: 100%; height: 130px; box-sizing: border-box; font-family: ui-m
 (function () {
   // 每个 stage：marks 为 [dot,corner,end]×N，共享一个 text
   var stages = [
-    { key: 'orig-midmic', label: '1. Original: Mid-Microphone —— hero-goggles2（1.2x）', img: './assets/images/hero-goggles2.webp?v=2',
-      text: { x: -25, y: 18.9 }, lines: ['Mid-Microphone'],
-      marks: [ { dot: {x:30.7,y:32.4}, corner: {x:20.2,y:21.9}, end: {x:-7.1,y:21.9} } ] },
-    { key: 'orig-rightmic', label: '2. Original: Right-Microphone —— hero-goggles2（1.2x）', img: './assets/images/hero-goggles2.webp?v=2',
-      text: { x: -26.7, y: 54.5 }, lines: ['Right-Microphone'],
-      marks: [ { dot: {x:10.9,y:68.7}, corner: {x:-0.1,y:57.7}, end: {x:-7.1,y:57.7} } ] },
-    { key: 'orig-usbc', label: '3. Original: USB Type-C —— hero-goggles2（1.2x）', img: './assets/images/hero-goggles2.webp?v=2',
-      text: { x: -20.9, y: 91.9 }, lines: ['USB Type-C'],
-      marks: [ { dot: {x:35.9,y:83.5}, corner: {x:24.9,y:94.5}, end: {x:-7.1,y:94.5} } ] },
-    { key: 'orig-rightspk', label: '4. Original: Right-Speaker —— hero-goggles2（1.2x）', img: './assets/images/hero-goggles2.webp?v=2',
-      text: { x: -22.8, y: 97.9 }, lines: ['Right-Speaker'],
-      marks: [ { dot: {x:45.3,y:86.5}, corner: {x:31,y:100.8}, end: {x:-7.1,y:100.8} } ] },
-    { key: 'orig-maincam', label: '5. Original: Main-Camera 12MP RGB —— hero-goggles2（1.2x）', img: './assets/images/hero-goggles2.webp?v=2',
-      text: { x: 118, y: 12.2 }, lines: ['Main-Camera 12MP RGB'],
-      marks: [ { dot: {x:72.9,y:30.8}, corner: {x:89,y:14.7}, end: {x:115,y:14.7} } ] },
-    { key: 'orig-mainimu', label: '6. Original: Main-IMU 6DOF —— hero-goggles2（1.2x）', img: './assets/images/hero-goggles2.webp?v=2',
-      text: { x: 118, y: 22.2 }, lines: ['Main-IMU 6DOF'],
-      marks: [ { dot: {x:79.7,y:34.8}, corner: {x:89.3,y:25.2}, end: {x:115,y:25.2} } ] },
-    { key: 'orig-leftmic', label: '7. Original: Left-Microphone —— hero-goggles2（1.2x）', img: './assets/images/hero-goggles2.webp?v=2',
-      text: { x: 118, y: 28.2 }, lines: ['Left-Microphone'],
-      marks: [ { dot: {x:78.3,y:41.4}, corner: {x:89,y:30.7}, end: {x:115,y:30.7} } ] },
-    { key: 'orig-leftspk', label: '8. Original: Left-Speaker —— hero-goggles2（1.2x）', img: './assets/images/hero-goggles2.webp?v=2',
-      text: { x: 118, y: 63.4 }, lines: ['Left-Speaker'],
-      marks: [ { dot: {x:106.2,y:61.7}, corner: {x:111.3,y:66.8}, end: {x:115,y:66.8} } ] },
-    { key: 'extgen', label: 'Extension: General Expansion Port —— 4.1左俯俯视（1.3x/上移10%）', img: './assets/images/4.1左俯俯视.png',
-      text: { x: 112.4, y: 32.3 }, lines: ['General Expansion Port', 'MIPI CSI B for Additional Camera,', 'ToF, SD Card and Custom Modules'],
-      marks: [ { dot: {x:73.7,y:58.7}, corner: {x:97.4,y:35}, end: {x:110,y:35} } ] },
-    { key: 'extvis', label: 'Extension: Vision Expansion Port —— 4.1左俯俯视（1.3x/上移10%）', img: './assets/images/4.1左俯俯视.png',
-      text: { x: -20.5, y: 86.5 }, lines: ['Vision Expansion Port', 'MIPI CSI B for Additional Camera+IMU', 'and Custom Modules'],
-      marks: [ { dot: {x:30,y:75.6}, corner: {x:16.5,y:89.1}, end: {x:7,y:89.1} } ] }
+    { key: 'orig-midmic', label: '1. Original: Mid-Microphone —— 1-1-右侧仰视无镜片（1.2x）', img: './assets/images/1-1-右侧仰视无镜片.webp',
+      text: { x: -24.2, y: 8.8 }, lines: ['Mid-Microphone'],
+      marks: [ { dot: {x:30.1,y:22.4}, corner: {x:19.6,y:11.9}, end: {x:-8.5,y:11.9} } ] },
+    { key: 'orig-rightmic', label: '2. Original: Right-Microphone —— 1-1-右侧仰视无镜片（1.2x）', img: './assets/images/1-1-右侧仰视无镜片.webp',
+      text: { x: -27.5, y: 42.2 }, lines: ['Right-Microphone'],
+      marks: [ { dot: {x:7.8,y:55.9}, corner: {x:-3.2,y:44.9}, end: {x:-8.5,y:44.9} } ] },
+    { key: 'orig-usbc', label: '3. Original: USB Type-C —— 1-1-右侧仰视无镜片（1.2x）', img: './assets/images/1-1-右侧仰视无镜片.webp',
+      text: { x: -20.6, y: 83.9 }, lines: ['USB Type-C'],
+      marks: [ { dot: {x:34.6,y:75.7}, corner: {x:23.6,y:86.7}, end: {x:-8.5,y:86.7} } ] },
+    { key: 'orig-rightspk', label: '4. Original: Right-Speaker —— 1-1-右侧仰视无镜片（1.2x）', img: './assets/images/1-1-右侧仰视无镜片.webp',
+      text: { x: -22.9, y: 89.5 }, lines: ['Right-Speaker'],
+      marks: [ { dot: {x:44.3,y:77.8}, corner: {x:30,y:92.1}, end: {x:-8.5,y:92.1} } ] },
+    { key: 'orig-maincam', label: '5. Original: Main-Camera 12MP RGB —— 1-1-右侧仰视无镜片（1.2x）', img: './assets/images/1-1-右侧仰视无镜片.webp',
+      text: { x: 117.5, y: 0.4 }, lines: ['Main-Camera 12MP RGB'],
+      marks: [ { dot: {x:72.9,y:19.4}, corner: {x:89,y:3.3}, end: {x:115,y:3.3} } ] },
+    { key: 'orig-mainimu', label: '6. Original: Main-IMU 6DOF —— 1-1-右侧仰视无镜片（1.2x）', img: './assets/images/1-1-右侧仰视无镜片.webp',
+      text: { x: 117.5, y: 11.9 }, lines: ['Main-IMU 6DOF'],
+      marks: [ { dot: {x:79.7,y:24}, corner: {x:89.3,y:14.4}, end: {x:115,y:14.4} } ] },
+    { key: 'orig-leftmic', label: '7. Original: Left-Microphone —— 1-1-右侧仰视无镜片（1.2x）', img: './assets/images/1-1-右侧仰视无镜片.webp',
+      text: { x: 117.5, y: 18.8 }, lines: ['Left-Microphone'],
+      marks: [ { dot: {x:78.9,y:32.1}, corner: {x:89.6,y:21.4}, end: {x:115,y:21.4} } ] },
+    { key: 'orig-leftspk', label: '8. Original: Left-Speaker —— 1-1-右侧仰视无镜片（1.2x）', img: './assets/images/1-1-右侧仰视无镜片.webp',
+      text: { x: 117.5, y: 54.3 }, lines: ['Left-Speaker'],
+      marks: [ { dot: {x:106.8,y:51.9}, corner: {x:111.9,y:57}, end: {x:115,y:57} } ] },
+    { key: 'extgen', label: 'Extension: General Expansion Port —— 5-1-左俯视图无镜片（1.3x/上移10%）', img: './assets/images/5-1-左俯视图无镜片.webp',
+      text: { x: 117.5, y: 21.2 }, lines: ['General Expansion Port', 'MIPI CSI B for Additional Camera,', 'ToF, SD Card and Custom Modules'],
+      marks: [ { dot: {x:78.8,y:47.7}, corner: {x:102.5,y:24}, end: {x:115,y:24} } ] },
+    { key: 'extvis', label: 'Extension: Vision Expansion Port —— 5-1-左俯视图无镜片（1.3x/上移10%）', img: './assets/images/5-1-左俯视图无镜片.webp',
+      text: { x: -26, y: 80 }, lines: ['Vision Expansion Port', 'MIPI CSI B for Additional Camera+IMU', 'and Custom Modules'],
+      marks: [ { dot: {x:24.7,y:68.9}, corner: {x:11.2,y:82.4}, end: {x:1.7,y:82.4} } ] }
   ];
 
   function build() {

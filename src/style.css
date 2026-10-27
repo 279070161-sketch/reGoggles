@@ -388,6 +388,9 @@ html {
   justify-content: center; /* 回退：老浏览器不支持 safe 关键字时使用 */
   justify-content: safe center;
   align-items: stretch;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate; /* 建立完全独立的层叠上下文，杜绝板块背景跨界溢出与层级污染 */
 }
 
 /* 视差元素提升为独立合成层，滚动时 GPU 平滑位移 */
@@ -405,6 +408,7 @@ html {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  isolation: isolate; /* 独立层叠上下文 */
   background:
     radial-gradient(circle at 30% 22%, #2e3235 0%, #181b1d 45%, #07080a 100%),
     linear-gradient(135deg, rgba(255, 255, 255, 0.10) 0%, transparent 36%, rgba(0, 0, 0, 0.6) 100%);
@@ -474,15 +478,19 @@ html {
 .hero-image-right {
   position: absolute;
   top: 50%;
-  left: 31vw;
-  transform: translateY(calc(-50% - 6.5vh)); /* 整体上移 */
+  left: 33.5vw; /* 稍微右移，与左侧大标题保持舒适间距，避免文字重叠 */
+  transform: translateY(calc(-50% - 6.5vh + 25px)); /* 向下微移 25px */
   z-index: 5;
   pointer-events: none;
 }
 
+.hero-image-right picture {
+  display: block;
+}
+
 .hero-image-right .product-image {
   display: block;
-  width: 89vw; /* 略小于 93vw，眼镜整体稍微小一点点 */
+  width: 78vw; /* 稍微缩减尺寸，保持舒适呼吸感 */
   max-width: none;
   max-height: none;
   object-fit: contain;
@@ -986,7 +994,23 @@ html {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.95rem;
+}
+
+.modal-field-group {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  text-align: left;
+}
+
+.modal-label {
+  font-family: 'Montserrat', sans-serif !important;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #c7d6d8;
+  letter-spacing: 0.01em;
 }
 
 .modal-input {
@@ -997,6 +1021,7 @@ html {
   background: rgba(0, 0, 0, 0.3);
   color: #ffffff;
   font-size: 0.9rem;
+  box-sizing: border-box;
 }
 
 .modal-input:focus {
@@ -1006,13 +1031,86 @@ html {
 
 .modal-submit-btn {
   width: 100%;
-  padding: 0.85rem;
-  border-radius: 8px;
+  padding: 0.9rem 1.4rem;
+  border-radius: 10px;
   background: var(--accent-lime);
-  color: var(--accent-pill-text);
+  color: #142325;
+  font-family: 'Montserrat', sans-serif !important;
   font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
   border: none;
   cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.modal-submit-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(198, 229, 61, 0.35);
+  filter: brightness(1.05);
+}
+
+.modal-submit-btn:active {
+  transform: translateY(0);
+}
+
+.modal-privacy {
+  font-size: 0.8rem;
+  color: #8fa5a7;
+  line-height: 1.5;
+  margin: -0.2rem 0 0.3rem;
+  text-align: left;
+}
+
+.modal-privacy-link {
+  color: var(--accent-lime);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.2s ease;
+}
+
+.modal-privacy-link:hover {
+  color: #ffffff;
+  text-decoration-color: #ffffff;
+}
+
+.modal-success-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 0.5rem;
+  text-align: center;
+}
+
+.modal-success-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(198, 229, 61, 0.15);
+  border: 1px solid var(--accent-lime);
+  color: var(--accent-lime);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.35rem;
+  box-shadow: 0 0 20px rgba(198, 229, 61, 0.25);
+}
+
+.modal-success-title {
+  font-family: 'Montserrat', sans-serif !important;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.modal-success-desc {
+  font-size: 0.9rem;
+  color: #a6bbbc;
+  line-height: 1.55;
+  margin: 0;
+  max-width: 360px;
 }
 
 /* Responsive adjustments */
@@ -1202,6 +1300,57 @@ html {
   overflow: hidden;
 }
 
+/* 第三板块背景大尺寸产品正面图（7-1-前仰视图无镜片），位于遮罩下方，半透明沉浸质感 */
+.features-bg-product {
+  position: absolute;
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(1360px, 92vw);
+  max-width: 1360px;
+  pointer-events: none;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.38;
+  filter: contrast(1.12) brightness(1.08);
+  /* 从上到下的渐隐效果：上部主体清晰立体，向下自然柔和淡出渐隐 */
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.95) 25%, rgba(0, 0, 0, 0.4) 65%, rgba(0, 0, 0, 0) 95%);
+  -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.95) 25%, rgba(0, 0, 0, 0.4) 65%, rgba(0, 0, 0, 0) 95%);
+}
+
+/* 大屏幕状态下（宽 > 1440px）：背景图尺寸适度加大，大屏下更舒展饱满；小屏幕维持现状 */
+@media (min-width: 1441px) {
+  .features-bg-product {
+    width: min(1820px, 92vw);
+    max-width: 1820px;
+    top: 54%;
+  }
+}
+
+@media (min-width: 1800px) {
+  .features-bg-product {
+    width: min(2160px, 94vw);
+    max-width: 2160px;
+    top: 53%;
+  }
+}
+
+.features-bg-product picture {
+  display: block;
+  width: 100%;
+}
+
+.features-product-silhouette {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
 .features-spotlight {
   position: absolute;
   inset: 0;
@@ -1211,6 +1360,7 @@ html {
   /* 色彩参考 Banner 背景: 顶部 #2e3235 / 冷灰金属质感聚光，向下自然柔和淡出 */
   background: radial-gradient(ellipse 80% 80% at 50% -20%, rgba(120, 135, 145, 0.32) 0%, rgba(255, 255, 255, 0) 100%);
   pointer-events: none;
+  z-index: 2;
 }
 
 /* 匹配 Banner 的微质感颗粒层（SVG fractalNoise），精致而不突兀 */
@@ -1219,6 +1369,7 @@ html {
   position: absolute;
   inset: 0;
   pointer-events: none;
+  z-index: 3;
   opacity: 0.08;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 240px 240px;
@@ -1353,7 +1504,9 @@ html {
 }
 
 .fbento-card:hover .border-beam,
-.fbento-card:focus-within .border-beam {
+.fbento-card:focus-within .border-beam,
+.build-feature-card:hover .border-beam,
+.build-feature-card:focus-within .border-beam {
   opacity: 1;
 }
 
@@ -1832,7 +1985,7 @@ html {
 /* 右对齐变体（左侧引线标注：文字位于折线左端点左侧，严格右对齐且与线端保留呼吸间距，绝不叠在线上） */
 .v-callout .vann-text.txt-right {
   left: auto !important;
-  right: calc(100% + 7.1% + 14px) !important;
+  right: calc(100% + 8.5% + 14px) !important;
   top: var(--txt-y, 50%);
   transform: translateY(-50%);
   text-align: right;
@@ -1854,6 +2007,14 @@ html {
 .original-callout .vann-text {
   width: max-content;
   white-space: nowrap;
+}
+
+.original-callout .vann-text:not(.txt-right) {
+  left: var(--txt-x, 117.5%);
+  top: var(--txt-y, 50%);
+  transform: translateY(-50%);
+  text-align: left;
+  align-items: flex-start;
 }
 
 .original-callout .vann-title {
@@ -2658,8 +2819,8 @@ html {
 
 .sdk-grid {
   display: grid;
-  grid-template-columns: 1.15fr 0.95fr; /* 2026-10-15 与 Data Gateway 对齐，两模块图片水平中点一致 */
-  gap: 4.5rem;
+  grid-template-columns: 1.25fr 0.95fr;
+  gap: clamp(2.5rem, 4vw, 5rem);
   align-items: center;
   width: 100%;
 }
@@ -2667,28 +2828,30 @@ html {
 .sdk-image-col {
   position: relative;
   width: 100%;
-  min-height: 480px;
+  min-height: clamp(480px, 52vh, 620px);
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
 }
 
-/* 换成透明背景产品渲染图 gateway-render-2.webp：左边缘自然延伸、右侧面向文案、完整呈现无裁切 */
+/* 换成透明背景产品渲染图 11-1-左仰视图无镜片：右侧与文案保持安全间距，主体大尺寸自然向左延伸铺展 */
 .sdk-img {
   position: absolute;
   top: 50%;
-  left: calc(-1 * (max(0px, (100vw - 1700px) / 2) + 3rem));
+  right: 0;
   transform: translateY(-50%);
-  width: calc(100% + max(0px, (100vw - 1700px) / 2) + 3rem);
+  height: clamp(380px, 48vh, 540px);
+  width: auto;
   max-width: none;
-  max-height: 85vh;
+  max-height: none;
   object-fit: contain;
-  object-position: left center;
+  object-position: right center;
   border-radius: 0;
-  filter: drop-shadow(0 20px 40px rgba(20, 35, 37, 0.08));
+  filter: drop-shadow(0 25px 50px rgba(20, 35, 37, 0.12));
   box-shadow: none;
   user-select: none;
   -webkit-user-drag: none;
+  pointer-events: none;
 }
 
 .sdk-content-col {
@@ -2806,9 +2969,9 @@ html {
     position: static;
     transform: none;
     width: 100%;
-    max-width: 580px;
+    max-width: 720px;
     height: auto;
-    max-height: 52vh;
+    max-height: 56vh;
     object-fit: contain;
     object-position: left center;
     margin-left: 0;
@@ -3139,15 +3302,15 @@ html {
 }
 
 /* ==========================================================================
-   Section 10: Build It Your Way (Marquee Title & SMT Workshop Customization)
+   Section 10: Build It Your Way (Marquee Title & 20261026-140630 Dark Customization)
    ========================================================================== */
 .build-section-wrapper {
   position: relative;
   width: 100%;
-  background: linear-gradient(180deg, #ffffff 0%, #c6ced2 100%); /* 与 Data Gateway 同款浅灰渐变 */
-  color: #142325;
+  background: #090e10;
+  color: #ffffff;
   overflow: hidden;
-  border-top: 1px solid rgba(20, 35, 37, 0.10);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
   padding-top: 3.5rem;
 }
 
@@ -3157,7 +3320,7 @@ html {
   z-index: 5;
 }
 
-/* Background Image Overlay ("SMT Workshop" 保留背景图，蒙层改中性深色) */
+/* Background Image Overlay ("20261026-140630" 搭配深色质感遮罩) */
 .build-bg-overlay {
   position: absolute;
   inset: 0;
@@ -3170,15 +3333,16 @@ html {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  mix-blend-mode: multiply;
-  opacity: 0.22;
-  filter: grayscale(25%) brightness(1.02);
+  mix-blend-mode: normal;
+  opacity: 0.78;
+  filter: brightness(0.88) contrast(1.12);
 }
 
 .build-bg-gradient {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, rgba(198, 206, 210, 0.72) 100%);
+  background: linear-gradient(180deg, rgba(8, 14, 16, 0.65) 0%, rgba(8, 14, 16, 0.42) 45%, rgba(6, 10, 12, 0.78) 100%),
+              radial-gradient(circle at 50% 50%, rgba(8, 14, 16, 0.20) 0%, rgba(6, 10, 12, 0.65) 100%);
 }
 
 /* 标题：移入左列与文字、CTA 同侧 */
@@ -3186,13 +3350,14 @@ html {
   font-family: 'Montserrat', sans-serif !important;
   font-size: clamp(2rem, 3.6vw, 3.2rem);
   font-weight: 600;
-  color: #142325;
+  color: #ffffff;
   letter-spacing: -0.03em;
   line-height: 1.15;
   margin: 0;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.85);
 }
 
-/* 2. Content Container with SMT Workshop Subtle Background */
+/* 2. Content Container with Workshop Subtle Background */
 .build-content-container {
   position: relative;
   z-index: 5;
@@ -3226,20 +3391,33 @@ html {
   min-width: 0;
 }
 
-.build-description,
-.build-lead-in {
+.build-description {
   font-family: 'Montserrat', sans-serif !important;
   font-size: clamp(1.02rem, 1.4vw, 1.28rem);
   font-weight: 400;
-  color: #4c5d60;
+  color: #e2edee;
   line-height: 1.6;
   letter-spacing: -0.015em;
   text-align: left;
   margin: 0;
   max-width: 480px;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.85);
 }
 
-/* Right Column: 3 张特点卡片（纵向堆叠） */
+.build-lead-in {
+  font-family: 'Montserrat', sans-serif !important;
+  font-size: clamp(1.02rem, 1.4vw, 1.28rem);
+  font-weight: 400;
+  color: #b8ccce;
+  line-height: 1.6;
+  letter-spacing: -0.015em;
+  text-align: left;
+  margin: 0;
+  max-width: 480px;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.85);
+}
+
+/* Right Column: 3 张特点卡片（纵向堆叠，采用深色磨砂玻璃） */
 .build-cards-col {
   display: flex;
   flex-direction: column;
@@ -3248,66 +3426,84 @@ html {
 }
 
 .build-feature-card {
+  position: relative;
   display: flex;
   align-items: flex-start;
   gap: 1.15rem;
-  background: rgba(255, 255, 255, 0.55);
-  border: 1px solid rgba(20, 35, 37, 0.12);
-  padding: 1.15rem 1.45rem;
-  border-radius: 20px;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  box-shadow: 0 6px 18px rgba(20, 35, 37, 0.06);
-  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 1.25rem 1.55rem;
+  border-radius: 14px;
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.35s ease,
+              border-color 0.35s ease,
+              box-shadow 0.35s ease;
   cursor: default;
+  overflow: hidden;
 }
 
 .build-feature-card:hover {
-  background: #ffffff;
-  border-color: rgba(20, 35, 37, 0.28);
   transform: translateY(-4px);
-  box-shadow: 0 16px 32px rgba(20, 35, 37, 0.14);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(198, 229, 61, 0.3);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.45), 0 0 24px rgba(198, 229, 61, 0.12);
 }
 
 .feature-icon-circle {
   flex: 0 0 auto;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: var(--accent-lime);
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: var(--accent-lime);
   display: flex;
   align-items: center;
   justify-content: center;
   margin-top: 0.12rem;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  z-index: 2;
 }
 
 .feature-icon-circle svg {
-  stroke: #142325 !important;
+  stroke: var(--accent-lime) !important;
+}
+
+.build-feature-card:hover .feature-icon-circle {
+  transform: scale(1.05);
+  background: rgba(198, 229, 61, 0.15);
+  border-color: var(--accent-lime);
 }
 
 .build-card-text {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.35rem;
   min-width: 0;
+  position: relative;
+  z-index: 2;
 }
 
 .feature-name {
   font-family: 'Montserrat', sans-serif !important;
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: #142325;
-  letter-spacing: -0.01em;
+  font-size: 1.08rem;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: -0.015em;
   margin: 0;
   line-height: 1.3;
 }
 
 .feature-desc {
   font-family: 'Montserrat', sans-serif !important;
-  font-size: 0.88rem;
+  font-size: 0.9rem;
   font-weight: 400;
-  color: #4c5d60;
-  line-height: 1.5;
+  color: #a6bbbc;
+  line-height: 1.55;
   margin: 0;
 }
 
@@ -3320,41 +3516,43 @@ html {
   display: inline-flex;
   align-items: center;
   gap: 0.8rem;
-  background: #142325;
-  color: #ffffff;
+  background: var(--accent-lime);
+  color: #142325;
   padding: 0.35rem 0.35rem 0.35rem 1.4rem;
   border-radius: 100px;
-  border: 1px solid #142325;
+  border: 1px solid var(--accent-lime);
   font-family: 'Montserrat', sans-serif !important;
   font-size: 0.95rem;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 10px 30px rgba(20, 35, 37, 0.20);
+  box-shadow: 0 10px 25px rgba(198, 229, 61, 0.25);
 }
 
 .cta-arrow-circle {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: var(--accent-lime);
+  background: #142325;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.35s ease;
 }
 
+.cta-arrow-circle svg path {
+  stroke: var(--accent-lime);
+}
+
 .btn-build-cta:hover {
-  background: var(--accent-lime);
-  color: #142325;
-  border-color: var(--accent-lime);
+  background: #d4f04e;
+  border-color: #d4f04e;
   transform: translateY(-2px);
-  box-shadow: 0 12px 35px rgba(20, 35, 37, 0.25);
+  box-shadow: 0 14px 35px rgba(198, 229, 61, 0.40);
 }
 
 .btn-build-cta:hover .cta-arrow-circle {
-  transform: scale(1.06);
-  background: var(--accent-lime);
+  transform: scale(1.08);
 }
 
 .btn-build-cta:active {
@@ -3759,6 +3957,7 @@ html {
   width: 100%;
   min-height: 100vh;
   overflow: hidden;
+  isolation: isolate; /* 独立层叠上下文，杜绝跨板块背景渗透 */
   background-color: var(--bg-primary);
   display: flex;
   align-items: center;
@@ -3769,10 +3968,11 @@ html {
   position: relative;
   width: 100%;
   min-height: 100vh;
+  overflow: hidden; /* 牢固包含背景视差视频(inset: -16%)，禁止向上向下溢出到相邻板块 */
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(1.5rem, 3.5vh, 3rem) 0;
+  padding: 2rem 0;
   border-top: none; /* 移除顶部 1 像素漏光高光线 */
   box-sizing: border-box;
 }
@@ -3780,100 +3980,91 @@ html {
 .fieldwork-container {
   position: relative;
   z-index: 10;
-  max-width: 1440px;
+  max-width: 1800px;
   width: 100%;
   margin: 0 auto;
-  padding: 0 clamp(2.5rem, 5.5vw, 6.5rem);
+  padding: 0 3rem;
   display: flex;
   flex-direction: column;
-  gap: clamp(2rem, 3.8vh, 3rem);
+  align-items: flex-start;
+  justify-content: center;
+  gap: clamp(1.4rem, 2.4vh, 2.2rem);
   box-sizing: border-box;
+  zoom: 1 !important;
 }
 
-/* 针对笔记本/较小桌面尺寸（宽 821px ~ 1440px）大标题适度收窄，选项与右侧卡片等宽 (1fr 1fr) */
-@media (min-width: 821px) and (max-width: 1440px) {
-  .fieldwork-container {
-    padding: 0 clamp(2.5rem, 5vw, 5rem);
-    max-width: 1340px;
-  }
-  .fieldwork-stage-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: clamp(1.4rem, 2vw, 2.2rem);
-  }
-  .fieldwork-main-title {
-    max-width: 760px;
-    font-size: clamp(1.9rem, 2.9vw, 2.7rem);
-    line-height: 1.2;
-    text-wrap: balance;
-  }
-  .fieldwork-subtitle {
-    width: 100%;
-    max-width: 100%;
-    text-wrap: balance;
-  }
+/* Main Interactive Stage Grid: 展开内容顶对齐左边的介绍文字 */
+.fieldwork-stage-grid {
+  display: grid;
+  grid-template-columns: minmax(540px, 820px) 1fr;
+  gap: clamp(2rem, 4vw, 4.5rem);
+  align-items: start; /* 关键：展开的内容顶对齐左边的介绍文字 */
+  width: 100%;
 }
 
-/* Section Header (Centered title & subtitle) */
+/* Left Column: 介绍文字和6个标签作为一个整体 */
+.fieldwork-left-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(1.6rem, 2.8vh, 2.4rem);
+  width: 100%;
+}
+
+/* Section Header (Left-aligned title & subtitle) */
 .fieldwork-header {
   width: 100%;
-  text-align: center;
+  text-align: left;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-  margin: 0 auto;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 0.85rem;
+  margin: 0;
 }
 
-/* 大屏状态：保持宽幅自然伸展，不做额外限制，维持大屏原本优美排版 */
+/* 大屏状态：标题与介绍文字严格左对齐，字号规格与 Section 3 (Features) 统一一致 */
 .fieldwork-main-title {
   font-family: 'Montserrat', sans-serif !important;
-  font-size: clamp(2.2rem, 3.8vw, 3.8rem);
+  font-size: clamp(2.2rem, 3.4vw, 3.4rem);
   font-weight: 600;
   color: #ffffff;
   line-height: 1.15;
   letter-spacing: -0.03em;
   margin: 0;
-  text-align: center;
-  max-width: none;
+  text-align: left;
+  max-width: 780px;
 }
 
 .fieldwork-subtitle {
   font-family: 'Montserrat', sans-serif !important;
-  font-size: clamp(0.95rem, 1.1vw, 1.12rem);
+  font-size: clamp(0.92rem, 1.05vw, 1.08rem);
   font-weight: 400;
   color: #a6bbbc;
   line-height: 1.55;
   width: 100%;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
+  max-width: 820px;
+  margin: 0;
+  text-align: left;
 }
 
-/* Main Interactive Stage Grid (大屏状态：保持原本优美比例关系 minmax(380px, 480px) 1fr) */
-.fieldwork-stage-grid {
-  display: grid;
-  grid-template-columns: minmax(380px, 480px) 1fr;
-  gap: clamp(1.5rem, 3vw, 3.2rem);
-  align-items: stretch;
-}
-
-/* Left Tabs List */
+/* Left Tabs List: 两排每排 3 个标签左对齐 */
 .fieldwork-tabs-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.85rem;
+  width: 100%;
 }
 
 .fieldwork-tab-item {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: clamp(0.65rem, 1.2vh, 0.82rem) clamp(1.1rem, 1.5vw, 1.4rem);
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 0.65rem;
+  padding: 0.95rem 1.1rem;
   background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 12px;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
@@ -3881,66 +4072,85 @@ html {
   cursor: pointer;
   text-align: left;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  width: 100%;
   box-sizing: border-box;
 }
 
 .fieldwork-tab-item:hover {
   background: rgba(255, 255, 255, 0.1);
   border-color: rgba(255, 255, 255, 0.25);
-  transform: translateX(4px);
+  transform: translateY(-2px);
 }
 
 .fieldwork-tab-item.active {
   background: rgba(198, 229, 61, 0.14);
   border-color: var(--accent-lime);
   box-shadow: 0 4px 20px rgba(198, 229, 61, 0.18);
-  transform: translateX(6px);
+  transform: translateY(-2px);
+}
+
+.tab-icon {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  color: rgba(255, 255, 255, 0.7);
+  flex-shrink: 0;
+  transition: color 0.25s ease, transform 0.25s ease;
+}
+
+.tab-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.fieldwork-tab-item:hover .tab-icon {
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.fieldwork-tab-item.active .tab-icon {
+  color: var(--accent-lime);
 }
 
 .tab-en-title {
   font-family: 'Montserrat', sans-serif !important;
-  font-size: clamp(0.92rem, 1.05vw, 1.02rem);
+  font-size: clamp(0.82rem, 0.88vw, 0.92rem);
   font-weight: 500;
   line-height: 1.35;
   color: #ffffff;
+  text-align: left;
 }
 
-.tab-indicator-arrow {
-  color: rgba(255, 255, 255, 0.35);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.2s ease, color 0.2s ease;
-  flex-shrink: 0;
-}
-
-.fieldwork-tab-item:hover .tab-indicator-arrow {
-  color: rgba(255, 255, 255, 0.85);
-  transform: translateX(3px);
-}
-
-.fieldwork-tab-item.active .tab-indicator-arrow {
-  color: var(--accent-lime);
-  transform: translateX(4px);
-}
-
-/* Right Panels Container: 固定的外层毛玻璃卡片框体，backdrop-filter 恒定处于 opacity: 1 状态，永不闪烁、永不掉帧 */
+/* Right Panels Container: 无外层卡片背景，直接浮于暗色背景之上，未点击时隐藏，点击选项后平滑展开出现 */
 .fieldwork-panels-container {
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 1fr;
   position: relative;
   width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.07);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  backdrop-filter: blur(28px) saturate(180%);
-  -webkit-backdrop-filter: blur(28px) saturate(180%);
-  border-radius: 14px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.22);
-  padding: clamp(1.4rem, 2.5vh, 2rem) clamp(1.6rem, 2.4vw, 2.4rem);
+  min-height: auto;
+  align-self: start;
+  background: transparent;
+  border: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0;
   box-sizing: border-box;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateX(18px);
+  transition: opacity 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+              visibility 0.32s ease,
+              transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fieldwork-panels-container.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateX(0);
 }
 
 .fieldwork-panel {
@@ -4034,41 +4244,302 @@ html {
   margin: 0;
 }
 
-/* Tablet & Mid-Size Screens (821px - 1080px) */
-@media (min-width: 821px) and (max-width: 1080px) {
-  .fieldwork-stage-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 1.4rem;
+/* Panel Lead Introductory Paragraph (Matches Figma design) */
+.fw-panel-lead {
+  font-family: 'Montserrat', sans-serif !important;
+  font-size: clamp(0.88rem, 1vw, 0.98rem);
+  font-weight: 400;
+  line-height: 1.55;
+  color: #dbe8e8;
+  margin: 0;
+  max-width: 680px;
+}
+
+
+/* --------------------------------------------------------------------------
+   Section 2 (Field Work) 深度响应式适配
+   覆盖：笔记本浅屏(高度<=850px)、常见笔记本(1081px-1400px)、平板横屏(821px-1080px)、
+   平板竖屏(541px-820px)、以及移动手机端(<=540px)
+   -------------------------------------------------------------------------- */
+
+/* 1. 笔记本矮屏优化 (如 1366x768, 1280x800 等受浏览器工具栏影响后高度 <= 850px) */
+@media (min-width: 821px) and (max-height: 850px) {
+  .fieldwork-section-wrapper {
+    min-height: 100vh;
+    height: auto;
+    overflow: hidden;
+  }
+  .fieldwork-section {
+    min-height: 100vh;
+    height: auto;
+    overflow: hidden;
+    padding: clamp(2.5rem, 5vh, 3.5rem) 0;
+  }
+  .fieldwork-main-title,
+  .features-main-title {
+    font-size: clamp(1.9rem, 2.8vw, 2.45rem);
+  }
+  .fieldwork-subtitle,
+  .features-subtitle {
+    font-size: clamp(0.88rem, 0.95vw, 0.96rem);
+    line-height: 1.5;
+  }
+  .fieldwork-container {
+    gap: clamp(1rem, 1.8vh, 1.4rem);
+  }
+  .fieldwork-left-col {
+    gap: clamp(1.2rem, 2vh, 1.6rem);
   }
 }
 
-/* Mobile Screens (<= 820px) */
-@media (max-width: 820px) {
+/* 2. 常见笔记本与中型桌面屏幕 (1081px - 1400px) */
+@media (min-width: 1081px) and (max-width: 1400px) {
   .fieldwork-section-wrapper {
-    height: auto;
     min-height: 100vh;
+    height: auto;
+    overflow: hidden;
   }
   .fieldwork-section {
-    height: auto;
     min-height: 100vh;
-    padding: 4.5rem 0 3.5rem 0;
+    height: auto;
+    overflow: hidden;
+    padding: clamp(3rem, 6vh, 4.5rem) 0;
   }
   .fieldwork-container {
-    padding: 0 clamp(2rem, 6vw, 3.5rem);
+    padding: 0 clamp(2rem, 4vw, 3rem);
     gap: 1.6rem;
+  }
+  .fieldwork-main-title,
+  .features-main-title {
+    font-size: clamp(1.9rem, 2.8vw, 2.45rem);
+  }
+  .fieldwork-main-title {
+    max-width: 720px;
+  }
+  .fieldwork-subtitle,
+  .features-subtitle {
+    font-size: clamp(0.88rem, 0.95vw, 0.96rem);
+    line-height: 1.52;
+  }
+  .fieldwork-subtitle {
+    max-width: 100%;
+  }
+  .fieldwork-stage-grid {
+    grid-template-columns: minmax(460px, 1.05fr) 1fr;
+    gap: clamp(1.8rem, 3vw, 3rem);
+  }
+  .fieldwork-tabs-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+  .fieldwork-tab-item {
+    padding: 0.85rem 0.95rem;
+    gap: 0.55rem;
+  }
+  .tab-en-title {
+    font-size: 0.82rem;
+  }
+}
+
+/* 3. 平板横屏 / 紧凑型桌面 (821px - 1080px)：标签切换为 2 列 x 3 排，彻底消除换行拥挤 */
+@media (min-width: 821px) and (max-width: 1080px) {
+  .fieldwork-section-wrapper {
+    min-height: 100vh;
+    height: auto;
+    overflow: hidden;
+  }
+  .fieldwork-section {
+    min-height: 100vh;
+    height: auto;
+    overflow: hidden;
+    padding: clamp(3rem, 6vh, 4rem) 0;
+  }
+  .fieldwork-container {
+    padding: 0 clamp(1.8rem, 4vw, 2.5rem);
+    gap: 1.5rem;
+  }
+  .fieldwork-main-title,
+  .features-main-title {
+    font-size: clamp(1.75rem, 2.7vw, 2.2rem);
+    line-height: 1.2;
+  }
+  .fieldwork-main-title {
+    max-width: 100%;
+  }
+  .fieldwork-subtitle,
+  .features-subtitle {
+    font-size: 0.92rem;
+    line-height: 1.52;
+  }
+  .fieldwork-subtitle {
+    max-width: 100%;
+  }
+  .fieldwork-stage-grid {
+    grid-template-columns: minmax(360px, 1fr) 1.1fr;
+    gap: 1.8rem;
+  }
+  .fieldwork-tabs-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr)); /* 2列排版，空间宽裕舒展 */
+    gap: 0.75rem;
+  }
+  .fieldwork-tab-item {
+    padding: 0.85rem 1rem;
+    gap: 0.55rem;
+  }
+  .tab-en-title {
+    font-size: 0.86rem;
+  }
+  .fieldwork-panels-container {
+    padding: 0;
+  }
+}
+
+/* 4. 平板竖屏与大屏手机 (541px - 820px)：单列流式布局，展开详情卡片化 */
+@media (min-width: 541px) and (max-width: 820px) {
+  .fieldwork-section-wrapper {
+    min-height: 100vh;
+    height: auto;
+    overflow: hidden;
+  }
+  .fieldwork-section {
+    min-height: 100vh;
+    height: auto;
+    overflow: hidden;
+    align-items: flex-start; /* 避免 flex-center 在长内容时顶部被遮挡 */
+    padding: clamp(4rem, 8vh, 5.5rem) 0 4rem 0;
+  }
+  .fieldwork-container {
+    padding: 0 clamp(1.8rem, 5vw, 3rem);
+    gap: 1.8rem;
     zoom: 1 !important;
+  }
+  .fieldwork-main-title,
+  .features-main-title {
+    font-size: clamp(1.65rem, 4.2vw, 2.05rem);
+    line-height: 1.22;
+  }
+  .fieldwork-main-title {
+    max-width: 100%;
+  }
+  .fieldwork-subtitle,
+  .features-subtitle {
+    font-size: 0.92rem;
+    line-height: 1.52;
+  }
+  .fieldwork-subtitle {
+    max-width: 100%;
+  }
+  .fieldwork-stage-grid {
+    grid-template-columns: 1fr;
+    gap: 1.8rem;
+  }
+  .fieldwork-tabs-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+  .fieldwork-tab-item {
+    padding: 0.85rem 1.1rem;
+    gap: 0.55rem;
+  }
+  .tab-en-title {
+    font-size: 0.88rem;
+  }
+  .fieldwork-panels-container:not(.active) {
+    display: none;
+  }
+  .fieldwork-panels-container.active {
+    margin-top: 0.5rem;
+    padding: 1.5rem;
+    background: rgba(18, 26, 28, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 14px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+    transform: none;
+  }
+}
+
+/* 5. 移动手机端 (<= 540px)：精细比例控制，大标题不爆版，操作流畅 */
+@media (max-width: 540px) {
+  .fieldwork-section-wrapper {
+    min-height: 100vh;
+    height: auto;
+    overflow: hidden;
+  }
+  .fieldwork-section {
+    min-height: 100vh;
+    height: auto;
+    overflow: hidden;
+    align-items: flex-start;
+    padding: clamp(3.5rem, 6vh, 4.5rem) 0 3rem 0;
+  }
+  .fieldwork-container {
+    padding: 0 clamp(1.2rem, 4.5vw, 1.8rem);
+    gap: 1.4rem;
+    zoom: 1 !important;
+  }
+  .fieldwork-main-title,
+  .features-main-title {
+    font-size: clamp(1.4rem, 5.5vw, 1.8rem);
+    line-height: 1.25;
+  }
+  .fieldwork-main-title {
+    max-width: 100%;
+  }
+  .fieldwork-subtitle,
+  .features-subtitle {
+    font-size: 0.88rem;
+    line-height: 1.52;
+  }
+  .fieldwork-subtitle {
+    max-width: 100%;
   }
   .fieldwork-stage-grid {
     grid-template-columns: 1fr;
     gap: 1.4rem;
   }
   .fieldwork-tabs-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.55rem;
   }
-  .fieldwork-panels-container {
-    padding: 1.35rem 1.4rem;
+  .fieldwork-tab-item {
+    padding: 0.75rem 0.8rem;
+    gap: 0.45rem;
+    border-radius: 10px;
+  }
+  .tab-icon svg {
+    width: 17px;
+    height: 17px;
+  }
+  .tab-en-title {
+    font-size: 0.78rem;
+    line-height: 1.25;
+  }
+  .fieldwork-panels-container:not(.active) {
+    display: none;
+  }
+  .fieldwork-panels-container.active {
+    margin-top: 0.4rem;
+    padding: 1.25rem 1rem;
+    background: rgba(18, 26, 28, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+    transform: none;
+  }
+  .bullets-title {
+    font-size: 1.12rem;
+  }
+  .fw-panel-lead {
+    font-size: 0.86rem;
+    line-height: 1.52;
+  }
+  .fw-bullet-en {
+    font-size: 0.86rem;
+    line-height: 1.48;
   }
 }
 

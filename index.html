@@ -52,14 +52,14 @@
             <!-- Quick Section Anchor Navigation Menu (Anchored directly under Menu button) -->
             <nav class="nav-dropdown-menu" id="nav-dropdown-menu" aria-label="Main Navigation">
               <ul class="nav-links-list">
-                <li><a href="#hero" class="nav-link-item">Overview</a></li>
-                <li><a href="#field-work" class="nav-link-item">Frontline Intelligence</a></li>
+                <li><a href="#hero" class="nav-link-item">Home</a></li>
+                <li><a href="#field-work" class="nav-link-item">Applications</a></li>
                 <li><a href="#features" class="nav-link-item">Features</a></li>
-                <li><a href="#sensing-system" class="nav-link-item">One Platform, More to Explore</a></li>
-                <li><a href="#protective-design" class="nav-link-item">Designed for Frontline Use</a></li>
-                <li><a href="#your-rules" class="nav-link-item">Your Data. Your AI. Your Rules.</a></li>
-                <li><a href="#open-sdk" class="nav-link-item">Open Source for Makers & Developers</a></li>
-                <li><a href="#community-builders" class="nav-link-item">Community Builders</a></li>
+                <li><a href="#sensing-system" class="nav-link-item">Expansions</a></li>
+                <li><a href="#protective-design" class="nav-link-item">Protection Design</a></li>
+                <li><a href="#your-rules" class="nav-link-item">AI Souvrinty</a></li>
+                <li><a href="#open-sdk" class="nav-link-item">Open Source</a></li>
+                <li><a href="#community-builders" class="nav-link-item">Join Community</a></li>
                 <li><a href="#customization" class="nav-link-item">Customization</a></li>
               </ul>
             </nav>
@@ -101,7 +101,10 @@
               </div>
             </div>
             <div class="hero-image-right">
-              <img id="product-img" class="product-image" src="./assets/images/banner2.webp" alt="reGoggles Wearable AI Goggles Static Render" />
+              <picture>
+                <source srcset="./assets/images/1-1-右侧仰视无镜片.webp" type="image/webp" />
+                <img id="product-img" class="product-image" src="./assets/images/1-1-右侧仰视无镜片.png" alt="reGoggles Wearable AI Goggles Static Render" />
+              </picture>
             </div>
           </div>
         </div>
@@ -139,135 +142,150 @@
 
         <div class="fieldwork-container">
           
-          <!-- Top Section Header -->
-          <div class="fieldwork-header">
-            <h2 class="fieldwork-main-title">
-              Sees What the Workers See, Enables What They Couldn't
-            </h2>
-            <p class="fieldwork-subtitle">
-              Unlike industrial cameras, reGoggles captures, records, and streams the first-person perspective of field technicians, delivering the data to AI models or remote experts for analysis, which enables advance warning, real-time recording, and post-event optimization.
-            </p>
-          </div>
+          <!-- Big Main Title at Top of Section Content -->
+          <h2 class="fieldwork-main-title">
+            Sees What the Workers See, Enables What They Couldn't
+          </h2>
 
-          <!-- Main Interactive Stage: Left Tabs, Right Detail & Viewport -->
+          <!-- Main Interactive Stage: Left Subtitle + Tabs & Right Detail Panel (Top-aligned) -->
           <div class="fieldwork-stage-grid">
             
-            <!-- Left Tabs Column (7 items, English only, no numbers) -->
-            <div class="fieldwork-tabs-list" role="tablist" aria-label="Field Intelligence Modules">
-              
-              <button type="button" class="fieldwork-tab-item active" data-fw-target="fw-panel-1" role="tab" aria-selected="true">
-                <span class="tab-en-title">First-Person AI Visual Inspection</span>
-                <div class="tab-indicator-arrow">
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 2L10 7L5 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </div>
-              </button>
+            <!-- Left Column: Introduction text (fieldwork-subtitle) + 6 Tabs -->
+            <div class="fieldwork-left-col">
+              <p class="fieldwork-subtitle">
+                Unlike industrial cameras, reGoggles captures, records, and streams the first-person perspective of field technicians, delivering the data to AI models or remote experts for analysis, which enables advance warning, real-time recording, and post-event optimization.
+              </p>
 
-              <button type="button" class="fieldwork-tab-item" data-fw-target="fw-panel-2" role="tab" aria-selected="false">
-                <span class="tab-en-title">Data-Based Performance Improvement</span>
-                <div class="tab-indicator-arrow">
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 2L10 7L5 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </div>
-              </button>
+              <!-- Left Tabs Column (6 items in 2 rows, 3 per row, left-aligned) -->
+              <div class="fieldwork-tabs-list" role="tablist" aria-label="Field Intelligence Modules">
+                
+                <!-- Row 1: Item 1 -->
+                <button type="button" class="fieldwork-tab-item" data-fw-target="fw-panel-1" role="tab" aria-selected="false">
+                  <div class="tab-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+                      <circle cx="12" cy="11" r="3"/>
+                    </svg>
+                  </div>
+                  <span class="tab-en-title">First-Person Inspection</span>
+                </button>
 
-              <button type="button" class="fieldwork-tab-item" data-fw-target="fw-panel-3" role="tab" aria-selected="false">
-                <span class="tab-en-title">On-Site PPE Monitoring</span>
-                <div class="tab-indicator-arrow">
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 2L10 7L5 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </div>
-              </button>
+                <!-- Row 1: Item 2 -->
+                <button type="button" class="fieldwork-tab-item" data-fw-target="fw-panel-2" role="tab" aria-selected="false">
+                  <div class="tab-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="18" y1="20" x2="18" y2="10"/>
+                      <line x1="12" y1="20" x2="12" y2="4"/>
+                      <line x1="6" y1="20" x2="6" y2="14"/>
+                    </svg>
+                  </div>
+                  <span class="tab-en-title">Data-Based Improvement</span>
+                </button>
 
-              <button type="button" class="fieldwork-tab-item" data-fw-target="fw-panel-4" role="tab" aria-selected="false">
-                <span class="tab-en-title">Hands-Free Expertise Copilot</span>
-                <div class="tab-indicator-arrow">
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 2L10 7L5 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </div>
-              </button>
+                <!-- Row 1: Item 3 -->
+                <button type="button" class="fieldwork-tab-item" data-fw-target="fw-panel-3" role="tab" aria-selected="false">
+                  <div class="tab-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                  </div>
+                  <span class="tab-en-title">On-Site PPE Monitoring</span>
+                </button>
 
-              <button type="button" class="fieldwork-tab-item" data-fw-target="fw-panel-5" role="tab" aria-selected="false">
-                <span class="tab-en-title">Live Streaming Remote Collaboration</span>
-                <div class="tab-indicator-arrow">
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 2L10 7L5 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </div>
-              </button>
+                <!-- Row 2: Item 1 -->
+                <button type="button" class="fieldwork-tab-item" data-fw-target="fw-panel-4" role="tab" aria-selected="false">
+                  <div class="tab-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+                      <path d="M5 3v4"/>
+                      <path d="M19 17v4"/>
+                      <path d="M3 5h4"/>
+                      <path d="M17 19h4"/>
+                    </svg>
+                  </div>
+                  <span class="tab-en-title">Hands-Free Copilot</span>
+                </button>
 
-              <button type="button" class="fieldwork-tab-item" data-fw-target="fw-panel-6" role="tab" aria-selected="false">
-                <span class="tab-en-title">Real-Time Process Evidence Recording</span>
-                <div class="tab-indicator-arrow">
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 2L10 7L5 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </div>
-              </button>
+                <!-- Row 2: Item 2 -->
+                <button type="button" class="fieldwork-tab-item" data-fw-target="fw-panel-5" role="tab" aria-selected="false">
+                  <div class="tab-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polygon points="23 7 16 12 23 17 23 7"/>
+                      <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+                    </svg>
+                  </div>
+                  <span class="tab-en-title">Evidence Recording</span>
+                </button>
 
-              <button type="button" class="fieldwork-tab-item" data-fw-target="fw-panel-7" role="tab" aria-selected="false">
-                <span class="tab-en-title">Ego Data for Embodied AI Training</span>
-                <div class="tab-indicator-arrow">
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 2L10 7L5 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </div>
-              </button>
+                <!-- Row 2: Item 3 -->
+                <button type="button" class="fieldwork-tab-item" data-fw-target="fw-panel-6" role="tab" aria-selected="false">
+                  <div class="tab-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <ellipse cx="12" cy="5" rx="9" ry="3"/>
+                      <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+                      <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+                    </svg>
+                  </div>
+                  <span class="tab-en-title">Ego Data Capture</span>
+                </button>
 
+              </div>
             </div>
 
-            <!-- Right Detail Panels Container (7 Panels) -->
+            <!-- Right Detail Panels Container (Top-aligned with fieldwork-subtitle) -->
             <div class="fieldwork-panels-container">
               
-              <!-- Panel 1: First-Person AI Visual Inspection -->
-              <div class="fieldwork-panel active" id="fw-panel-1">
+              <!-- Panel 1: First-Person Inspection -->
+              <div class="fieldwork-panel" id="fw-panel-1">
                 <div class="fieldwork-detail-card">
                   <div class="panel-header-row">
-                    <h3 class="bullets-title">First-Person AI Visual Inspection</h3>
+                    <h3 class="bullets-title">First-Person Inspection</h3>
                   </div>
+
+                  <p class="fw-panel-lead">
+                    Automated visual inspection isn't suited for manual assembly lines. Manual inspection varies from person to person and can miss critical defects. reGoggles brings AI-assisted quality inspection to the line, boosting yield.
+                  </p>
 
                   <ul class="fw-bullets-list">
                     <li class="fw-bullet-item">
                       <span class="bullet-dot"></span>
-                      <p class="fw-bullet-en">Automated visual inspection isn't suited for manual assembly lines.</p>
+                      <p class="fw-bullet-en">HD Camera Spots Subtle Defects</p>
                     </li>
                     <li class="fw-bullet-item">
                       <span class="bullet-dot"></span>
-                      <p class="fw-bullet-en">Manual inspection varies by person and can miss critical defects.</p>
+                      <p class="fw-bullet-en">Real-time AI Inspection</p>
                     </li>
                     <li class="fw-bullet-item">
                       <span class="bullet-dot"></span>
-                      <p class="fw-bullet-en">With reGoggles, real-time recording and AI QC trace every defect back to its step.</p>
-                    </li>
-                    <li class="fw-bullet-item">
-                      <span class="bullet-dot"></span>
-                      <p class="fw-bullet-en">Its HD camera spots subtle defects the naked eye often misses.</p>
-                    </li>
-                    <li class="fw-bullet-item">
-                      <span class="bullet-dot"></span>
-                      <p class="fw-bullet-en">AI visual inspection complements human QC, removing operator-to-operator variation.</p>
+                      <p class="fw-bullet-en">Step-Level Defect Traceability</p>
                     </li>
                   </ul>
                 </div>
               </div>
 
-              <!-- Panel 2: Data-Based Performance Improvement -->
+              <!-- Panel 2: Data-Based Improvement -->
               <div class="fieldwork-panel" id="fw-panel-2">
                 <div class="fieldwork-detail-card">
                   <div class="panel-header-row">
-                    <h3 class="bullets-title">Data-Based Performance Improvement</h3>
+                    <h3 class="bullets-title">Data-Based Improvement</h3>
                   </div>
+
+                  <p class="fw-panel-lead">
+                    Production planning relies on line-team experience and habit, and improvements often take weeks without data-backed evidence. reGoggles’ full-process first-person recordings let AI quantify operations and recommend concrete improvements.
+                  </p>
 
                   <ul class="fw-bullets-list">
                     <li class="fw-bullet-item">
                       <span class="bullet-dot"></span>
-                      <p class="fw-bullet-en">Shift and production schedules rely on line-team experience and habits.</p>
+                      <p class="fw-bullet-en">Data-Driven Frontline Analysis</p>
                     </li>
                     <li class="fw-bullet-item">
                       <span class="bullet-dot"></span>
-                      <p class="fw-bullet-en">Improving steps, processes, and scheduling lacks data-backed evidence, often taking weeks.</p>
+                      <p class="fw-bullet-en">Rapid Retrospectives</p>
                     </li>
                     <li class="fw-bullet-item">
                       <span class="bullet-dot"></span>
-                      <p class="fw-bullet-en">Full-process first-person recordings via reGoggles let AI quantify operations and suggest improvements.</p>
-                    </li>
-                    <li class="fw-bullet-item">
-                      <span class="bullet-dot"></span>
-                      <p class="fw-bullet-en">Recommendations grounded in real work, warehouse, and shipment data reflect actual conditions.</p>
-                    </li>
-                    <li class="fw-bullet-item">
-                      <span class="bullet-dot"></span>
-                      <p class="fw-bullet-en">AI enables rapid team retrospectives, pinpointing anomalies in specific process steps.</p>
+                      <p class="fw-bullet-en">Anomalies Timeline Pinpoint</p>
                     </li>
                   </ul>
                 </div>
@@ -280,154 +298,106 @@
                     <h3 class="bullets-title">On-Site PPE Monitoring</h3>
                   </div>
 
+                  <p class="fw-panel-lead">
+                    PPE and hazard detection are critical in chemical and construction industries. Manual safety checks cannot provide 24/7 coverage, leaving recurring gaps in safety coverage. Replacing traditional goggles, reGoggles provides continuous PPE checks and round-the-clock monitoring.
+                  </p>
+
                   <ul class="fw-bullets-list">
                     <li class="fw-bullet-item">
                       <span class="bullet-dot"></span>
-                      <p class="fw-bullet-en">PPE and hazard detection are critical in biochemical and construction industries.</p>
+                      <p class="fw-bullet-en">Monitoring While Working</p>
                     </li>
                     <li class="fw-bullet-item">
                       <span class="bullet-dot"></span>
-                      <p class="fw-bullet-en">Manual safety checks cannot provide 24/7 coverage, leaving recurring safety gaps.</p>
+                      <p class="fw-bullet-en">Real-time Danger Alert</p>
                     </li>
                     <li class="fw-bullet-item">
                       <span class="bullet-dot"></span>
-                      <p class="fw-bullet-en">Replacing traditional goggles, reGoggles provides continuous PPE checks and round-the-clock monitoring.</p>
-                    </li>
-                    <li class="fw-bullet-item">
-                      <span class="bullet-dot"></span>
-                      <p class="fw-bullet-en">Real-time AI analysis triggers immediate alerts the moment risks appear.</p>
-                    </li>
-                    <li class="fw-bullet-item">
-                      <span class="bullet-dot"></span>
-                      <p class="fw-bullet-en">First-person incident replay enables safety analysis and liability determination.</p>
+                      <p class="fw-bullet-en">First-person Incident Replay and Liability Determination</p>
                     </li>
                   </ul>
                 </div>
               </div>
 
-              <!-- Panel 4: Hands-Free Expertise Copilot -->
+              <!-- Panel 4: Hands-Free Copilot -->
               <div class="fieldwork-panel" id="fw-panel-4">
                 <div class="fieldwork-detail-card">
                   <div class="panel-header-row">
-                    <h3 class="bullets-title">Hands-Free Expertise Copilot</h3>
+                    <h3 class="bullets-title">Hands-Free Copilot</h3>
                   </div>
+
+                  <p class="fw-panel-lead">
+                    Expert visits are costly, and workers’ hands are typically occupied on the job. reGoggles streams first-person views for real-time remote support from experts or AI, without interrupting the work.
+                  </p>
 
                   <ul class="fw-bullets-list">
                     <li class="fw-bullet-item">
                       <span class="bullet-dot"></span>
-                      <p class="fw-bullet-en">Machining relies heavily on the experience and skills of senior technicians.</p>
+                      <p class="fw-bullet-en">Operations Auto-Captured into SOPs</p>
                     </li>
                     <li class="fw-bullet-item">
                       <span class="bullet-dot"></span>
-                      <p class="fw-bullet-en">Codifying expertise into SOPs to guide frontline workers is labor-intensive and impractical.</p>
+                      <p class="fw-bullet-en">Hands-free AI Guidance</p>
                     </li>
                     <li class="fw-bullet-item">
                       <span class="bullet-dot"></span>
-                      <p class="fw-bullet-en">Experts' first-person operations are auto-captured by reGoggles, building a searchable database.</p>
-                    </li>
-                    <li class="fw-bullet-item">
-                      <span class="bullet-dot"></span>
-                      <p class="fw-bullet-en">AI distills best practices from massive operation data, codifying them into line SOPs.</p>
-                    </li>
-                    <li class="fw-bullet-item">
-                      <span class="bullet-dot"></span>
-                      <p class="fw-bullet-en">Hands-free AI guidance accelerates new-hire onboarding, reducing dependence on skilled workers.</p>
+                      <p class="fw-bullet-en">Remote Expert Collaboration</p>
                     </li>
                   </ul>
                 </div>
               </div>
 
-              <!-- Panel 5: Live Streaming Remote Collaboration -->
+              <!-- Panel 5: Evidence Recording -->
               <div class="fieldwork-panel" id="fw-panel-5">
                 <div class="fieldwork-detail-card">
                   <div class="panel-header-row">
-                    <h3 class="bullets-title">Live Streaming Remote Collaboration</h3>
+                    <h3 class="bullets-title">Evidence Recording</h3>
                   </div>
+
+                  <p class="fw-panel-lead">
+                    Compliance audits in petrochemical and other regulated industries demand airtight process evidence, yet on-site records rarely stand up to scrutiny. Workers capture process evidence in the field with reGoggles, closing the evidence loop while AI verifies compliance in real time.
+                  </p>
 
                   <ul class="fw-bullets-list">
                     <li class="fw-bullet-item">
                       <span class="bullet-dot"></span>
-                      <p class="fw-bullet-en">Precision manufacturing and chemical production lines call for costly on-site expert guidance.</p>
+                      <p class="fw-bullet-en">Auto-linked to workstation, operator and shift</p>
                     </li>
                     <li class="fw-bullet-item">
                       <span class="bullet-dot"></span>
-                      <p class="fw-bullet-en">Maintenance and adjustment tasks often rule out handheld recording with phones or tablets.</p>
+                      <p class="fw-bullet-en">Open Data Pipelines with Local-First Security</p>
                     </li>
                     <li class="fw-bullet-item">
                       <span class="bullet-dot"></span>
-                      <p class="fw-bullet-en">First-person footage streams via reGoggles to remote experts, enabling real-time two-way communications.</p>
-                    </li>
-                    <li class="fw-bullet-item">
-                      <span class="bullet-dot"></span>
-                      <p class="fw-bullet-en">AI automatically summarizes remote collaboration calls into searchable notes.</p>
-                    </li>
-                    <li class="fw-bullet-item">
-                      <span class="bullet-dot"></span>
-                      <p class="fw-bullet-en">Fully recorded guidance sessions serve as replayable enterprise knowledge.</p>
+                      <p class="fw-bullet-en">Real-Time Recording with AI Verification</p>
                     </li>
                   </ul>
                 </div>
               </div>
 
-              <!-- Panel 6: Real-Time Process Evidence Recording -->
+              <!-- Panel 6: Ego Data Capture -->
               <div class="fieldwork-panel" id="fw-panel-6">
                 <div class="fieldwork-detail-card">
                   <div class="panel-header-row">
-                    <h3 class="bullets-title">Real-Time Process Evidence Recording</h3>
+                    <h3 class="bullets-title">Ego Data Capture</h3>
                   </div>
+
+                  <p class="fw-panel-lead">
+                    First-person operation data from real industrial settings is invaluable for training embodied AI. Conventional ego-capture devices lack protection and hard-hat compatibility, barring many industrial sites. reGoggles makes ego data capture possible in frontline industrial environments.
+                  </p>
 
                   <ul class="fw-bullets-list">
                     <li class="fw-bullet-item">
                       <span class="bullet-dot"></span>
-                      <p class="fw-bullet-en">Accurate process evidence underpins compliance audits in petrochemical and other regulated industries.</p>
+                      <p class="fw-bullet-en">Hard-hat Compatibility</p>
                     </li>
                     <li class="fw-bullet-item">
                       <span class="bullet-dot"></span>
-                      <p class="fw-bullet-en">On-site process records often omit details or fall short of audit standards.</p>
+                      <p class="fw-bullet-en">Passive Ego Data Capture</p>
                     </li>
                     <li class="fw-bullet-item">
                       <span class="bullet-dot"></span>
-                      <p class="fw-bullet-en">Workers wearing reGoggles capture process evidence while AI verifies compliance in real time.</p>
-                    </li>
-                    <li class="fw-bullet-item">
-                      <span class="bullet-dot"></span>
-                      <p class="fw-bullet-en">Every compliance action is auto-linked to workstation, operator and first-person data.</p>
-                    </li>
-                    <li class="fw-bullet-item">
-                      <span class="bullet-dot"></span>
-                      <p class="fw-bullet-en">With open data pipeline, sensitive data can be stored and processed locally, meeting privacy requirements.</p>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-
-              <!-- Panel 7: Ego Data for Embodied AI Training -->
-              <div class="fieldwork-panel" id="fw-panel-7">
-                <div class="fieldwork-detail-card">
-                  <div class="panel-header-row">
-                    <h3 class="bullets-title">Ego Data for Embodied AI Training</h3>
-                  </div>
-
-                  <ul class="fw-bullets-list">
-                    <li class="fw-bullet-item">
-                      <span class="bullet-dot"></span>
-                      <p class="fw-bullet-en">First-person operation data from real industrial settings is invaluable for training embodied AI.</p>
-                    </li>
-                    <li class="fw-bullet-item">
-                      <span class="bullet-dot"></span>
-                      <p class="fw-bullet-en">Conventional ego-capture devices lack protection and hard-hat compatibility, barring many industrial sites.</p>
-                    </li>
-                    <li class="fw-bullet-item">
-                      <span class="bullet-dot"></span>
-                      <p class="fw-bullet-en">reGoggles fits hard hats and is purpose-built for frontline industrial environments.</p>
-                    </li>
-                    <li class="fw-bullet-item">
-                      <span class="bullet-dot"></span>
-                      <p class="fw-bullet-en">Hands-free goggles capture data passively while workers do their jobs.</p>
-                    </li>
-                    <li class="fw-bullet-item">
-                      <span class="bullet-dot"></span>
-                      <p class="fw-bullet-en">The modular design makes it possible to add or switch sensors and define the dataset according to specific needs.</p>
+                      <p class="fw-bullet-en">Modular Design for Adaptable Sensors</p>
                     </li>
                   </ul>
                 </div>
@@ -444,8 +414,14 @@
 
     <!-- Section 3: Features (Bento Grid) -->
     <div class="features-section-wrapper" id="features">
-      <!-- Radial Spotlight (参考 React 组件 & Banner 配色) -->
+      <!-- Background Layer: Radial Spotlight & Product Silhouette (7-1-前仰视图无镜片) -->
       <div class="features-bg-layer" aria-hidden="true">
+        <div class="features-bg-product">
+          <picture>
+            <source srcset="./assets/images/7-1-前仰视图无镜片.webp" type="image/webp" />
+            <img src="./assets/images/7-1-前仰视图无镜片.png" alt="" class="features-product-silhouette" />
+          </picture>
+        </div>
         <div class="features-spotlight"></div>
       </div>
 
@@ -454,9 +430,9 @@
 
           <!-- Section Header -->
           <div class="features-header">
-            <h2 class="features-main-title">Features</h2>
+            <h2 class="features-main-title">Designed For Industrial AI</h2>
             <p class="features-subtitle">
-              Purpose-built for industrial AI, reGoggles is engineered around safety, data capture, and hands-free use, so enterprises and developers can fold it seamlessly into their industrial intelligence systems.
+              With safety, data capture, and hands-free use at its core, reGoggles fits seamlessly into the industrial intelligence systems of enterprises and developers alike.
             </p>
           </div>
 
@@ -590,7 +566,7 @@
                 <img
                   id="image-vision"
                   class="expansion-image active"
-                  src="./assets/images/hero-goggles2.webp?v=2"
+                  src="./assets/images/1-1-右侧仰视无镜片.webp"
                   alt="Original mode sample"
                 />
 
@@ -598,15 +574,15 @@
                 <img
                   id="image-extension"
                   class="expansion-image"
-                  src="./assets/images/4.1左俯俯视.png"
+                  src="./assets/images/5-1-左俯视图无镜片.webp"
                   alt="Expansion mode sample"
                 />
 
-                <!-- Original 模式 8 个定位点标注 —— 用户校准坐标 2026-10-22 -->
-                <!-- 1. Mid-Microphone -->
-                <div class="v-callout original-callout active" id="orig-midmic" style="--dot-x: 30.7%; --dot-y: 32.4%; --txt-x: -7.1%; --txt-y: 21.9%;">
+                <!-- Original 模式 8 个定位点标注 —— 用户校准与精确对齐坐标 2026-10-26 -->
+                <!-- 1. Mid-Microphone (左侧：圆点上下对齐在 x=-8.5%，文字严格右对齐) -->
+                <div class="v-callout original-callout active" id="orig-midmic" style="--dot-x: 30.1%; --dot-y: 22.4%; --txt-x: -8.5%; --txt-y: 11.9%;">
                   <svg class="vann-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-                    <path class="vann-line" d="M 30.7 32.4 L 20.2 21.9 L -7.1 21.9" pathLength="1" fill="none" />
+                    <path class="vann-line" d="M 30.1 22.4 L 19.6 11.9 L -8.5 11.9" pathLength="1" fill="none" />
                   </svg>
                   <div class="vann-dot"></div>
                   <div class="vann-text txt-right">
@@ -614,10 +590,10 @@
                   </div>
                 </div>
 
-                <!-- 2. Right-Microphone -->
-                <div class="v-callout original-callout active" id="orig-rightmic" style="--dot-x: 10.9%; --dot-y: 68.7%; --txt-x: -7.1%; --txt-y: 57.7%;">
+                <!-- 2. Right-Microphone (左侧：圆点上下对齐在 x=-8.5%，文字严格右对齐) -->
+                <div class="v-callout original-callout active" id="orig-rightmic" style="--dot-x: 7.8%; --dot-y: 55.9%; --txt-x: -8.5%; --txt-y: 44.9%;">
                   <svg class="vann-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-                    <path class="vann-line" d="M 10.9 68.7 L -0.1 57.7 L -7.1 57.7" pathLength="1" fill="none" />
+                    <path class="vann-line" d="M 7.8 55.9 L -3.2 44.9 L -8.5 44.9" pathLength="1" fill="none" />
                   </svg>
                   <div class="vann-dot"></div>
                   <div class="vann-text txt-right">
@@ -625,10 +601,10 @@
                   </div>
                 </div>
 
-                <!-- 3. USB Type-C -->
-                <div class="v-callout original-callout active" id="orig-usbc" style="--dot-x: 35.9%; --dot-y: 83.5%; --txt-x: -7.1%; --txt-y: 94.5%;">
+                <!-- 3. USB Type-C (左侧：圆点上下对齐在 x=-8.5%，文字严格右对齐) -->
+                <div class="v-callout original-callout active" id="orig-usbc" style="--dot-x: 34.6%; --dot-y: 75.7%; --txt-x: -8.5%; --txt-y: 86.7%;">
                   <svg class="vann-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-                    <path class="vann-line" d="M 35.9 83.5 L 24.9 94.5 L -7.1 94.5" pathLength="1" fill="none" />
+                    <path class="vann-line" d="M 34.6 75.7 L 23.6 86.7 L -8.5 86.7" pathLength="1" fill="none" />
                   </svg>
                   <div class="vann-dot"></div>
                   <div class="vann-text txt-right">
@@ -636,10 +612,10 @@
                   </div>
                 </div>
 
-                <!-- 4. Right-Speaker -->
-                <div class="v-callout original-callout active" id="orig-rightspk" style="--dot-x: 45.3%; --dot-y: 86.5%; --txt-x: -7.1%; --txt-y: 100.8%;">
+                <!-- 4. Right-Speaker (左侧：圆点上下对齐在 x=-8.5%，文字严格右对齐) -->
+                <div class="v-callout original-callout active" id="orig-rightspk" style="--dot-x: 44.3%; --dot-y: 77.8%; --txt-x: -8.5%; --txt-y: 92.1%;">
                   <svg class="vann-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-                    <path class="vann-line" d="M 45.3 86.5 L 31 100.8 L -7.1 100.8" pathLength="1" fill="none" />
+                    <path class="vann-line" d="M 44.3 77.8 L 30 92.1 L -8.5 92.1" pathLength="1" fill="none" />
                   </svg>
                   <div class="vann-dot"></div>
                   <div class="vann-text txt-right">
@@ -647,10 +623,10 @@
                   </div>
                 </div>
 
-                <!-- 5. Main-Camera 12MP RGB -->
-                <div class="v-callout original-callout active" id="orig-maincam" style="--dot-x: 72.9%; --dot-y: 30.8%; --txt-x: 118%; --txt-y: 12.2%;">
+                <!-- 5. Main-Camera 12MP RGB (右侧：圆点上下对齐在 x=115%，文字严格左对齐在 x=117.5%) -->
+                <div class="v-callout original-callout active" id="orig-maincam" style="--dot-x: 72.9%; --dot-y: 19.4%; --txt-x: 117.5%; --txt-y: 3.3%;">
                   <svg class="vann-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-                    <path class="vann-line" d="M 72.9 30.8 L 89 14.7 L 115 14.7" pathLength="1" fill="none" />
+                    <path class="vann-line" d="M 72.9 19.4 L 89 3.3 L 115 3.3" pathLength="1" fill="none" />
                   </svg>
                   <div class="vann-dot"></div>
                   <div class="vann-text">
@@ -658,10 +634,10 @@
                   </div>
                 </div>
 
-                <!-- 6. Main-IMU 6DOF -->
-                <div class="v-callout original-callout active" id="orig-mainimu" style="--dot-x: 79.7%; --dot-y: 34.8%; --txt-x: 118%; --txt-y: 22.2%;">
+                <!-- 6. Main-IMU 6DOF (右侧：圆点上下对齐在 x=115%，文字严格左对齐在 x=117.5%) -->
+                <div class="v-callout original-callout active" id="orig-mainimu" style="--dot-x: 79.7%; --dot-y: 24%; --txt-x: 117.5%; --txt-y: 14.4%;">
                   <svg class="vann-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-                    <path class="vann-line" d="M 79.7 34.8 L 89.3 25.2 L 115 25.2" pathLength="1" fill="none" />
+                    <path class="vann-line" d="M 79.7 24 L 89.3 14.4 L 115 14.4" pathLength="1" fill="none" />
                   </svg>
                   <div class="vann-dot"></div>
                   <div class="vann-text">
@@ -669,10 +645,10 @@
                   </div>
                 </div>
 
-                <!-- 7. Left-Microphone -->
-                <div class="v-callout original-callout active" id="orig-leftmic" style="--dot-x: 78.3%; --dot-y: 41.4%; --txt-x: 118%; --txt-y: 28.2%;">
+                <!-- 7. Left-Microphone (右侧：圆点上下对齐在 x=115%，文字严格左对齐在 x=117.5%) -->
+                <div class="v-callout original-callout active" id="orig-leftmic" style="--dot-x: 78.9%; --dot-y: 32.1%; --txt-x: 117.5%; --txt-y: 21.4%;">
                   <svg class="vann-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-                    <path class="vann-line" d="M 78.3 41.4 L 89 30.7 L 115 30.7" pathLength="1" fill="none" />
+                    <path class="vann-line" d="M 78.9 32.1 L 89.6 21.4 L 115 21.4" pathLength="1" fill="none" />
                   </svg>
                   <div class="vann-dot"></div>
                   <div class="vann-text">
@@ -680,10 +656,10 @@
                   </div>
                 </div>
 
-                <!-- 8. Left-Speaker -->
-                <div class="v-callout original-callout active" id="orig-leftspk" style="--dot-x: 106.2%; --dot-y: 61.7%; --txt-x: 118%; --txt-y: 63.4%;">
+                <!-- 8. Left-Speaker (右侧：圆点上下对齐在 x=115%，文字严格左对齐在 x=117.5%) -->
+                <div class="v-callout original-callout active" id="orig-leftspk" style="--dot-x: 106.8%; --dot-y: 51.9%; --txt-x: 117.5%; --txt-y: 57%;">
                   <svg class="vann-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-                    <path class="vann-line" d="M 106.2 61.7 L 111.3 66.8 L 115 66.8" pathLength="1" fill="none" />
+                    <path class="vann-line" d="M 106.8 51.9 L 111.9 57 L 115 57" pathLength="1" fill="none" />
                   </svg>
                   <div class="vann-dot"></div>
                   <div class="vann-text">
@@ -691,10 +667,10 @@
                   </div>
                 </div>
 
-                <!-- Extension 模式标注 1：General Expansion Port —— 用户校准坐标 2026-10-22 -->
-                <div class="v-callout extension-callout" id="ext-callout-general" style="--dot-x: 73.7%; --dot-y: 58.7%; --txt-x: 112.4%; --txt-y: 32.3%;">
+                <!-- Extension 模式标注 1：General Expansion Port —— 用户校准坐标 2026-10-26 -->
+                <div class="v-callout extension-callout" id="ext-callout-general" style="--dot-x: 78.8%; --dot-y: 47.7%; --txt-x: 117.5%; --txt-y: 21.2%;">
                   <svg class="vann-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-                    <path class="vann-line" d="M 73.7 58.7 L 97.4 35 L 110 35" pathLength="1" fill="none" />
+                    <path class="vann-line" d="M 78.8 47.7 L 102.5 24 L 115 24" pathLength="1" fill="none" />
                   </svg>
                   <div class="vann-dot"></div>
                   <div class="vann-text">
@@ -703,10 +679,10 @@
                   </div>
                 </div>
 
-                <!-- Extension 模式标注 2：Vision Expansion Port —— 用户校准坐标 2026-10-22 -->
-                <div class="v-callout extension-callout" id="ext-callout-vision" style="--dot-x: 30%; --dot-y: 75.6%; --txt-x: -20.5%; --txt-y: 86.5%;">
+                <!-- Extension 模式标注 2：Vision Expansion Port —— 用户校准坐标 2026-10-26 -->
+                <div class="v-callout extension-callout" id="ext-callout-vision" style="--dot-x: 24.7%; --dot-y: 68.9%; --txt-x: -26%; --txt-y: 80%;">
                   <svg class="vann-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-                    <path class="vann-line" d="M 30 75.6 L 16.5 89.1 L 7 89.1" pathLength="1" fill="none" />
+                    <path class="vann-line" d="M 24.7 68.9 L 11.2 82.4 L 1.7 82.4" pathLength="1" fill="none" />
                   </svg>
                   <div class="vann-dot"></div>
                   <div class="vann-text">
@@ -751,7 +727,7 @@
         <div class="protective-container">
           <div class="protective-text-col">
             <h2 class="protective-title">
-              Designed for Frontline Use
+              Built for Frontline Use
             </h2>
             <p class="protective-subtitle">
               The goggle-form design delivers a secure fit and eye protection in frontline environments.
@@ -783,7 +759,7 @@
               Your Data. Your AI. Your Rules.
             </h2>
             <p class="rules-main-subtitle">
-              Intelligent systems are too often undermined by service discontinuation and data leaks — reGoggles counters this with open data interfaces and pipelines, empowering enterprises with true AI and data sovereignty.
+              Intelligent systems are often compromised by service discontinuation and data leaks — reGoggles counters this with open data interfaces and pipelines, empowering enterprises with true AI and data sovereignty.
             </p>
           </div>
 
@@ -859,16 +835,16 @@
           
           <div class="sdk-grid">
             
-            <!-- Left Column: Product Image (使用产品渲染图 gateway-render-2.webp) -->
+            <!-- Left Column: Product Image (11-1-左仰视图无镜片) -->
             <div class="sdk-image-col">
-              <img src="./assets/images/gateway-render-2.webp?v=2" alt="reGoggles Product Render" class="sdk-img" />
+              <img src="./assets/images/11-1-左仰视图无镜片.webp" alt="reGoggles Product Render" class="sdk-img" />
             </div>
 
             <!-- Right Column: Content & Feature Tags -->
             <div class="sdk-content-col">
               
               <h2 class="sdk-title">
-                Open Source for Makers and Developers
+                Open Source for Developers
               </h2>
               
               <p class="sdk-subtitle">
@@ -1025,9 +1001,12 @@
     <!-- Section 10: Build It Your Way (左：标题/文字/联系我们按钮，右：三张特点卡片) -->
     <div class="build-section-wrapper" id="customization">
 
-      <!-- Background Image Overlay ("SMT Workshop" 覆盖整个 Section 10 包含顶部留白) -->
+      <!-- Background Image Overlay ("20261026-140630" 覆盖整个 Section 10 并搭配深色遮罩) -->
       <div class="build-bg-overlay">
-        <img src="./assets/images/smt-workshop.webp" alt="SMT Workshop Background" class="build-bg-img" />
+        <picture>
+          <source srcset="./assets/images/20261026-140630.webp" type="image/webp" />
+          <img src="./assets/images/20261026-140630.jpg" alt="Customization Production Workshop" class="build-bg-img" />
+        </picture>
         <div class="build-bg-gradient"></div>
       </div>
 
@@ -1043,7 +1022,7 @@
             <div class="build-left-col">
               <h2 class="build-title">Customization</h2>
               <p class="build-description">
-                A professional ecosystem for scaling hardware from sensors to intelligent systems, 0 to 1kk.
+                A professional ecosystem for scaling hardware from sensors to intelligent systems, 0 to 1Mn.
               </p>
               <p class="build-lead-in">
                 Navigate B2B manufacturing through Modular prototyping, Agile production, and Global distribution networks.
@@ -1067,8 +1046,9 @@
 
               <!-- Card 1: Modular prototyping -->
               <div class="build-feature-card">
+                <div class="border-beam" aria-hidden="true"></div>
                 <div class="feature-icon-circle">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#142325" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="3" y="3" width="7" height="7"></rect>
                     <rect x="14" y="3" width="7" height="7"></rect>
                     <rect x="14" y="14" width="7" height="7"></rect>
@@ -1083,8 +1063,9 @@
 
               <!-- Card 2: Agile production -->
               <div class="build-feature-card">
+                <div class="border-beam" aria-hidden="true"></div>
                 <div class="feature-icon-circle">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#142325" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                     <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
                   </svg>
                 </div>
@@ -1096,8 +1077,9 @@
 
               <!-- Card 3: Global distribution networks -->
               <div class="build-feature-card">
+                <div class="border-beam" aria-hidden="true"></div>
                 <div class="feature-icon-circle">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#142325" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="12" r="10"></circle>
                     <line x1="2" y1="12" x2="22" y2="12"></line>
                     <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
@@ -1120,27 +1102,46 @@
 
     <!-- 左侧快速切换页面导航（Viture Helix 风格圆点，桌面端可见） -->
     <aside class="screen-nav" id="screen-nav" aria-label="Quick section navigation">
-      <button type="button" class="screen-nav-dot active" data-screen="hero" aria-label="Overview"></button>
-      <button type="button" class="screen-nav-dot" data-screen="field-work" aria-label="Frontline Intelligence"></button>
+      <button type="button" class="screen-nav-dot active" data-screen="hero" aria-label="Home"></button>
+      <button type="button" class="screen-nav-dot" data-screen="field-work" aria-label="Applications"></button>
       <button type="button" class="screen-nav-dot" data-screen="features" aria-label="Features"></button>
-      <button type="button" class="screen-nav-dot" data-screen="sensing-system" aria-label="Sensing System"></button>
-      <button type="button" class="screen-nav-dot" data-screen="protective-design" aria-label="Frontline Design"></button>
-      <button type="button" class="screen-nav-dot" data-screen="your-rules" aria-label="Your Rules"></button>
-      <button type="button" class="screen-nav-dot" data-screen="open-sdk" aria-label="Open Source for Makers and Developers"></button>
-      <button type="button" class="screen-nav-dot" data-screen="community-builders" aria-label="Community"></button>
+      <button type="button" class="screen-nav-dot" data-screen="sensing-system" aria-label="Expansions"></button>
+      <button type="button" class="screen-nav-dot" data-screen="protective-design" aria-label="Protection Design"></button>
+      <button type="button" class="screen-nav-dot" data-screen="your-rules" aria-label="AI Souvrinty"></button>
+      <button type="button" class="screen-nav-dot" data-screen="open-sdk" aria-label="Open Source"></button>
+      <button type="button" class="screen-nav-dot" data-screen="community-builders" aria-label="Join Community"></button>
       <button type="button" class="screen-nav-dot" data-screen="customization" aria-label="Customization"></button>
     </aside>
 
-    <div class="modal-backdrop" id="action-modal">
+    <div class="modal-backdrop" id="action-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title-text">
       <div class="modal-card">
-        <button class="modal-close" id="modal-close-btn">&times;</button>
-        <h3 class="modal-title" id="modal-title-text">Join reGoggles Community</h3>
-        <p class="modal-subtitle" id="modal-desc-text">Enter your email address to get early developer access and updates.</p>
+        <button class="modal-close" id="modal-close-btn" type="button" aria-label="Close dialog">&times;</button>
+        <h3 class="modal-title" id="modal-title-text">Subscribe for Updates</h3>
+        <p class="modal-subtitle" id="modal-desc-text">Be the first to know about reGoggles launch and early access.</p>
         
-        <form class="modal-form" id="subscribe-form" onsubmit="event.preventDefault(); alert('Thank you for subscribing to reGoggles updates!'); document.getElementById('action-modal').classList.remove('active');">
-          <input type="email" placeholder="Enter your email" required class="modal-input" />
-          <button type="submit" class="modal-submit-btn">Submit</button>
+        <form class="modal-form" id="subscribe-form">
+          <div class="modal-field-group">
+            <input type="email" id="modal-email-input" placeholder="Enter your email" required class="modal-input" autocomplete="email" />
+          </div>
+          <div class="modal-field-group" id="modal-discord-group" style="display: none;">
+            <label for="modal-discord-input" class="modal-label">Name in Discord:</label>
+            <input type="text" id="modal-discord-input" placeholder="Your Discord username" class="modal-input" autocomplete="username" />
+          </div>
+          <p class="modal-privacy" id="modal-privacy-text">
+            By subscribing to our newsletter, you agree to our <a href="https://www.seeedstudio.com/privacy_policy" target="_blank" rel="noopener noreferrer" class="modal-privacy-link">Privacy Policy.</a>
+          </p>
+          <button type="submit" class="modal-submit-btn" id="modal-submit-btn">Subscribe</button>
         </form>
+
+        <div class="modal-success-state" id="modal-success-state" style="display: none;">
+          <div class="modal-success-icon">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 6 9 17l-5-5"/>
+            </svg>
+          </div>
+          <h4 class="modal-success-title" id="modal-success-title-text">Thank you for subscribing!</h4>
+          <p class="modal-success-desc" id="modal-success-desc-text">Be the first to know about reGoggles launch and early access.</p>
+        </div>
       </div>
     </div>
   </div>
