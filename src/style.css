@@ -3089,7 +3089,7 @@ html {
   position: absolute;
   top: 50%;
   right: clamp(2.5rem, 4vw, 5.2rem);
-  transform: translateY(calc(-50% + 50px)) rotate(-9deg);
+  transform: translateX(-20px) translateY(calc(-50% + 50px)) rotate(-9deg);
   transform-origin: center center;
   height: clamp(380px, 48vh, 540px);
   width: auto;
@@ -3222,7 +3222,7 @@ html {
     position: absolute;
     top: 50%;
     right: clamp(0.5rem, 3vw, 2.5rem);
-    transform: translateY(calc(-50% + 50px)) rotate(-9deg);
+    transform: translateX(-20px) translateY(calc(-50% + 50px)) rotate(-9deg);
     transform-origin: center center;
     height: clamp(300px, 38vh, 460px);
     width: auto;
