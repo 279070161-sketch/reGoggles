@@ -169,14 +169,22 @@ body {
   transform: translateY(-5px) rotate(-45deg);
 }
 
-/* Navigation Dropdown Menu Panel (Clean Minimalist Title List - Directly under Menu button) */
+/* Navigation Dropdown Menu Panel (Clean Minimalist Title List - Anchored gracefully under Menu button) */
 .nav-dropdown-menu {
   position: absolute;
   top: calc(100% + 12px);
-  left: 0;
+  right: 0;
+  left: auto;
   width: max-content;
-  min-width: 280px;
-  max-width: min(360px, calc(100vw - 2.5rem));
+  min-width: 240px;
+  max-width: min(320px, calc(100vw - 2rem));
+  max-height: calc(100vh - var(--header-height) - 1.5rem);
+  max-height: calc(100dvh - var(--header-height) - 1.5rem);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(198, 229, 61, 0.35) transparent;
   background: linear-gradient(165deg, rgba(20, 35, 37, 0.78) 0%, rgba(9, 18, 19, 0.88) 100%);
   backdrop-filter: blur(28px) saturate(190%);
   -webkit-backdrop-filter: blur(28px) saturate(190%);
@@ -193,6 +201,23 @@ body {
               visibility 0.2s ease;
   pointer-events: none;
   z-index: 105;
+}
+
+.nav-dropdown-menu::-webkit-scrollbar {
+  width: 4px;
+}
+
+.nav-dropdown-menu::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.nav-dropdown-menu::-webkit-scrollbar-thumb {
+  background: rgba(198, 229, 61, 0.35);
+  border-radius: 4px;
+}
+
+.nav-dropdown-menu::-webkit-scrollbar-thumb:hover {
+  background: rgba(198, 229, 61, 0.65);
 }
 
 .nav-dropdown-menu.active {
@@ -356,6 +381,27 @@ body {
   .arrow-circle svg {
     width: 10px;
     height: 10px;
+  }
+  .menu-btn-wrapper {
+    position: static;
+  }
+  .header-container {
+    position: relative;
+  }
+  .nav-dropdown-menu {
+    top: calc(100% + 8px);
+    right: clamp(1.8rem, 5.5vw, 3rem);
+    left: auto;
+    width: min(250px, calc(100vw - 3.6rem));
+    min-width: 0;
+    max-width: calc(100vw - 3.6rem);
+    max-height: calc(100vh - var(--header-height) - 1rem);
+    max-height: calc(100dvh - var(--header-height) - 1rem);
+    padding: 0.45rem;
+  }
+  .nav-link-item {
+    padding: 0.52rem 0.75rem;
+    font-size: 0.8rem;
   }
   .hero-cta-group {
     gap: 0.55rem;
