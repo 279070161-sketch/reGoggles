@@ -12,7 +12,6 @@ function initApp() {
   const modalEmailInput = document.getElementById('modal-email-input');
   const modalDiscordGroup = document.getElementById('modal-discord-group');
   const modalDiscordInput = document.getElementById('modal-discord-input');
-  const modalBadgeLabel = document.getElementById('modal-badge-label');
   const modalBtnText = document.getElementById('modal-btn-text');
   const modalPrivacyRow = document.getElementById('modal-privacy-row');
   const modalPrivacyCheckbox = document.getElementById('modal-privacy-checkbox');
@@ -41,7 +40,6 @@ function initApp() {
 
   function openModal(options = {}) {
     const {
-      badge = 'reGoggles // Connect',
       title = 'Subscribe for Updates',
       desc = 'Be the first to know about reGoggles launch and early access.',
       btnText = 'Subscribe',
@@ -56,9 +54,6 @@ function initApp() {
     if (modalAutoCloseTimer) {
       clearTimeout(modalAutoCloseTimer);
       modalAutoCloseTimer = null;
-    }
-    if (modalBadgeLabel) {
-      modalBadgeLabel.textContent = badge;
     }
     if (modalTitle) {
       modalTitle.textContent = title;
@@ -107,7 +102,6 @@ function initApp() {
   const handleJoinClick = (e) => {
     if (e && e.preventDefault) e.preventDefault();
     openModal({
-      badge: 'Community // Discord',
       title: 'Join Community',
       desc: 'Subscribe and Join Our Discord Community.',
       btnText: 'Subscribe & Join Community',
@@ -121,7 +115,6 @@ function initApp() {
   const handleSubscribeClick = (e) => {
     if (e && e.preventDefault) e.preventDefault();
     openModal({
-      badge: 'Updates // Early Access',
       title: 'Subscribe for Updates',
       desc: 'Be the first to know about reGoggles launch and early access.',
       btnText: 'Subscribe',
@@ -135,7 +128,6 @@ function initApp() {
   const handleContactClick = (e) => {
     if (e && e.preventDefault) e.preventDefault();
     openModal({
-      badge: 'Direct // Inquiries',
       title: 'Contact reGoggles Team',
       desc: 'Have technical inquiries, partnership proposals, or media questions? Leave your email and we will reach out.',
       btnText: 'Contact Us',
