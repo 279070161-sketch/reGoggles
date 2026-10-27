@@ -236,11 +236,15 @@ body {
   text-decoration: none;
   font-size: 0.85rem;
   font-weight: 600;
-  transition: transform var(--transition-fast);
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  transition: transform var(--transition-fast), filter var(--transition-fast);
 }
 
 .contact-btn:hover {
   transform: translateY(-1px);
+  filter: brightness(1.08);
 }
 
 .arrow-circle {
@@ -934,132 +938,339 @@ html {
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(8px);
-  z-index: 200;
+  background: radial-gradient(circle at 50% 40%, rgba(20, 36, 39, 0.72) 0%, rgba(4, 9, 10, 0.88) 100%);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  z-index: 300;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 1.5rem;
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
-  transition: opacity var(--transition-fast);
+  transition: opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              visibility 0.28s ease;
 }
 
 .modal-backdrop.active {
   opacity: 1;
+  visibility: visible;
   pointer-events: auto;
 }
 
 .modal-card {
-  background: #142325;
-  border: 1px solid rgba(198, 229, 61, 0.3);
-  border-radius: 16px;
-  padding: 2.5rem 2rem;
-  max-width: 480px;
-  width: 100%;
   position: relative;
+  width: 100%;
+  max-width: 460px;
+  background: linear-gradient(165deg, rgba(22, 38, 41, 0.94) 0%, rgba(11, 20, 22, 0.97) 100%);
+  backdrop-filter: blur(32px) saturate(200%);
+  -webkit-backdrop-filter: blur(32px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-top: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 24px;
+  padding: 2.4rem 2.2rem 2.2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.75), 
+              0 0 0 1px rgba(0, 0, 0, 0.5),
+              inset 0 1px 0 rgba(255, 255, 255, 0.15),
+              0 0 45px rgba(198, 229, 61, 0.08);
+  transform: translateY(18px) scale(0.96);
+  opacity: 0;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+/* 顶部环境光泽微弧 */
+.modal-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 15%;
+  right: 15%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(198, 229, 61, 0.65), transparent);
+  pointer-events: none;
+}
+
+.modal-backdrop.active .modal-card {
+  transform: translateY(0) scale(1);
+  opacity: 1;
 }
 
 .modal-close {
   position: absolute;
-  top: 1rem;
-  right: 1.2rem;
-  background: none;
-  border: none;
-  color: var(--text-secondary);
-  font-size: 1.8rem;
+  top: 1.1rem;
+  right: 1.1rem;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #9ab4b6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-close:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.28);
+  color: #ffffff;
+  transform: rotate(90deg);
+}
+
+/* 顶部品牌分类标签 Badge */
+.modal-header-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 100px;
+  background: rgba(198, 229, 61, 0.08);
+  border: 1px solid rgba(198, 229, 61, 0.22);
+  margin-bottom: 0.9rem;
+}
+
+.modal-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-lime);
+  box-shadow: 0 0 8px var(--accent-lime);
+}
+
+.modal-badge-label {
+  font-family: 'Montserrat', sans-serif !important;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-lime);
 }
 
 .modal-title {
-  font-size: 1.4rem;
-  font-weight: 700;
+  font-family: 'Montserrat', sans-serif !important;
+  font-size: clamp(1.4rem, 2vw, 1.65rem);
+  font-weight: 600;
   color: #ffffff;
-  margin-bottom: 0.6rem;
+  letter-spacing: -0.025em;
+  line-height: 1.25;
+  margin-bottom: 0.45rem;
 }
 
 .modal-subtitle {
+  font-family: 'Montserrat', sans-serif !important;
   font-size: 0.88rem;
-  color: var(--text-secondary);
-  margin-bottom: 1.5rem;
+  color: #8da4a7;
+  line-height: 1.5;
+  margin-bottom: 1.6rem;
+  max-width: 380px;
 }
 
 .modal-form {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 0.95rem;
+  gap: 1.05rem;
 }
 
 .modal-field-group {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 0.4rem;
   text-align: left;
 }
 
 .modal-label {
   font-family: 'Montserrat', sans-serif !important;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 500;
-  color: #c7d6d8;
-  letter-spacing: 0.01em;
+  color: #9cb5b7;
+  letter-spacing: 0.02em;
+  padding-left: 0.2rem;
+}
+
+.modal-input-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.modal-input-icon {
+  position: absolute;
+  left: 1.1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6a8285;
+  pointer-events: none;
+  transition: color 0.2s ease;
 }
 
 .modal-input {
   width: 100%;
-  padding: 0.85rem 1.2rem;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background: rgba(0, 0, 0, 0.3);
+  padding: 0.85rem 1.15rem 0.85rem 2.85rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.35);
   color: #ffffff;
+  font-family: 'Montserrat', sans-serif !important;
   font-size: 0.9rem;
+  line-height: 1.4;
   box-sizing: border-box;
+  transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.modal-input::placeholder {
+  color: #5d7578;
 }
 
 .modal-input:focus {
   outline: none;
   border-color: var(--accent-lime);
+  background: rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 0 3px rgba(198, 229, 61, 0.16), inset 0 1px 2px rgba(0, 0, 0, 0.35);
 }
 
+.modal-input-wrapper:focus-within .modal-input-icon {
+  color: var(--accent-lime);
+}
+
+/* 提交按钮：采用品牌标志性的全圆角胶囊药丸 (Pill) + 黑色圆形箭头徽标 */
 .modal-submit-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
-  padding: 0.9rem 1.4rem;
-  border-radius: 10px;
+  padding: 0.4rem 0.45rem 0.4rem 1.6rem;
+  border-radius: 100px;
   background: var(--accent-lime);
   color: #142325;
   font-family: 'Montserrat', sans-serif !important;
-  font-weight: 700;
-  font-size: 0.95rem;
-  letter-spacing: 0.02em;
+  font-weight: 600;
+  font-size: 0.92rem;
+  letter-spacing: -0.01em;
   border: none;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+  margin-top: 0.25rem;
+  box-shadow: 0 4px 18px rgba(198, 229, 61, 0.28);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.2s ease,
+              filter 0.2s ease;
+}
+
+.modal-submit-btn .modal-btn-text {
+  flex: 1;
+  text-align: center;
+  margin-left: 1.5rem; /* 视觉补偿居中 */
+}
+
+.modal-submit-btn .arrow-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(20, 35, 37, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.25s ease, background 0.25s ease;
 }
 
 .modal-submit-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(198, 229, 61, 0.35);
+  transform: translateY(-1.5px);
+  box-shadow: 0 8px 26px rgba(198, 229, 61, 0.45);
   filter: brightness(1.05);
+}
+
+.modal-submit-btn:hover .arrow-circle {
+  transform: translateX(2px);
+  background: rgba(20, 35, 37, 0.22);
 }
 
 .modal-submit-btn:active {
   transform: translateY(0);
 }
 
-.modal-privacy {
-  font-size: 0.8rem;
-  color: #8fa5a7;
-  line-height: 1.5;
-  margin: -0.2rem 0 0.3rem;
+.modal-privacy-row {
+  margin: -0.1rem 0 0.25rem;
+  width: 100%;
+}
+
+.modal-privacy-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  cursor: pointer;
+  user-select: none;
   text-align: left;
+}
+
+.modal-checkbox {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.modal-checkbox-custom {
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.05);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+  color: #142325;
+}
+
+.modal-checkbox-custom svg {
+  opacity: 0;
+  transform: scale(0.6);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-checkbox:checked + .modal-checkbox-custom {
+  background: var(--accent-lime);
+  border-color: var(--accent-lime);
+  box-shadow: 0 0 10px rgba(198, 229, 61, 0.35);
+}
+
+.modal-checkbox:checked + .modal-checkbox-custom svg {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.modal-checkbox:focus-visible + .modal-checkbox-custom {
+  outline: 2px solid var(--accent-lime);
+  outline-offset: 2px;
+}
+
+.modal-privacy-label:hover .modal-checkbox-custom {
+  border-color: rgba(255, 255, 255, 0.55);
+}
+
+.modal-privacy-text {
+  font-family: 'Montserrat', sans-serif !important;
+  font-size: 0.78rem;
+  color: #8da4a7;
+  line-height: 1.48;
+  margin: 0;
+  flex: 1;
 }
 
 .modal-privacy-link {
@@ -1079,35 +1290,37 @@ html {
   flex-direction: column;
   align-items: center;
   gap: 0.75rem;
-  padding: 1rem 0.5rem;
+  padding: 1.2rem 0.5rem 0.5rem;
   text-align: center;
 }
 
 .modal-success-icon {
-  width: 52px;
-  height: 52px;
+  width: 54px;
+  height: 54px;
   border-radius: 50%;
-  background: rgba(198, 229, 61, 0.15);
+  background: rgba(198, 229, 61, 0.12);
   border: 1px solid var(--accent-lime);
   color: var(--accent-lime);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 0.35rem;
-  box-shadow: 0 0 20px rgba(198, 229, 61, 0.25);
+  margin-bottom: 0.4rem;
+  box-shadow: 0 0 24px rgba(198, 229, 61, 0.25);
 }
 
 .modal-success-title {
   font-family: 'Montserrat', sans-serif !important;
   font-size: 1.25rem;
-  font-weight: 700;
+  font-weight: 600;
   color: #ffffff;
+  letter-spacing: -0.02em;
   margin: 0;
 }
 
 .modal-success-desc {
-  font-size: 0.9rem;
-  color: #a6bbbc;
+  font-family: 'Montserrat', sans-serif !important;
+  font-size: 0.88rem;
+  color: #8da4a7;
   line-height: 1.55;
   margin: 0;
   max-width: 360px;
@@ -1306,8 +1519,8 @@ html {
   top: 55%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: min(1360px, 92vw);
-  max-width: 1360px;
+  width: min(1224px, 83vw);
+  max-width: 1224px;
   pointer-events: none;
   z-index: 1;
   display: flex;
@@ -1320,19 +1533,19 @@ html {
   -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.95) 25%, rgba(0, 0, 0, 0.4) 65%, rgba(0, 0, 0, 0) 95%);
 }
 
-/* 大屏幕状态下（宽 > 1440px）：背景图尺寸适度加大，大屏下更舒展饱满；小屏幕维持现状 */
+/* 大屏幕状态下（宽 > 1440px）：背景图尺寸维持在90%比例，更精致和谐 */
 @media (min-width: 1441px) {
   .features-bg-product {
-    width: min(1820px, 92vw);
-    max-width: 1820px;
+    width: min(1638px, 83vw);
+    max-width: 1638px;
     top: 54%;
   }
 }
 
 @media (min-width: 1800px) {
   .features-bg-product {
-    width: min(2160px, 94vw);
-    max-width: 2160px;
+    width: min(1944px, 85vw);
+    max-width: 1944px;
     top: 53%;
   }
 }
@@ -2834,12 +3047,13 @@ html {
   justify-content: flex-end;
 }
 
-/* 换成透明背景产品渲染图 11-1-左仰视图无镜片：右侧与文案保持安全间距，主体大尺寸自然向左延伸铺展 */
+/* 换成透明背景产品渲染图 11-1-左仰视图无镜片：逆时针旋转 9°，向左平移适度距离，展现极具动感的立体工业科技感 */
 .sdk-img {
   position: absolute;
   top: 50%;
-  right: 0;
-  transform: translateY(-50%);
+  right: clamp(2.5rem, 4vw, 5.2rem);
+  transform: translateY(-50%) rotate(-9deg);
+  transform-origin: center center;
   height: clamp(380px, 48vh, 540px);
   width: auto;
   max-width: none;
@@ -2947,7 +3161,7 @@ html {
 
 @media (max-width: 900px) {
   .sdk-section-wrapper {
-    padding: clamp(4.5rem, 8vh, 6rem) 0;
+    padding: clamp(4rem, 7vh, 5.5rem) 0;
   }
   .sdk-container {
     padding-left: 0 !important;
@@ -2955,31 +3169,47 @@ html {
   }
   .sdk-grid {
     grid-template-columns: 1fr;
-    gap: 2.5rem;
+    gap: clamp(1.8rem, 3.5vh, 2.5rem);
   }
   .sdk-image-col {
     position: relative;
     width: 100%;
-    min-height: auto;
+    min-height: clamp(300px, 38vh, 460px);
     display: flex;
-    justify-content: flex-start;
+    justify-content: flex-end;
     align-items: center;
+    overflow: visible;
   }
+  /* 小屏幕保持与大屏一致的大尺寸与姿态：向左延伸穿出屏幕边缘，眼镜正面核心特写大比例呈现 */
   .sdk-img {
-    position: static;
-    transform: none;
-    width: 100%;
-    max-width: 720px;
-    height: auto;
-    max-height: 56vh;
+    position: absolute;
+    top: 50%;
+    right: clamp(0.5rem, 3vw, 2.5rem);
+    transform: translateY(-50%) rotate(-9deg);
+    transform-origin: center center;
+    height: clamp(300px, 38vh, 460px);
+    width: auto;
+    max-width: none;
+    max-height: none;
     object-fit: contain;
-    object-position: left center;
-    margin-left: 0;
-    margin-right: auto;
+    object-position: right center;
+    margin: 0;
     display: block;
+    filter: drop-shadow(0 20px 45px rgba(20, 35, 37, 0.12));
+    pointer-events: none;
   }
   .sdk-content-col {
     padding-left: clamp(2rem, 6vw, 3.5rem);
+  }
+}
+
+@media (max-width: 540px) {
+  .sdk-image-col {
+    min-height: clamp(250px, 34vh, 320px);
+  }
+  .sdk-img {
+    height: clamp(250px, 34vh, 320px);
+    right: 0.5rem;
   }
 }
 
@@ -3697,11 +3927,7 @@ html {
   .rules-container { zoom: 0.95; }
   .sdk-container { zoom: 0.95; }
   .sdk-img {
-    left: calc(-1 * (max(0px, ((100vw / 0.95) - 1700px) / 2) + 3rem));
-    width: calc(100% + max(0px, ((100vw / 0.95) - 1700px) / 2) + 3rem);
-    max-height: 85vh;
-    height: auto;
-    top: calc(50% - 4px); /* 本档上内边距 3rem/下 2.5rem，中心下移 4px，向上修正 */
+    top: calc(50% - 4px);
   }
   .carousel-stage-container { zoom: 0.76; }
 }
@@ -3734,11 +3960,7 @@ html {
   .rules-container { zoom: 0.98; }
   .sdk-container { zoom: 0.98; }
   .sdk-img {
-    left: calc(-1 * (max(0px, ((100vw / 0.98) - 1700px) / 2) + 3rem));
-    width: calc(100% + max(0px, ((100vw / 0.98) - 1700px) / 2) + 3rem);
-    max-height: 85vh;
-    height: auto;
-    top: calc(50% - 2px); /* 本档上 2rem/下 1.75rem，中心下移 2px，向上修正 */
+    top: calc(50% - 2px);
   }
   .carousel-stage-container { zoom: 0.74; }
   .build-section { zoom: 1.05; }
@@ -3772,10 +3994,6 @@ html {
   .rules-container { zoom: 0.90; }
   .sdk-container { zoom: 0.90; }
   .sdk-img {
-    left: calc(-1 * (max(0px, ((100vw / 0.90) - 1700px) / 2) + 3rem));
-    width: calc(100% + max(0px, ((100vw / 0.90) - 1700px) / 2) + 3rem);
-    max-height: 85vh;
-    height: auto;
     top: calc(50% - 2px);
   }
   .carousel-stage-container { zoom: 0.68; }
@@ -3810,10 +4028,6 @@ html {
   .rules-container { zoom: 0.80; }
   .sdk-container { zoom: 0.80; }
   .sdk-img {
-    left: calc(-1 * (max(0px, ((100vw / 0.80) - 1700px) / 2) + 3rem));
-    width: calc(100% + max(0px, ((100vw / 0.80) - 1700px) / 2) + 3rem);
-    max-height: 85vh;
-    height: auto;
     top: calc(50% - 2px);
   }
   .carousel-stage-container { zoom: 0.59; }
@@ -3846,10 +4060,6 @@ html {
   .rules-container { zoom: 0.74; }
   .sdk-container { zoom: 0.74; }
   .sdk-img {
-    left: calc(-1 * (max(0px, ((100vw / 0.74) - 1700px) / 2) + 3rem));
-    width: calc(100% + max(0px, ((100vw / 0.74) - 1700px) / 2) + 3rem);
-    max-height: 85vh;
-    height: auto;
     top: calc(50% - 2px);
   }
   .carousel-stage-container { zoom: 0.54; }
@@ -3882,10 +4092,6 @@ html {
   .rules-container { zoom: 0.66; }
   .sdk-container { zoom: 0.66; }
   .sdk-img {
-    left: calc(-1 * (max(0px, ((100vw / 0.66) - 1700px) / 2) + 3rem));
-    width: calc(100% + max(0px, ((100vw / 0.66) - 1700px) / 2) + 3rem);
-    max-height: 85vh;
-    height: auto;
     top: calc(50% - 2px);
   }
   .carousel-stage-container { zoom: 0.48; }
@@ -4038,7 +4244,7 @@ html {
 
 .fieldwork-subtitle {
   font-family: 'Montserrat', sans-serif !important;
-  font-size: clamp(0.92rem, 1.05vw, 1.08rem);
+  font-size: clamp(0.86rem, 0.95vw, 0.98rem);
   font-weight: 400;
   color: #a6bbbc;
   line-height: 1.55;
@@ -4198,7 +4404,7 @@ html {
 
 .bullets-title {
   font-family: 'Montserrat', sans-serif !important;
-  font-size: clamp(1.15rem, 1.5vw, 1.35rem);
+  font-size: clamp(1.06rem, 1.25vw, 1.22rem);
   font-weight: 600;
   color: #ffffff;
   letter-spacing: -0.015em;
@@ -4237,7 +4443,7 @@ html {
 
 .fw-bullet-en {
   font-family: 'Montserrat', sans-serif !important;
-  font-size: clamp(0.88rem, 1vw, 0.98rem);
+  font-size: clamp(0.82rem, 0.88vw, 0.88rem);
   font-weight: 400;
   line-height: 1.52;
   color: #e2eeee;
@@ -4247,7 +4453,7 @@ html {
 /* Panel Lead Introductory Paragraph (Matches Figma design) */
 .fw-panel-lead {
   font-family: 'Montserrat', sans-serif !important;
-  font-size: clamp(0.88rem, 1vw, 0.98rem);
+  font-size: clamp(0.84rem, 0.9vw, 0.9rem);
   font-weight: 400;
   line-height: 1.55;
   color: #dbe8e8;
@@ -4277,12 +4483,26 @@ html {
   }
   .fieldwork-main-title,
   .features-main-title {
-    font-size: clamp(1.9rem, 2.8vw, 2.45rem);
+    font-size: clamp(1.8rem, 2.6vw, 2.3rem);
   }
   .fieldwork-subtitle,
   .features-subtitle {
-    font-size: clamp(0.88rem, 0.95vw, 0.96rem);
+    font-size: clamp(0.82rem, 0.88vw, 0.88rem);
     line-height: 1.5;
+  }
+  .tab-en-title {
+    font-size: 0.80rem;
+  }
+  .bullets-title {
+    font-size: 1.08rem;
+  }
+  .fw-panel-lead {
+    font-size: 0.82rem;
+    line-height: 1.5;
+  }
+  .fw-bullet-en {
+    font-size: 0.80rem;
+    line-height: 1.48;
   }
   .fieldwork-container {
     gap: clamp(1rem, 1.8vh, 1.4rem);
@@ -4311,18 +4531,32 @@ html {
   }
   .fieldwork-main-title,
   .features-main-title {
-    font-size: clamp(1.9rem, 2.8vw, 2.45rem);
+    font-size: clamp(1.8rem, 2.6vw, 2.3rem);
   }
   .fieldwork-main-title {
     max-width: 720px;
   }
   .fieldwork-subtitle,
   .features-subtitle {
-    font-size: clamp(0.88rem, 0.95vw, 0.96rem);
+    font-size: clamp(0.84rem, 0.9vw, 0.88rem);
     line-height: 1.52;
   }
   .fieldwork-subtitle {
     max-width: 100%;
+  }
+  .tab-en-title {
+    font-size: 0.80rem;
+  }
+  .bullets-title {
+    font-size: 1.10rem;
+  }
+  .fw-panel-lead {
+    font-size: 0.84rem;
+    line-height: 1.52;
+  }
+  .fw-bullet-en {
+    font-size: 0.82rem;
+    line-height: 1.48;
   }
   .fieldwork-stage-grid {
     grid-template-columns: minmax(460px, 1.05fr) 1fr;
@@ -4336,12 +4570,9 @@ html {
     padding: 0.85rem 0.95rem;
     gap: 0.55rem;
   }
-  .tab-en-title {
-    font-size: 0.82rem;
-  }
 }
 
-/* 3. 平板横屏 / 紧凑型桌面 (821px - 1080px)：标签切换为 2 列 x 3 排，彻底消除换行拥挤 */
+/* 3. 平板横屏 / 紧凑型桌面 (821px - 1080px)：标签切换为 2 列 x 3 排，文案大小严格参考后续板块 */
 @media (min-width: 821px) and (max-width: 1080px) {
   .fieldwork-section-wrapper {
     min-height: 100vh;
@@ -4360,7 +4591,7 @@ html {
   }
   .fieldwork-main-title,
   .features-main-title {
-    font-size: clamp(1.75rem, 2.7vw, 2.2rem);
+    font-size: clamp(1.65rem, 2.5vw, 2.05rem);
     line-height: 1.2;
   }
   .fieldwork-main-title {
@@ -4368,33 +4599,44 @@ html {
   }
   .fieldwork-subtitle,
   .features-subtitle {
-    font-size: 0.92rem;
+    font-size: 0.84rem;
     line-height: 1.52;
   }
   .fieldwork-subtitle {
     max-width: 100%;
+  }
+  .tab-en-title {
+    font-size: 0.78rem;
+  }
+  .bullets-title {
+    font-size: 1.05rem;
+  }
+  .fw-panel-lead {
+    font-size: 0.82rem;
+    line-height: 1.5;
+  }
+  .fw-bullet-en {
+    font-size: 0.80rem;
+    line-height: 1.48;
   }
   .fieldwork-stage-grid {
     grid-template-columns: minmax(360px, 1fr) 1.1fr;
     gap: 1.8rem;
   }
   .fieldwork-tabs-list {
-    grid-template-columns: repeat(2, minmax(0, 1fr)); /* 2列排版，空间宽裕舒展 */
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.75rem;
   }
   .fieldwork-tab-item {
-    padding: 0.85rem 1rem;
-    gap: 0.55rem;
-  }
-  .tab-en-title {
-    font-size: 0.86rem;
+    padding: 0.8rem 0.95rem;
+    gap: 0.5rem;
   }
   .fieldwork-panels-container {
     padding: 0;
   }
 }
 
-/* 4. 平板竖屏与大屏手机 (541px - 820px)：单列流式布局，展开详情卡片化 */
+/* 4. 平板竖屏与大屏手机 (541px - 820px)：单列流式布局，字号收拢适度 */
 @media (min-width: 541px) and (max-width: 820px) {
   .fieldwork-section-wrapper {
     min-height: 100vh;
@@ -4405,17 +4647,17 @@ html {
     min-height: 100vh;
     height: auto;
     overflow: hidden;
-    align-items: flex-start; /* 避免 flex-center 在长内容时顶部被遮挡 */
+    align-items: flex-start;
     padding: clamp(4rem, 8vh, 5.5rem) 0 4rem 0;
   }
   .fieldwork-container {
     padding: 0 clamp(1.8rem, 5vw, 3rem);
-    gap: 1.8rem;
+    gap: 1.6rem;
     zoom: 1 !important;
   }
   .fieldwork-main-title,
   .features-main-title {
-    font-size: clamp(1.65rem, 4.2vw, 2.05rem);
+    font-size: clamp(1.48rem, 3.8vw, 1.82rem);
     line-height: 1.22;
   }
   .fieldwork-main-title {
@@ -4423,7 +4665,7 @@ html {
   }
   .fieldwork-subtitle,
   .features-subtitle {
-    font-size: 0.92rem;
+    font-size: 0.82rem;
     line-height: 1.52;
   }
   .fieldwork-subtitle {
@@ -4431,25 +4673,25 @@ html {
   }
   .fieldwork-stage-grid {
     grid-template-columns: 1fr;
-    gap: 1.8rem;
+    gap: 1.6rem;
   }
   .fieldwork-tabs-list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.75rem;
+    gap: 0.7rem;
   }
   .fieldwork-tab-item {
-    padding: 0.85rem 1.1rem;
-    gap: 0.55rem;
+    padding: 0.8rem 1rem;
+    gap: 0.5rem;
   }
   .tab-en-title {
-    font-size: 0.88rem;
+    font-size: 0.76rem;
   }
   .fieldwork-panels-container:not(.active) {
     display: none;
   }
   .fieldwork-panels-container.active {
     margin-top: 0.5rem;
-    padding: 1.5rem;
+    padding: 1.35rem;
     background: rgba(18, 26, 28, 0.75);
     border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 14px;
@@ -4458,9 +4700,20 @@ html {
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
     transform: none;
   }
+  .bullets-title {
+    font-size: 1.02rem;
+  }
+  .fw-panel-lead {
+    font-size: 0.80rem;
+    line-height: 1.5;
+  }
+  .fw-bullet-en {
+    font-size: 0.80rem;
+    line-height: 1.48;
+  }
 }
 
-/* 5. 移动手机端 (<= 540px)：精细比例控制，大标题不爆版，操作流畅 */
+/* 5. 移动手机端 (<= 540px)：精细比例控制，与下面模块完全一致 */
 @media (max-width: 540px) {
   .fieldwork-section-wrapper {
     min-height: 100vh;
@@ -4476,12 +4729,12 @@ html {
   }
   .fieldwork-container {
     padding: 0 clamp(1.2rem, 4.5vw, 1.8rem);
-    gap: 1.4rem;
+    gap: 1.3rem;
     zoom: 1 !important;
   }
   .fieldwork-main-title,
   .features-main-title {
-    font-size: clamp(1.4rem, 5.5vw, 1.8rem);
+    font-size: clamp(1.35rem, 5vw, 1.65rem);
     line-height: 1.25;
   }
   .fieldwork-main-title {
@@ -4489,7 +4742,7 @@ html {
   }
   .fieldwork-subtitle,
   .features-subtitle {
-    font-size: 0.88rem;
+    font-size: 0.80rem;
     line-height: 1.52;
   }
   .fieldwork-subtitle {
@@ -4497,23 +4750,23 @@ html {
   }
   .fieldwork-stage-grid {
     grid-template-columns: 1fr;
-    gap: 1.4rem;
+    gap: 1.3rem;
   }
   .fieldwork-tabs-list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.55rem;
+    gap: 0.5rem;
   }
   .fieldwork-tab-item {
-    padding: 0.75rem 0.8rem;
-    gap: 0.45rem;
+    padding: 0.7rem 0.75rem;
+    gap: 0.4rem;
     border-radius: 10px;
   }
   .tab-icon svg {
-    width: 17px;
-    height: 17px;
+    width: 16px;
+    height: 16px;
   }
   .tab-en-title {
-    font-size: 0.78rem;
+    font-size: 0.74rem;
     line-height: 1.25;
   }
   .fieldwork-panels-container:not(.active) {
@@ -4521,7 +4774,7 @@ html {
   }
   .fieldwork-panels-container.active {
     margin-top: 0.4rem;
-    padding: 1.25rem 1rem;
+    padding: 1.15rem 0.95rem;
     background: rgba(18, 26, 28, 0.85);
     border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 12px;
@@ -4531,15 +4784,15 @@ html {
     transform: none;
   }
   .bullets-title {
-    font-size: 1.12rem;
+    font-size: 0.98rem;
   }
   .fw-panel-lead {
-    font-size: 0.86rem;
-    line-height: 1.52;
+    font-size: 0.78rem;
+    line-height: 1.5;
   }
   .fw-bullet-en {
-    font-size: 0.86rem;
-    line-height: 1.48;
+    font-size: 0.78rem;
+    line-height: 1.45;
   }
 }
 

@@ -12,12 +12,17 @@ function initApp() {
   const modalEmailInput = document.getElementById('modal-email-input');
   const modalDiscordGroup = document.getElementById('modal-discord-group');
   const modalDiscordInput = document.getElementById('modal-discord-input');
+  const modalBadgeLabel = document.getElementById('modal-badge-label');
+  const modalBtnText = document.getElementById('modal-btn-text');
+  const modalPrivacyRow = document.getElementById('modal-privacy-row');
+  const modalPrivacyCheckbox = document.getElementById('modal-privacy-checkbox');
   const modalPrivacy = document.getElementById('modal-privacy-text');
   const modalSubmitBtn = document.getElementById('modal-submit-btn');
   const modalSuccess = document.getElementById('modal-success-state');
   const modalSuccessTitle = document.getElementById('modal-success-title-text');
   const modalSuccessDesc = document.getElementById('modal-success-desc-text');
 
+  const navContactBtn = document.getElementById('nav-contact-btn');
   const joinBtn = document.getElementById('join-community-btn');
   const subscribeBtn = document.getElementById('subscribe-btn');
   const contactBtn = document.getElementById('contact-us-btn');
@@ -36,6 +41,7 @@ function initApp() {
 
   function openModal(options = {}) {
     const {
+      badge = 'reGoggles // Connect',
       title = 'Subscribe for Updates',
       desc = 'Be the first to know about reGoggles launch and early access.',
       btnText = 'Subscribe',
@@ -51,6 +57,9 @@ function initApp() {
       clearTimeout(modalAutoCloseTimer);
       modalAutoCloseTimer = null;
     }
+    if (modalBadgeLabel) {
+      modalBadgeLabel.textContent = badge;
+    }
     if (modalTitle) {
       modalTitle.textContent = title;
       modalTitle.style.display = 'block';
@@ -59,8 +68,16 @@ function initApp() {
       modalDesc.textContent = desc;
       modalDesc.style.display = 'block';
     }
-    if (modalSubmitBtn) modalSubmitBtn.textContent = btnText;
-    if (modalPrivacy) modalPrivacy.style.display = showPrivacy ? 'block' : 'none';
+    if (modalBtnText) {
+      modalBtnText.textContent = btnText;
+    } else if (modalSubmitBtn) {
+      modalSubmitBtn.textContent = btnText;
+    }
+    if (modalPrivacyRow) modalPrivacyRow.style.display = showPrivacy ? 'block' : 'none';
+    if (modalPrivacyCheckbox) {
+      modalPrivacyCheckbox.checked = true; // 默认打勾
+      modalPrivacyCheckbox.required = !!showPrivacy;
+    }
 
     if (modalDiscordGroup) {
       modalDiscordGroup.style.display = showDiscord ? 'flex' : 'none';
@@ -87,8 +104,10 @@ function initApp() {
     if (modalBackdrop) modalBackdrop.classList.remove('active');
   }
 
-  const handleJoinClick = () => {
+  const handleJoinClick = (e) => {
+    if (e && e.preventDefault) e.preventDefault();
     openModal({
+      badge: 'Community // Discord',
       title: 'Join Community',
       desc: 'Subscribe and Join Our Discord Community.',
       btnText: 'Subscribe & Join Community',
@@ -99,8 +118,10 @@ function initApp() {
     });
   };
 
-  const handleSubscribeClick = () => {
+  const handleSubscribeClick = (e) => {
+    if (e && e.preventDefault) e.preventDefault();
     openModal({
+      badge: 'Updates // Early Access',
       title: 'Subscribe for Updates',
       desc: 'Be the first to know about reGoggles launch and early access.',
       btnText: 'Subscribe',
@@ -111,17 +132,24 @@ function initApp() {
     });
   };
 
-  const handleContactClick = () => {
+  const handleContactClick = (e) => {
+    if (e && e.preventDefault) e.preventDefault();
     openModal({
+      badge: 'Direct // Inquiries',
       title: 'Contact reGoggles Team',
       desc: 'Have technical inquiries, partnership proposals, or media questions? Leave your email and we will reach out.',
       btnText: 'Contact Us',
       showDiscord: false,
-      showPrivacy: false,
+      showPrivacy: true,
       successTitle: 'Thank you for reaching out!',
       successDesc: 'Our team will review your inquiry and get back to you shortly.'
     });
   };
+
+  if (navContactBtn) navContactBtn.addEventListener('click', handleContactClick);
+  if (contactBtn) contactBtn.addEventListener('click', handleContactClick);
+  if (heroContactBtn) heroContactBtn.addEventListener('click', handleContactClick);
+  if (buildContactBtn) buildContactBtn.addEventListener('click', handleContactClick);
 
   if (joinBtn) joinBtn.addEventListener('click', handleJoinClick);
   if (heroJoinBtn) heroJoinBtn.addEventListener('click', handleJoinClick);
@@ -129,15 +157,16 @@ function initApp() {
   if (subscribeBtn) subscribeBtn.addEventListener('click', handleSubscribeClick);
   if (heroSubscribeBtn) heroSubscribeBtn.addEventListener('click', handleSubscribeClick);
 
-  if (contactBtn) contactBtn.addEventListener('click', handleContactClick);
-  if (heroContactBtn) heroContactBtn.addEventListener('click', handleContactClick);
-  if (buildContactBtn) buildContactBtn.addEventListener('click', handleContactClick);
-
   if (modalForm) {
     modalForm.addEventListener('submit', (e) => {
       e.preventDefault();
       const email = modalEmailInput ? modalEmailInput.value.trim() : '';
       if (!email) return;
+
+      if (modalPrivacyCheckbox && modalPrivacyRow && modalPrivacyRow.style.display !== 'none' && !modalPrivacyCheckbox.checked) {
+        modalPrivacyCheckbox.reportValidity();
+        return;
+      }
 
       if (modalSuccessTitle) modalSuccessTitle.textContent = currentSuccessConfig.title;
       if (modalSuccessDesc) modalSuccessDesc.textContent = currentSuccessConfig.desc;
