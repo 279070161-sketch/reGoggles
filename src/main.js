@@ -20,6 +20,8 @@ function initApp() {
   const modalSuccess = document.getElementById('modal-success-state');
   const modalSuccessTitle = document.getElementById('modal-success-title-text');
   const modalSuccessDesc = document.getElementById('modal-success-desc-text');
+  const modalDiscordJumpBtn = document.getElementById('modal-discord-jump-btn');
+  const DISCORD_COMMUNITY_URL = 'https://discord.com/channels/862602258452578314/1564833194052816976';
 
   const navContactBtn = document.getElementById('nav-contact-btn');
   const joinBtn = document.getElementById('join-community-btn');
@@ -182,6 +184,7 @@ function initApp() {
 
     if (modalForm) modalForm.style.display = 'flex';
     if (modalSuccess) modalSuccess.style.display = 'none';
+    if (modalDiscordJumpBtn) modalDiscordJumpBtn.style.display = 'none';
     if (modalEmailInput) {
       modalEmailInput.value = '';
       setTimeout(() => modalEmailInput.focus(), 80);
@@ -255,11 +258,11 @@ function initApp() {
     openModal({
       title: 'Join Community',
       desc: 'Subscribe and Join Our Discord Community.',
-      btnText: 'Subscribe & Join Community',
+      btnText: 'Subscribe & Join Discord',
       showDiscord: true,
       showPrivacy: true,
       successTitle: 'Welcome to the Community!',
-      successDesc: 'Thank you for joining our Discord community. We will be in touch with your access invite shortly!'
+      successDesc: 'Thank you for joining our community! Redirecting you to our Discord channel...'
     });
   };
 
@@ -359,16 +362,35 @@ function initApp() {
             target: 'subscribe-form',
             extra_info: `Email: ${email}, Discord: ${discord}`
           });
+
+          if (modalDiscordJumpBtn) {
+            modalDiscordJumpBtn.style.display = 'inline-flex';
+          }
+
+          // 自动跳转到指定的 Discord 频道链接
+          try {
+            window.open(DISCORD_COMMUNITY_URL, '_blank', 'noopener,noreferrer');
+          } catch (err) {
+            console.warn('Popup blocked, button available on screen', err);
+          }
+
+          modalAutoCloseTimer = setTimeout(() => {
+            closeModal();
+          }, 8000);
         } else {
           trackEvent('subscribe_success', '成功提交订阅', {
             target: 'subscribe-form',
             extra_info: `Email: ${email}`
           });
-        }
 
-        modalAutoCloseTimer = setTimeout(() => {
-          closeModal();
-        }, 3200);
+          if (modalDiscordJumpBtn) {
+            modalDiscordJumpBtn.style.display = 'none';
+          }
+
+          modalAutoCloseTimer = setTimeout(() => {
+            closeModal();
+          }, 3200);
+        }
       };
 
       try {
@@ -423,6 +445,12 @@ function initApp() {
   if (privacyLink) {
     privacyLink.addEventListener('click', (e) => {
       e.stopPropagation();
+    });
+  }
+
+  if (modalDiscordJumpBtn) {
+    modalDiscordJumpBtn.addEventListener('click', () => {
+      closeModal();
     });
   }
 
