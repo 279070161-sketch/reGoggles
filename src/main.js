@@ -21,8 +21,6 @@ function initApp() {
   const modalSuccessTitle = document.getElementById('modal-success-title-text');
   const modalSuccessDesc = document.getElementById('modal-success-desc-text');
   const modalDiscordJumpBtn = document.getElementById('modal-discord-jump-btn');
-  const modalDirectDiscordRow = document.getElementById('modal-direct-discord-row');
-  const modalDirectDiscordLink = document.getElementById('modal-direct-discord-link');
   const DISCORD_COMMUNITY_URL = 'https://discord.com/channels/862602258452578314/1564833194052816976';
 
   const navContactBtn = document.getElementById('nav-contact-btn');
@@ -187,7 +185,6 @@ function initApp() {
     if (modalForm) modalForm.style.display = 'flex';
     if (modalSuccess) modalSuccess.style.display = 'none';
     if (modalDiscordJumpBtn) modalDiscordJumpBtn.style.display = 'none';
-    if (modalDirectDiscordRow) modalDirectDiscordRow.style.display = showDiscord ? 'block' : 'none';
     if (modalEmailInput) {
       modalEmailInput.value = '';
       setTimeout(() => modalEmailInput.focus(), 80);
@@ -263,11 +260,11 @@ function initApp() {
     openModal({
       title: 'Join Community',
       desc: 'Subscribe and Join Our Discord Community.',
-      btnText: 'Subscribe & Join Discord',
+      btnText: 'Subscribe & Join Community',
       showDiscord: true,
       showPrivacy: true,
       successTitle: 'Welcome to the Community!',
-      successDesc: 'Thank you for joining our community! Redirecting you to our Discord channel...'
+      successDesc: 'Thank you for joining our community! Click below to enter our Discord channel.'
     });
   };
 
@@ -373,16 +370,11 @@ function initApp() {
             modalDiscordJumpBtn.style.display = 'inline-flex';
           }
 
-          // 自动跳转到指定的 Discord 频道链接
-          try {
-            window.open(DISCORD_COMMUNITY_URL, '_blank', 'noopener,noreferrer');
-          } catch (err) {
-            console.warn('Popup blocked, button available on screen', err);
+          // 用户提交后先在本弹窗提醒成功，由用户点击出现的「Enter Discord Channel」按钮主动跳转
+          if (modalAutoCloseTimer) {
+            clearTimeout(modalAutoCloseTimer);
+            modalAutoCloseTimer = null;
           }
-
-          modalAutoCloseTimer = setTimeout(() => {
-            closeModal();
-          }, 8000);
         } else {
           trackEvent('subscribe_success', '成功提交订阅', {
             target: 'subscribe-form',
@@ -456,16 +448,10 @@ function initApp() {
 
   if (modalDiscordJumpBtn) {
     modalDiscordJumpBtn.addEventListener('click', () => {
-      closeModal();
-    });
-  }
-
-  if (modalDirectDiscordLink) {
-    modalDirectDiscordLink.addEventListener('click', () => {
-      trackEvent('discord_direct_click', '点击直接跳转Discord频道', {
-        target: 'modal-direct-discord-link'
+      trackEvent('discord_btn_click', '点击成功卡片进入Discord', {
+        target: 'modal-discord-jump-btn'
       });
-      closeModal();
+      setTimeout(() => closeModal(), 400);
     });
   }
 
