@@ -158,7 +158,7 @@ function initApp() {
     }
     if (modalPrivacyRow) modalPrivacyRow.style.display = showPrivacy ? 'block' : 'none';
     if (modalPrivacyCheckbox) {
-      modalPrivacyCheckbox.checked = true; // 默认打勾
+      modalPrivacyCheckbox.checked = false; // 遵循欧盟 GDPR 合规要求：默认不预先勾选，必须由用户自主主动勾选
       modalPrivacyCheckbox.required = !!showPrivacy;
     }
 
