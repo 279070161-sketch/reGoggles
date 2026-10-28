@@ -156,10 +156,13 @@ function initApp() {
     } else if (modalSubmitBtn) {
       modalSubmitBtn.textContent = btnText;
     }
-    if (modalPrivacyRow) modalPrivacyRow.style.display = showPrivacy ? 'block' : 'none';
+    if (modalPrivacyRow) {
+      modalPrivacyRow.style.display = showPrivacy ? 'block' : 'none';
+      modalPrivacyRow.classList.remove('privacy-error');
+    }
     if (modalPrivacyCheckbox) {
       modalPrivacyCheckbox.checked = false; // 遵循欧盟 GDPR 合规要求：默认不预先勾选，必须由用户自主主动勾选
-      modalPrivacyCheckbox.required = !!showPrivacy;
+      modalPrivacyCheckbox.required = false; // 由 JS 显式校验，防止隐藏 input 导致原生校验静默阻断表单
     }
 
     if (modalDiscordGroup) {
@@ -316,16 +319,24 @@ function initApp() {
       const email = modalEmailInput ? modalEmailInput.value.trim() : '';
       if (!email) return;
 
-      if (modalPrivacyCheckbox && modalPrivacyRow && modalPrivacyRow.style.display !== 'none' && !modalPrivacyCheckbox.checked) {
-        modalPrivacyCheckbox.reportValidity();
-        return;
-      }
-
-      const discord = modalDiscordInput ? modalDiscordInput.value.trim() : '';
       const errorMsgEl = document.getElementById('modal-error-msg');
       if (errorMsgEl) {
         errorMsgEl.style.display = 'none';
         errorMsgEl.textContent = '';
+      }
+
+      if (modalPrivacyCheckbox && modalPrivacyRow && modalPrivacyRow.style.display !== 'none' && !modalPrivacyCheckbox.checked) {
+        if (errorMsgEl) {
+          errorMsgEl.textContent = 'Please check the box to agree to our Privacy Policy.';
+          errorMsgEl.style.display = 'block';
+        }
+        if (modalPrivacyRow) {
+          modalPrivacyRow.classList.add('privacy-error');
+        }
+        return;
+      }
+      if (modalPrivacyRow) {
+        modalPrivacyRow.classList.remove('privacy-error');
       }
 
       const originalBtnText = modalBtnText ? modalBtnText.textContent : 'Subscribe';
@@ -388,6 +399,28 @@ function initApp() {
         modalForm.submit();
         triggerSuccess();
       }
+    });
+  }
+
+  if (modalPrivacyCheckbox) {
+    modalPrivacyCheckbox.addEventListener('change', () => {
+      if (modalPrivacyCheckbox.checked) {
+        const errorMsgEl = document.getElementById('modal-error-msg');
+        if (errorMsgEl && errorMsgEl.textContent.includes('Privacy Policy')) {
+          errorMsgEl.style.display = 'none';
+          errorMsgEl.textContent = '';
+        }
+        if (modalPrivacyRow) {
+          modalPrivacyRow.classList.remove('privacy-error');
+        }
+      }
+    });
+  }
+
+  const privacyLink = document.querySelector('.modal-privacy-link');
+  if (privacyLink) {
+    privacyLink.addEventListener('click', (e) => {
+      e.stopPropagation();
     });
   }
 

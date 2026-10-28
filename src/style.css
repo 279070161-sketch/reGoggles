@@ -1288,6 +1288,11 @@ html {
   border-color: rgba(255, 255, 255, 0.65);
 }
 
+.modal-privacy-row.privacy-error .modal-checkbox-custom {
+  border-color: #ff6b6b !important;
+  box-shadow: 0 0 10px rgba(255, 107, 107, 0.5) !important;
+}
+
 .modal-privacy-text {
   font-family: 'Montserrat', sans-serif !important;
   font-size: 0.78rem;
