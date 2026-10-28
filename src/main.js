@@ -32,6 +32,93 @@ function initApp() {
   const heroSubscribeBtn = document.getElementById('hero-subscribe-btn');
   const heroJoinBtn = document.getElementById('hero-join-btn');
 
+  // ==========================================================================
+  // 数据埋点与飞书多维表格（Feishu Base）自动化联动
+  // ==========================================================================
+  const FEISHU_WEBHOOK_URL = 'https://seeedstudio.feishu.cn/base/automation/webhook/event/Qd0DajOjnwKtXPhUpnecQTXjnKc';
+
+  function getVisitorId() {
+    try {
+      let vid = localStorage.getItem('regoggles_vid');
+      if (!vid) {
+        vid = 'v_' + Math.random().toString(36).substring(2, 10) + '_' + Date.now().toString(36);
+        localStorage.setItem('regoggles_vid', vid);
+      }
+      return vid;
+    } catch (e) {
+      return 'v_anonymous_' + Math.random().toString(36).substring(2, 8);
+    }
+  }
+
+  function getDeviceType() {
+    const ua = navigator.userAgent || '';
+    if (/iPad|Tablet|(Android(?!.*Mobile))/i.test(ua)) return 'Tablet';
+    if (/Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated/i.test(ua)) return 'Mobile';
+    return 'Desktop';
+  }
+
+  function formatCurrentTime() {
+    const now = new Date();
+    const pad = (n) => String(n).padStart(2, '0');
+    return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+  }
+
+  const SECTION_LABELS = {
+    'hero': 'Hero (首屏)',
+    'field-work': 'Field Worker (工业巡检)',
+    'features': 'Features (工业设计与特性)',
+    'sensing-system': 'Sensing System (扩展系统)',
+    'protective-design': 'Protective Design (安全防护)',
+    'your-rules': 'Your Rules (数据主权与AI私有化)',
+    'open-sdk': 'Open SDK (开源开发者生态)',
+    'community-builders': 'Community (社区与生态合作)',
+    'customization': 'Customization (柔性制造定制)'
+  };
+
+  const visitedSections = new Set();
+  let currentActiveSectionId = 'hero';
+
+  function getCurrentSectionName() {
+    return SECTION_LABELS[currentActiveSectionId] || currentActiveSectionId;
+  }
+
+  function trackEvent(eventType, eventName, options = {}) {
+    try {
+      const payload = {
+        event_type: eventType,
+        event_name: eventName,
+        section: options.section || getCurrentSectionName(),
+        target: options.target || '',
+        extra_info: options.extra_info || '',
+        device: getDeviceType(),
+        screen_size: `${window.innerWidth}x${window.innerHeight}`,
+        visitor_id: getVisitorId(),
+        timestamp: formatCurrentTime(),
+        url: window.location.href,
+        referrer: document.referrer || 'direct'
+      };
+
+      console.log('[reGoggles 埋点数据]', payload);
+
+      const jsonStr = JSON.stringify(payload);
+      if (navigator.sendBeacon) {
+        const blob = new Blob([jsonStr], { type: 'text/plain;charset=UTF-8' });
+        navigator.sendBeacon(FEISHU_WEBHOOK_URL, blob);
+      } else {
+        fetch(FEISHU_WEBHOOK_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
+          body: jsonStr
+        }).catch(() => {});
+      }
+    } catch (err) {
+      // 埋点异常严防阻断主业务流程
+      console.warn('[reGoggles 埋点微异常]', err);
+    }
+  }
+
+  let isCommunityModal = false;
   let modalAutoCloseTimer = null;
   let currentSuccessConfig = {
     title: 'Thank you for subscribing!',
@@ -49,6 +136,7 @@ function initApp() {
       successDesc = 'Be the first to know about reGoggles launch and early access.'
     } = options;
 
+    isCommunityModal = !!showDiscord;
     currentSuccessConfig = { title: successTitle, desc: successDesc };
 
     if (modalAutoCloseTimer) {
@@ -157,6 +245,9 @@ function initApp() {
 
   const handleJoinClick = (e) => {
     if (e && e.preventDefault) e.preventDefault();
+    trackEvent('join_community_open', '打开加入社区弹窗', {
+      target: e?.currentTarget?.id || 'join-btn'
+    });
     openModal({
       title: 'Join Community',
       desc: 'Subscribe and Join Our Discord Community.',
@@ -170,6 +261,9 @@ function initApp() {
 
   const handleSubscribeClick = (e) => {
     if (e && e.preventDefault) e.preventDefault();
+    trackEvent('subscribe_open', '打开订阅弹窗', {
+      target: e?.currentTarget?.id || 'subscribe-btn'
+    });
     openModal({
       title: 'Subscribe for Updates',
       desc: 'Be the first to know about reGoggles launch and early access.',
@@ -182,6 +276,21 @@ function initApp() {
   };
 
   const handleContactClick = (e) => {
+    const targetId = e?.currentTarget?.id || 'contact-btn';
+    let label = '点击联系我们';
+    let sectionName = getCurrentSectionName();
+    if (targetId === 'nav-contact-btn') {
+      label = '点击联系我们 (顶部导航)';
+      sectionName = 'Navigation';
+    } else if (targetId === 'hero-contact-btn') {
+      label = '点击联系我们 (首屏)';
+      sectionName = SECTION_LABELS['hero'];
+    } else if (targetId === 'build-contact-btn') {
+      label = '点击联系我们 (定制板块)';
+      sectionName = SECTION_LABELS['customization'];
+    }
+    trackEvent('contact_click', label, { target: targetId, section: sectionName });
+
     if (e && e.currentTarget && e.currentTarget.tagName === 'A') {
       return; // 允许 <a> 标签原生通过 target="_blank" 打开页面
     }
@@ -231,6 +340,19 @@ function initApp() {
         if (modalTitle) modalTitle.style.display = 'none';
         if (modalDesc) modalDesc.style.display = 'none';
         if (modalSuccess) modalSuccess.style.display = 'flex';
+
+        // 埋点上报成功
+        if (isCommunityModal) {
+          trackEvent('join_community_success', '成功提交加入社区', {
+            target: 'subscribe-form',
+            extra_info: `Email: ${email}, Discord: ${discord}`
+          });
+        } else {
+          trackEvent('subscribe_success', '成功提交订阅', {
+            target: 'subscribe-form',
+            extra_info: `Email: ${email}`
+          });
+        }
 
         modalAutoCloseTimer = setTimeout(() => {
           closeModal();
@@ -313,6 +435,10 @@ function initApp() {
   navLinkItems.forEach((link) => {
     link.addEventListener('click', (e) => {
       const targetHash = link.getAttribute('href');
+      const linkText = link.textContent.trim();
+      trackEvent('nav_click', '点击导航菜单项: ' + linkText, {
+        target: targetHash
+      });
       if (targetHash && targetHash.startsWith('#')) {
         e.preventDefault();
         const targetElement = document.querySelector(targetHash);
@@ -411,6 +537,11 @@ function initApp() {
         }
 
         const targetId = tab.dataset.fwTarget;
+        const tabTitle = tab.querySelector('.fieldwork-tab-title')?.textContent?.trim() || tab.textContent.trim();
+        trackEvent('tab_click', '切换工业巡检Tab: ' + tabTitle, {
+          target: targetId,
+          section: SECTION_LABELS['field-work']
+        });
 
         fwTabs.forEach((t) => {
           t.classList.remove('active');
@@ -451,6 +582,11 @@ function initApp() {
         tab.classList.add('active');
 
         const targetId = tab.dataset.target;
+        const tabTitle = tab.textContent.trim();
+        trackEvent('tab_click', '切换扩展系统视图: ' + tabTitle, {
+          target: targetId,
+          section: SECTION_LABELS['sensing-system']
+        });
         modeImages.forEach((img) => {
           img.classList.toggle('active', img.id === targetId);
         });
@@ -603,6 +739,18 @@ function initApp() {
     screenNavDots.forEach((dot, i) => {
       dot.classList.toggle('active', i === activeIndex);
     });
+
+    const activeSectionId = sectionIds[activeIndex] || 'hero';
+    if (activeSectionId !== currentActiveSectionId) {
+      currentActiveSectionId = activeSectionId;
+      if (!visitedSections.has(activeSectionId)) {
+        visitedSections.add(activeSectionId);
+        trackEvent('section_view', '浏览板块: ' + (SECTION_LABELS[activeSectionId] || activeSectionId), {
+          section: SECTION_LABELS[activeSectionId] || activeSectionId,
+          target: activeSectionId
+        });
+      }
+    }
   }
 
   function scrollToSection(index, smooth = true) {
@@ -722,6 +870,11 @@ function initApp() {
   // 4. 左侧圆点点击切换
   screenNavDots.forEach((dot, index) => {
     dot.addEventListener('click', () => {
+      const secId = sectionIds[index] || `section-${index}`;
+      trackEvent('screen_nav_click', '点击左侧导航点: ' + (SECTION_LABELS[secId] || `第${index + 1}屏`), {
+        target: secId,
+        section: SECTION_LABELS[secId]
+      });
       scrollToSection(index, true);
     });
   });
@@ -760,6 +913,13 @@ function initApp() {
 
   measureScreenNav();
   syncScreenNav();
+
+  // 记录初次页面加载 PV 埋点
+  visitedSections.add('hero');
+  trackEvent('page_view', '访问页面', {
+    target: 'landing_page',
+    section: SECTION_LABELS['hero']
+  });
 
   // ==========================================================================
   // Smart Video Autoplay & Energy Saving via IntersectionObserver
