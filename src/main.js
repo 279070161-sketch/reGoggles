@@ -37,7 +37,7 @@ function initApp() {
   // ==========================================================================
   // 数据埋点与飞书多维表格（Feishu Base）自动化联动
   // ==========================================================================
-  const FEISHU_WEBHOOK_URL = 'https://seeedstudio.feishu.cn/base/automation/webhook/event/Qd0DajOjnwKtXPhUpnecQTXjnKc';
+  const FEISHU_WEBHOOK_URL = 'https://seeedstudio.feishu.cn/base/automation/webhook/event/TqVVa6AOpwwkRShIqbzctf6anze';
 
   function getVisitorId() {
     try {
