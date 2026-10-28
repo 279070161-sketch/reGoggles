@@ -6,18 +6,48 @@
   <title>reGoggles: Open Smart Goggles for Industrial AI & Ego Data Capture</title>
   <meta name="description" content="reGoggles are open smart safety goggles for industrial AI assistance — first-person inspection, PPE monitoring, remote expert support, and egocentric data capture. Open SDK, modular sensors." />
   
+  <meta name="theme-color" content="#142325" />
+  <meta name="format-detection" content="telephone=no" />
+
+  <!-- Open Graph / Facebook / LinkedIn / Discord -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="reGoggles" />
+  <meta property="og:title" content="reGoggles: Open Smart Goggles for Industrial AI & Ego Data Capture" />
+  <meta property="og:description" content="reGoggles are open smart safety goggles for industrial AI assistance — first-person inspection, PPE monitoring, remote expert support, and egocentric data capture. Open SDK, modular sensors." />
+  <meta property="og:image" content="./assets/images/1-1-右侧仰视无镜片.webp" />
+
+  <!-- Twitter / X Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="reGoggles: Open Smart Goggles for Industrial AI & Ego Data Capture" />
+  <meta name="twitter:description" content="reGoggles are open smart safety goggles for industrial AI assistance — first-person inspection, PPE monitoring, remote expert support, and egocentric data capture. Open SDK, modular sensors." />
+  <meta name="twitter:image" content="./assets/images/1-1-右侧仰视无镜片.webp" />
+
   <!-- Montserrat Font with non-blocking load and immediate sans-serif fallback -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300..800;1,300..800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300..800&display=swap"></noscript>
-  
-  <!-- ES Module Import Map for native browser module resolution (GitHub Pages support) -->
-  
 
   <link rel="icon" type="image/svg+xml" href="./logo.svg" />
+  <link rel="apple-touch-icon" href="./logo.svg" />
   <link rel="stylesheet" href="./assets/style.css" />
-  </head>
+
+  <!-- Schema.org JSON-LD Structured Data for Search Engines -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "reGoggles",
+    "image": "./assets/images/1-1-右侧仰视无镜片.webp",
+    "description": "Open smart safety goggles for industrial AI assistance — first-person inspection, PPE monitoring, remote expert support, and egocentric data capture. Open SDK, modular sensors.",
+    "brand": {
+      "@type": "Brand",
+      "name": "Seeed Studio"
+    },
+    "category": "Industrial AI Hardware / Wearables"
+  }
+  </script>
+</head>
 <body>
 
 
@@ -94,7 +124,7 @@
             <div class="hero-image-right">
               <picture>
                 <source srcset="./assets/images/1-1-右侧仰视无镜片.webp" type="image/webp" />
-                <img id="product-img" class="product-image" src="./assets/images/1-1-右侧仰视无镜片.png" alt="reGoggles Wearable AI Goggles Static Render" />
+                <img id="product-img" class="product-image" src="./assets/images/1-1-右侧仰视无镜片.png" alt="reGoggles Wearable AI Goggles Static Render" fetchpriority="high" decoding="async" />
               </picture>
             </div>
           </div>
@@ -124,7 +154,7 @@
             muted
             loop
             playsinline
-            preload="auto"
+            preload="metadata"
             poster="./assets/images/fieldwork-bg.webp"
             src="./assets/videos/fieldwork-bg.mp4"
           ></video>
@@ -410,7 +440,7 @@
         <div class="features-bg-product">
           <picture>
             <source srcset="./assets/images/7-1-前仰视图无镜片.webp" type="image/webp" />
-            <img src="./assets/images/7-1-前仰视图无镜片.png" alt="" class="features-product-silhouette" />
+            <img src="./assets/images/7-1-前仰视图无镜片.webp" alt="" class="features-product-silhouette" loading="lazy" decoding="async" />
           </picture>
         </div>
         <div class="features-spotlight"></div>
@@ -559,6 +589,8 @@
                   class="expansion-image active"
                   src="./assets/images/1-1-右侧仰视无镜片.webp"
                   alt="Original mode sample"
+                  loading="lazy"
+                  decoding="async"
                 />
 
                 <!-- Image 2 (Expansion) -->
@@ -567,6 +599,8 @@
                   class="expansion-image"
                   src="./assets/images/5-1-左俯视图无镜片.webp"
                   alt="Expansion mode sample"
+                  loading="lazy"
+                  decoding="async"
                 />
 
                 <!-- Original 模式 8 个定位点标注 —— 用户校准与精确对齐坐标 2026-10-26 -->
@@ -709,6 +743,7 @@
             muted 
             loop 
             playsinline 
+            preload="none"
             src="./assets/videos/feishu-20261023-151427.mp4"
           ></video>
           <div class="protective-fade-overlay"></div>
@@ -736,7 +771,7 @@
       <div class="data-bg-overlay" aria-hidden="true">
         <picture>
           <source srcset="./assets/images/factory-worker-using-computer-screen-in-dark-workp-2026-09-24-16-25-26-utc.webp" type="image/webp" />
-          <img src="./assets/images/factory-worker-using-computer-screen-in-dark-workp-2026-09-24-16-25-26-utc.jpg" alt="Factory Worker Background" class="data-bg-img" />
+          <img src="./assets/images/factory-worker-using-computer-screen-in-dark-workp-2026-09-24-16-25-26-utc.jpg" alt="Factory Worker Background" class="data-bg-img" loading="lazy" decoding="async" />
         </picture>
         <div class="data-bg-gradient"></div>
       </div>
@@ -828,7 +863,7 @@
             
             <!-- Left Column: Product Image (11-1-左仰视图无镜片) -->
             <div class="sdk-image-col">
-              <img src="./assets/images/11-1-左仰视图无镜片.webp" alt="reGoggles Product Render" class="sdk-img" />
+              <img src="./assets/images/11-1-左仰视图无镜片.webp" alt="reGoggles Product Render" class="sdk-img" loading="lazy" decoding="async" />
             </div>
 
             <!-- Right Column: Content & Feature Tags -->
@@ -910,7 +945,7 @@
             muted
             loop
             playsinline
-            preload="auto"
+            preload="none"
             poster="./assets/images/community-bg.webp"
             src="./assets/videos/diverse-team-collaborates-on-code-presentation-ind-2026-10-03-05-12-34-utc.mp4"
           ></video>
@@ -996,7 +1031,7 @@
       <div class="build-bg-overlay">
         <picture>
           <source srcset="./assets/images/20261026-140630.webp" type="image/webp" />
-          <img src="./assets/images/20261026-140630.jpg" alt="Customization Production Workshop" class="build-bg-img" />
+          <img src="./assets/images/20261026-140630.jpg" alt="Customization Production Workshop" class="build-bg-img" loading="lazy" decoding="async" />
         </picture>
         <div class="build-bg-gradient"></div>
       </div>

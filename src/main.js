@@ -762,84 +762,27 @@ function initApp() {
   syncScreenNav();
 
   // ==========================================================================
-  // Section 9: Applications 3D Infinite Circular Loop Carousel Logic
+  // Smart Video Autoplay & Energy Saving via IntersectionObserver
+  // (Saves battery, GPU and bandwidth by only playing videos when visible)
   // ==========================================================================
-  const stageContainer = document.querySelector('.carousel-stage-container');
-  const slideCards = document.querySelectorAll('.theme-slide-card');
-  const indicatorDots = document.querySelectorAll('.indicator-dot');
-  const arrowPrev = document.getElementById('stage-arrow-prev');
-  const arrowNext = document.getElementById('stage-arrow-next');
+  const bgVideos = document.querySelectorAll('.section-bg-video, .protective-video');
+  if (bgVideos.length && 'IntersectionObserver' in window) {
+    const videoObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const video = entry.target;
+        if (entry.isIntersecting) {
+          if (video.paused) {
+            video.play().catch(() => {});
+          }
+        } else {
+          if (!video.paused) {
+            video.pause();
+          }
+        }
+      });
+    }, { rootMargin: '120px 0px 120px 0px', threshold: 0.05 });
 
-  let currentSlideIndex = 0;
-  const totalSlides = slideCards.length;
-
-  function update3DCarousel(activeIndex) {
-    if (!slideCards.length || !stageContainer) return;
-
-    currentSlideIndex = (activeIndex + totalSlides) % totalSlides;
-
-    slideCards.forEach((card, idx) => {
-      // Calculate circular offset relative to activeIndex (for 3 slides: -1, 0, 1)
-      let diff = idx - currentSlideIndex;
-      if (diff === -2) diff = 1;
-      if (diff === 2) diff = -1;
-
-      if (diff === 0) {
-        // Active Center Slide
-        card.style.transform = 'translate(-50%, 0) scale(1)';
-        card.style.opacity = '1';
-        card.style.filter = 'none';
-        card.style.zIndex = '10';
-        card.style.pointerEvents = 'auto';
-        card.classList.add('active');
-      } else if (diff === -1) {
-        // Left Preview Slide (Circular Wrapped)
-        card.style.transform = 'translate(calc(-50% - 100% - 2.5rem), 0) scale(0.85)';
-        card.style.opacity = '0.25';
-        card.style.filter = 'blur(4px) brightness(0.4)';
-        card.style.zIndex = '5';
-        card.style.pointerEvents = 'none';
-        card.classList.remove('active');
-      } else if (diff === 1) {
-        // Right Preview Slide (Circular Wrapped)
-        card.style.transform = 'translate(calc(-50% + 100% + 2.5rem), 0) scale(0.85)';
-        card.style.opacity = '0.25';
-        card.style.filter = 'blur(4px) brightness(0.4)';
-        card.style.zIndex = '5';
-        card.style.pointerEvents = 'none';
-        card.classList.remove('active');
-      }
-    });
-
-    // Update bottom indicator dots
-    indicatorDots.forEach((dot, idx) => {
-      if (idx === currentSlideIndex) {
-        dot.classList.add('active');
-      } else {
-        dot.classList.remove('active');
-      }
-    });
-  }
-
-  if (slideCards.length) {
-    // Initial position
-    update3DCarousel(0);
-
-    // Prev / Next Arrows (Endless Infinite Circular Loop!)
-    if (arrowPrev) {
-      arrowPrev.addEventListener('click', () => update3DCarousel(currentSlideIndex - 1));
-    }
-    if (arrowNext) {
-      arrowNext.addEventListener('click', () => update3DCarousel(currentSlideIndex + 1));
-    }
-
-    // Indicator Dots
-    indicatorDots.forEach((dot, idx) => {
-      dot.addEventListener('click', () => update3DCarousel(idx));
-    });
-
-    // Handle window resize
-    window.addEventListener('resize', () => update3DCarousel(currentSlideIndex));
+    bgVideos.forEach((v) => videoObserver.observe(v));
   }
 
   // Initialize Section 3 Features Dynamic Noise Grain

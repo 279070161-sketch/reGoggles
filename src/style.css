@@ -431,7 +431,6 @@ html {
 .rules-section-wrapper,
 .data-section-wrapper,
 .sdk-section-wrapper,
-.applications-section-wrapper,
 .build-section-wrapper {
   scroll-snap-align: start;
   scroll-snap-stop: always;

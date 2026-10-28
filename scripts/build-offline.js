@@ -62,35 +62,31 @@ fs.writeFileSync(path.join(ASSETS_OUT, 'style.css'), minifiedCss.code, 'utf8');
 
 // 3. Copy static web assets (images, videos) into dist/assets
 console.log('3. Copying images and videos into dist/assets...');
-function copyRecursive(src, dst) {
+function copyRecursive(src, dst, filterFn) {
   if (!fs.existsSync(dst)) fs.mkdirSync(dst, { recursive: true });
   for (const item of fs.readdirSync(src, { withFileTypes: true })) {
+    if (filterFn && !filterFn(item.name)) continue;
     const s = path.join(src, item.name);
     const d = path.join(dst, item.name);
     if (item.isDirectory()) {
-      copyRecursive(s, d);
+      copyRecursive(s, d, filterFn);
     } else if (item.isFile()) {
       fs.copyFileSync(s, d);
     }
   }
 }
 
-copyRecursive(path.join(ROOT, 'assets/images'), path.join(ASSETS_OUT, 'images'));
+// Filter out obsolete unreferenced PNG drafts (~20MB savings)
+const ignoredImages = new Set(['model2.png', 'model3.png', 'hero-goggles2.png']);
+copyRecursive(path.join(ROOT, 'assets/images'), path.join(ASSETS_OUT, 'images'), (name) => !ignoredImages.has(name));
 copyRecursive(path.join(ROOT, 'assets/videos'), path.join(ASSETS_OUT, 'videos'));
 
-// Copy favicon/logo, 3D model, and Draco decoders
+// Copy favicon/logo and utilities
 if (fs.existsSync(path.join(ROOT, 'public/logo.svg'))) {
   fs.copyFileSync(path.join(ROOT, 'public/logo.svg'), path.join(DIST, 'logo.svg'));
 }
-if (fs.existsSync(path.join(ROOT, 'public/reGoggles-render-hq.glb'))) {
-  fs.copyFileSync(path.join(ROOT, 'public/reGoggles-render-hq.glb'), path.join(DIST, 'reGoggles-render-hq.glb'));
-}
 if (fs.existsSync(path.join(ROOT, 'public/calibrate.html'))) {
   fs.copyFileSync(path.join(ROOT, 'public/calibrate.html'), path.join(DIST, 'calibrate.html'));
-}
-if (fs.existsSync(path.join(ROOT, 'public/draco'))) {
-  copyRecursive(path.join(ROOT, 'public/draco'), path.join(DIST, 'draco'));
-  copyRecursive(path.join(ROOT, 'public/draco'), path.join(ASSETS_OUT, 'draco'));
 }
 
 // 4. Generate clean standalone dist/index.html
