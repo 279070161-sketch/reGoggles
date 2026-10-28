@@ -1389,6 +1389,27 @@ html {
   transform: translateX(3px);
 }
 
+.modal-direct-discord-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: var(--accent-lime);
+  font-family: 'Montserrat', sans-serif !important;
+  font-size: 0.82rem;
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  opacity: 0.9;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.modal-direct-discord-link:hover {
+  opacity: 1;
+  color: #ffffff;
+}
+
 /* Responsive adjustments */
 @media (max-width: 900px) {
   .community-container {

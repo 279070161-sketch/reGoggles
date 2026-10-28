@@ -21,6 +21,8 @@ function initApp() {
   const modalSuccessTitle = document.getElementById('modal-success-title-text');
   const modalSuccessDesc = document.getElementById('modal-success-desc-text');
   const modalDiscordJumpBtn = document.getElementById('modal-discord-jump-btn');
+  const modalDirectDiscordRow = document.getElementById('modal-direct-discord-row');
+  const modalDirectDiscordLink = document.getElementById('modal-direct-discord-link');
   const DISCORD_COMMUNITY_URL = 'https://discord.com/channels/862602258452578314/1564833194052816976';
 
   const navContactBtn = document.getElementById('nav-contact-btn');
@@ -185,6 +187,7 @@ function initApp() {
     if (modalForm) modalForm.style.display = 'flex';
     if (modalSuccess) modalSuccess.style.display = 'none';
     if (modalDiscordJumpBtn) modalDiscordJumpBtn.style.display = 'none';
+    if (modalDirectDiscordRow) modalDirectDiscordRow.style.display = showDiscord ? 'block' : 'none';
     if (modalEmailInput) {
       modalEmailInput.value = '';
       setTimeout(() => modalEmailInput.focus(), 80);
@@ -321,6 +324,7 @@ function initApp() {
       e.preventDefault();
       const email = modalEmailInput ? modalEmailInput.value.trim() : '';
       if (!email) return;
+      const discord = modalDiscordInput ? modalDiscordInput.value.trim() : '';
 
       const errorMsgEl = document.getElementById('modal-error-msg');
       if (errorMsgEl) {
@@ -450,6 +454,15 @@ function initApp() {
 
   if (modalDiscordJumpBtn) {
     modalDiscordJumpBtn.addEventListener('click', () => {
+      closeModal();
+    });
+  }
+
+  if (modalDirectDiscordLink) {
+    modalDirectDiscordLink.addEventListener('click', () => {
+      trackEvent('discord_direct_click', '点击直接跳转Discord频道', {
+        target: 'modal-direct-discord-link'
+      });
       closeModal();
     });
   }
