@@ -209,6 +209,7 @@ function initApp() {
       url.searchParams.set('f_id', '0093fde0f0');
       url.searchParams.set('c', callbackName);
       url.searchParams.set('EMAIL', email);
+      url.searchParams.set('tags', '9372724,9372726');
       url.searchParams.set('b_0c272aa6642cc5d058579205f_4b071a49e3', '');
       if (discordName) {
         url.searchParams.set('NAME', discordName);
