@@ -379,7 +379,8 @@ function initApp() {
         if (resp && resp.result === 'success') {
           triggerSuccess();
         } else if (resp && resp.result === 'fallback') {
-          // JSONP 回退：调用原生 form 提交并呈现成功反馈
+          // JSONP 回退：在静默隐藏 iframe 中提交，绝对不跳转也不开新标签页
+          modalForm.target = 'mailchimp_silent_iframe';
           modalForm.submit();
           triggerSuccess();
         } else {
@@ -396,6 +397,7 @@ function initApp() {
       } catch (err) {
         if (modalSubmitBtn) modalSubmitBtn.disabled = false;
         if (modalBtnText) modalBtnText.textContent = originalBtnText;
+        modalForm.target = 'mailchimp_silent_iframe';
         modalForm.submit();
         triggerSuccess();
       }
