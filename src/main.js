@@ -319,6 +319,13 @@ function initApp() {
   if (heroContactBtn) heroContactBtn.addEventListener('click', handleContactClick);
   if (buildContactBtn) buildContactBtn.addEventListener('click', handleContactClick);
 
+  const brandLogo = document.querySelector('.brand-logo');
+  if (brandLogo) {
+    brandLogo.addEventListener('click', () => {
+      trackEvent('logo_click', '点击左上角Seeed Studio Logo', { target: 'https://www.seeedstudio.com/', section: 'Navigation' });
+    });
+  }
+
   if (joinBtn) joinBtn.addEventListener('click', handleJoinClick);
   if (heroJoinBtn) heroJoinBtn.addEventListener('click', handleJoinClick);
 
