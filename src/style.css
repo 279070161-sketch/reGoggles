@@ -41,19 +41,20 @@ html {
   color: var(--text-primary);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
+  overscroll-behavior-y: none;
 }
 
 body {
   min-height: 100vh;
+  min-height: 100dvh;
   overflow-x: hidden;
-  /* 关键：body 有 overflow-x:hidden 时 Chrome 会把 body 当作滚动容器，
-     scroll-snap 必须同时在 html 和 body 上声明 mandatory 严格吸附 */
-  scroll-snap-type: y mandatory;
-  scroll-behavior: smooth;
   display: flex;
   flex-direction: column;
   background-color: var(--bg-primary);
   font-family: 'Montserrat', sans-serif !important;
+  overscroll-behavior: none;
+  overscroll-behavior-y: none;
 }
 
 #app {
@@ -433,13 +434,8 @@ body {
 }
 
 /* ==========================================================================
-   整屏分页滚动（Full-Page Scroll Snap）：自动覆盖全屏，杜绝停滞在中间
+   全设备整屏 PPT 幻灯片布局（Full-Page Slide Deck Presentation）
    ========================================================================== */
-html {
-  scroll-behavior: smooth;
-  scroll-snap-type: y mandatory;
-}
-
 .hero-section,
 .fieldwork-section-wrapper,
 .features-section-wrapper,
@@ -450,21 +446,21 @@ html {
 .data-section-wrapper,
 .sdk-section-wrapper,
 .build-section-wrapper {
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
   height: 100vh;
   height: 100dvh;
   min-height: 100vh;
+  min-height: 100dvh;
   max-height: 100vh;
+  max-height: 100dvh;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* 回退：老浏览器不支持 safe 关键字时使用 */
+  justify-content: center;
   justify-content: safe center;
   align-items: stretch;
   position: relative;
   overflow: hidden;
-  isolation: isolate; /* 建立完全独立的层叠上下文，杜绝板块背景跨界溢出与层级污染 */
+  isolation: isolate;
 }
 
 /* 视差元素提升为独立合成层，滚动时 GPU 平滑位移 */
@@ -474,20 +470,20 @@ html {
 
 /* Hero Section */
 .hero-section {
-  margin-top: calc(-1 * var(--header-height)); /* 上移顶到页面最顶，渐变延伸到透明导航栏后面 */
-  padding-top: var(--header-height); /* 内容避让导航栏高度 */
+  margin-top: calc(-1 * var(--header-height));
+  padding-top: var(--header-height);
   width: 100%;
   height: 100vh;
   height: 100dvh;
   min-height: 100vh;
+  min-height: 100dvh;
   max-height: 100vh;
+  max-height: 100dvh;
   position: relative;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  isolation: isolate; /* 独立层叠上下文 */
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
+  isolation: isolate;
   background:
     radial-gradient(circle at 30% 22%, #2e3235 0%, #181b1d 45%, #07080a 100%),
     linear-gradient(135deg, rgba(255, 255, 255, 0.10) 0%, transparent 36%, rgba(0, 0, 0, 0.6) 100%);

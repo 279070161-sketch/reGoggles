@@ -78,6 +78,8 @@ function initApp() {
     'customization': 'Customization (柔性制造定制)'
   };
 
+  const sectionIds = Object.keys(SECTION_LABELS);
+
   const visitedSections = new Set();
   let currentActiveSectionId = 'hero';
 
@@ -491,6 +493,7 @@ function initApp() {
   const headerMenuBtn = document.getElementById('header-menu-btn');
   const navDropdownMenu = document.getElementById('nav-dropdown-menu');
   const navLinkItems = document.querySelectorAll('.nav-link-item');
+  let goToSlide = null;
 
   function toggleNavMenu(forceState) {
     if (!headerMenuBtn || !navDropdownMenu) return;
@@ -520,18 +523,16 @@ function initApp() {
       });
       if (targetHash && targetHash.startsWith('#')) {
         e.preventDefault();
-        const targetElement = document.querySelector(targetHash);
-        
         toggleNavMenu(false);
-
-        if (targetElement) {
-          const headerHeight = document.querySelector('.main-header')?.offsetHeight || 80;
-          const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - (targetHash === '#hero' ? headerHeight : 0);
-
-          window.scrollTo({
-            top: Math.max(0, targetPosition),
-            behavior: 'smooth'
-          });
+        const secId = targetHash.replace('#', '');
+        const secIdx = sectionIds.indexOf(secId);
+        if (secIdx !== -1 && typeof goToSlide === 'function') {
+          goToSlide(secIdx, true);
+        } else {
+          const targetElement = document.querySelector(targetHash);
+          if (targetElement) {
+            targetElement.scrollIntoView({ behavior: 'smooth' });
+          }
         }
       }
     });
@@ -764,62 +765,38 @@ function initApp() {
   parallaxRafId = requestAnimationFrame(updateParallax);
 
   // ==========================================================================
-  // 全屏整屏自动吸附轮播滚动引擎（Full-Page Snap Scroll Controller）
-  // 杜绝卡在两屏中间，滚轮/键盘/滑动手势均自动覆盖整屏（100vh）
+  // 全设备统一 PPT 式整屏翻页引擎（Full-Device PPT Slide Presentation Engine）
+  // 杜绝任何中间悬停、卡顿或弹跳；滚轮、触控板、键盘、触屏滑动均做到一翻一整屏
   // ==========================================================================
   const screenNavDots = document.querySelectorAll('.screen-nav-dot');
-  const sectionIds = [
-    'hero',
-    'field-work',
-    'features',
-    'sensing-system',
-    'protective-design',
-    'your-rules',
-    'open-sdk',
-    'community-builders',
-    'customization'
-  ];
-
   const sections = sectionIds
     .map((id) => document.getElementById(id))
     .filter(Boolean);
 
   let navTops = [];
-  let isWheelLocked = false;
-  let wheelUnlockTimer = null;
-  let scrollSnapDebounceTimer = null;
+  let currentSlideIndex = 0;
+  let isSlideTransitioning = false;
+  let slideCooldownTimer = null;
 
   function measureScreenNav() {
-    navTops = sections.map((sec) => {
-      return sec.getBoundingClientRect().top + window.scrollY;
-    });
+    navTops = sections.map((sec) => sec.getBoundingClientRect().top + window.scrollY);
   }
 
-  function getClosestIndex() {
-    const currentY = window.scrollY;
-    let closestIndex = 0;
-    let minDiff = Infinity;
-    for (let i = 0; i < navTops.length; i += 1) {
-      const diff = Math.abs(currentY - navTops[i]);
-      if (diff < minDiff) {
-        minDiff = diff;
-        closestIndex = i;
-      }
-    }
-    return closestIndex;
-  }
+  goToSlide = function(targetIndex, smooth = true) {
+    const clampedIndex = Math.max(0, Math.min(sections.length - 1, targetIndex));
+    currentSlideIndex = clampedIndex;
+    measureScreenNav();
+    const targetTop = navTops[currentSlideIndex] !== undefined 
+      ? navTops[currentSlideIndex] 
+      : (sections[currentSlideIndex]?.offsetTop || 0);
 
-  function syncScreenNav() {
-    const probe = window.scrollY + window.innerHeight * 0.42;
-    let activeIndex = 0;
-    for (let i = 0; i < navTops.length; i += 1) {
-      if (probe >= navTops[i]) activeIndex = i;
-    }
+    // 同步左侧导航小圆点
     screenNavDots.forEach((dot, i) => {
-      dot.classList.toggle('active', i === activeIndex);
+      dot.classList.toggle('active', i === currentSlideIndex);
     });
 
-    const activeSectionId = sectionIds[activeIndex] || 'hero';
+    // 触发板块曝光及埋点
+    const activeSectionId = sectionIds[currentSlideIndex] || 'hero';
     if (activeSectionId !== currentActiveSectionId) {
       currentActiveSectionId = activeSectionId;
       if (!visitedSections.has(activeSectionId)) {
@@ -830,22 +807,28 @@ function initApp() {
         });
       }
     }
-  }
 
-  function scrollToSection(index, smooth = true) {
-    if (index < 0 || index >= sections.length) return;
-    measureScreenNav();
-    const targetTop = navTops[index];
-    screenNavDots.forEach((dot, i) => {
-      dot.classList.toggle('active', i === index);
+    // 同步顶部导航栏高亮状态
+    navLinkItems.forEach((link) => {
+      const href = link.getAttribute('href');
+      link.classList.toggle('active', href === '#' + activeSectionId);
     });
+
+    // 精确跳转到目标整屏
     window.scrollTo({
       top: targetTop,
       behavior: smooth ? 'smooth' : 'auto'
     });
-  }
 
-  // 1. 桌面端滚轮整屏切换（杜绝停滞在中间）
+    // 锁定翻页冷却，避免触控板惯性连续误触发多屏
+    isSlideTransitioning = true;
+    clearTimeout(slideCooldownTimer);
+    slideCooldownTimer = setTimeout(() => {
+      isSlideTransitioning = false;
+    }, 700);
+  };
+
+  // 1. 桌面端鼠标滚轮 & 触控板滑动翻页
   window.addEventListener('wheel', (e) => {
     const modal = document.getElementById('action-modal');
     if (modal && modal.classList.contains('active')) return;
@@ -853,39 +836,23 @@ function initApp() {
     const navDropdownMenu = document.getElementById('nav-dropdown-menu');
     if (navDropdownMenu && navDropdownMenu.classList.contains('active')) return;
 
-    // 过滤极微小颤动
-    if (Math.abs(e.deltaY) < 18) return;
-
-    // 阻止浏览器默认零碎停顿滚动
+    // 拦截默认原生碎片滚动，实行幻灯片翻页控制
     e.preventDefault();
 
-    if (isWheelLocked) {
-      clearTimeout(wheelUnlockTimer);
-      wheelUnlockTimer = setTimeout(() => {
-        isWheelLocked = false;
-      }, 160);
-      return;
-    }
+    // 动画翻页中直接忽略后续惯性微颤事件，避免重置定时器引发卡死
+    if (isSlideTransitioning) return;
 
-    const currentIndex = getClosestIndex();
-    let nextIndex = currentIndex;
+    // 过滤零碎微小触碰
+    if (Math.abs(e.deltaY) < 15) return;
 
     if (e.deltaY > 0) {
-      nextIndex = Math.min(sections.length - 1, currentIndex + 1);
+      goToSlide(currentSlideIndex + 1, true);
     } else {
-      nextIndex = Math.max(0, currentIndex - 1);
+      goToSlide(currentSlideIndex - 1, true);
     }
-
-    isWheelLocked = true;
-    scrollToSection(nextIndex, true);
-
-    clearTimeout(wheelUnlockTimer);
-    wheelUnlockTimer = setTimeout(() => {
-      isWheelLocked = false;
-    }, 700);
   }, { passive: false });
 
-  // 2. 键盘上/下/空格键整屏切换
+  // 2. 键盘上/下/PageUp/PageDown/空格键幻灯片整页翻转
   window.addEventListener('keydown', (e) => {
     const modal = document.getElementById('action-modal');
     if (modal && modal.classList.contains('active')) return;
@@ -896,25 +863,23 @@ function initApp() {
 
     if (['ArrowDown', 'PageDown', ' '].includes(e.key) && !e.shiftKey) {
       e.preventDefault();
-      const curr = getClosestIndex();
-      if (curr < sections.length - 1) scrollToSection(curr + 1, true);
+      if (!isSlideTransitioning) goToSlide(currentSlideIndex + 1, true);
     } else if (['ArrowUp', 'PageUp'].includes(e.key) || (e.key === ' ' && e.shiftKey)) {
       e.preventDefault();
-      const curr = getClosestIndex();
-      if (curr > 0) scrollToSection(curr - 1, true);
+      if (!isSlideTransitioning) goToSlide(currentSlideIndex - 1, true);
     } else if (e.key === 'Home') {
       e.preventDefault();
-      scrollToSection(0, true);
+      if (!isSlideTransitioning) goToSlide(0, true);
     } else if (e.key === 'End') {
       e.preventDefault();
-      scrollToSection(sections.length - 1, true);
+      if (!isSlideTransitioning) goToSlide(sections.length - 1, true);
     }
   });
 
-  // 3. 触屏滑动手势支持
+  // 3. 移动端/平板触屏滑动手势（PPT 切换体验）
   let touchStartY = 0;
   let touchStartX = 0;
-  let isTouching = false;
+  let isTouchActive = false;
 
   window.addEventListener('touchstart', (e) => {
     const modal = document.getElementById('action-modal');
@@ -922,31 +887,42 @@ function initApp() {
     if (e.touches.length === 1) {
       touchStartY = e.touches[0].clientY;
       touchStartX = e.touches[0].clientX;
-      isTouching = true;
+      isTouchActive = true;
     }
   }, { passive: true });
 
+  window.addEventListener('touchmove', (e) => {
+    if (!isTouchActive) return;
+    const modal = document.getElementById('action-modal');
+    if (modal && modal.classList.contains('active')) return;
+    // 阻止移动端橡皮筋回弹和零碎拖拽，实现如同原生幻灯片的手势拦截
+    if (e.cancelable) {
+      e.preventDefault();
+    }
+  }, { passive: false });
+
   window.addEventListener('touchend', (e) => {
-    if (!isTouching) return;
-    isTouching = false;
+    if (!isTouchActive) return;
+    isTouchActive = false;
     const modal = document.getElementById('action-modal');
     if (modal && modal.classList.contains('active')) return;
 
     if (e.changedTouches.length === 1) {
       const deltaY = e.changedTouches[0].clientY - touchStartY;
       const deltaX = e.changedTouches[0].clientX - touchStartX;
-      if (Math.abs(deltaY) > 45 && Math.abs(deltaY) > Math.abs(deltaX)) {
-        const curr = getClosestIndex();
-        if (deltaY < 0 && curr < sections.length - 1) {
-          scrollToSection(curr + 1, true);
-        } else if (deltaY > 0 && curr > 0) {
-          scrollToSection(curr - 1, true);
+      // 竖向位移大于 35px 且竖向为主滑动方向时触发翻页
+      if (Math.abs(deltaY) > 35 && Math.abs(deltaY) > Math.abs(deltaX)) {
+        if (isSlideTransitioning) return;
+        if (deltaY < 0) {
+          goToSlide(currentSlideIndex + 1, true);
+        } else {
+          goToSlide(currentSlideIndex - 1, true);
         }
       }
     }
   }, { passive: true });
 
-  // 4. 左侧圆点点击切换
+  // 4. 左侧圆点指示器点击切换
   screenNavDots.forEach((dot, index) => {
     dot.addEventListener('click', () => {
       const secId = sectionIds[index] || `section-${index}`;
@@ -954,44 +930,31 @@ function initApp() {
         target: secId,
         section: SECTION_LABELS[secId]
       });
-      scrollToSection(index, true);
+      goToSlide(index, true);
     });
   });
 
-  // 5. 滚动同步与停滞自动吸附校准
-  function autoSnapToNearest() {
-    if (isWheelLocked) return;
+  // 5. 窗口大小变动与初始加载校准
+  window.addEventListener('resize', () => {
     measureScreenNav();
-    const currentY = window.scrollY;
-    const closestIdx = getClosestIndex();
-    const targetY = navTops[closestIdx];
-    if (Math.abs(currentY - targetY) > 4) {
-      window.scrollTo({
-        top: targetY,
-        behavior: 'smooth'
-      });
-      screenNavDots.forEach((dot, i) => {
-        dot.classList.toggle('active', i === closestIdx);
-      });
-    }
-  }
+    goToSlide(currentSlideIndex, false);
+  });
 
-  window.addEventListener('scroll', () => {
-    syncScreenNav();
-    if (!isWheelLocked) {
-      clearTimeout(scrollSnapDebounceTimer);
-      scrollSnapDebounceTimer = setTimeout(autoSnapToNearest, 180);
-    }
-  }, { passive: true });
+  window.addEventListener('orientationchange', () => {
+    setTimeout(() => {
+      measureScreenNav();
+      goToSlide(currentSlideIndex, false);
+    }, 150);
+  });
 
-  window.addEventListener('resize', measureScreenNav);
   window.addEventListener('load', () => {
     measureScreenNav();
-    syncScreenNav();
+    const hash = window.location.hash ? window.location.hash.replace('#', '') : '';
+    const initialIdx = sectionIds.indexOf(hash);
+    goToSlide(initialIdx !== -1 ? initialIdx : 0, false);
   });
 
   measureScreenNav();
-  syncScreenNav();
 
   // 记录初次页面加载 PV 埋点
   visitedSections.add('hero');
