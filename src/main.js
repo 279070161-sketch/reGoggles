@@ -12,6 +12,7 @@ function initApp() {
   const modalEmailInput = document.getElementById('modal-email-input');
   const modalDiscordGroup = document.getElementById('modal-discord-group');
   const modalDiscordInput = document.getElementById('modal-discord-input');
+  const modalTagsInput = document.getElementById('modal-tags-input');
   const modalBtnText = document.getElementById('modal-btn-text');
   const modalPrivacyRow = document.getElementById('modal-privacy-row');
   const modalPrivacyCheckbox = document.getElementById('modal-privacy-checkbox');
@@ -172,7 +173,11 @@ function initApp() {
     }
     if (modalDiscordInput) {
       modalDiscordInput.required = !!showDiscord;
+      modalDiscordInput.disabled = !showDiscord;
       modalDiscordInput.value = '';
+    }
+    if (modalTagsInput) {
+      modalTagsInput.value = showDiscord ? '9372726,9372724,9372726' : '9372724,9372726';
     }
 
     const errorMsgEl = document.getElementById('modal-error-msg');
@@ -215,12 +220,14 @@ function initApp() {
       url.searchParams.set('f_id', '0093fde0f0');
       url.searchParams.set('c', callbackName);
       url.searchParams.set('EMAIL', email);
-      url.searchParams.set('tags', '9372724,9372726');
       url.searchParams.set('b_0c272aa6642cc5d058579205f_4b071a49e3', '');
-      if (discordName) {
-        // Mailchimp NAME 字段只允许字母、数字、破折号、点等，将 # 替换为下划线，防止被 Mailchimp 拒绝
-        const safeName = discordName.replace(/#/g, '_').trim();
-        url.searchParams.set('NAME', safeName);
+      if (discordName && discordName.trim()) {
+        const cleanName = discordName.trim();
+        // Mailchimp 官方新配置：Social Media Name 字段为 MMERGE12，支持完整 Discord 用户名（包括 # 号）
+        url.searchParams.set('MMERGE12', cleanName);
+        url.searchParams.set('tags', '9372726,9372724,9372726');
+      } else {
+        url.searchParams.set('tags', '9372724,9372726');
       }
 
       let timeoutId = null;
