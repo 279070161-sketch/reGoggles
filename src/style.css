@@ -91,7 +91,7 @@ body {
 }
 
 .brand-logo-img {
-  height: 24px;
+  height: 17px;
   width: auto;
   display: block;
   object-fit: contain;
@@ -308,7 +308,7 @@ body {
     font-size: 1.25rem;
   }
   .brand-logo-img {
-    height: 21px;
+    height: 15px;
   }
   .header-nav-buttons {
     gap: 0.65rem;
@@ -370,7 +370,7 @@ body {
     font-size: 1.15rem;
   }
   .brand-logo-img {
-    height: 19px;
+    height: 13.5px;
   }
   .header-nav-buttons {
     gap: 0.5rem;
