@@ -786,28 +786,29 @@ body {
     bottom: auto !important;
     transform: none !important;
     width: 100% !important;
-    max-width: 100% !important;
-    margin: 0.5rem auto 0.2rem auto !important;
+    max-width: none !important;
+    margin: 0.2rem 0 !important;
     display: flex !important;
     align-items: center !important;
-    justify-content: center !important;
+    justify-content: flex-start !important;
     flex: 1 1 auto !important;
     min-height: 0 !important;
     pointer-events: none;
+    overflow: visible !important;
   }
   .hero-image-right picture {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    width: 100% !important;
-    height: 100% !important;
+    display: block !important;
+    width: auto !important;
+    overflow: visible !important;
   }
   .hero-image-right .product-image {
-    width: 100% !important;
-    max-width: min(88vw, 380px) !important;
+    display: block !important;
+    width: 122vw !important; /* 尺寸放大，超出右侧屏幕，如 PC 端般大气质感 */
+    max-width: 530px !important;
     height: auto !important;
-    max-height: clamp(140px, 32vh, 260px) !important;
+    max-height: clamp(180px, 38vh, 320px) !important;
     object-fit: contain !important;
+    transform: translateX(4vw) !important; /* 主体居中偏左，右侧镜腿延伸超出屏幕右缘 */
   }
   .bottom-annotation-bar {
     width: 100% !important;
@@ -1033,28 +1034,61 @@ body {
 
 @media (max-width: 900px) {
   .community-section-wrapper {
-    position: relative;
-    width: 100%;
+    position: relative !important;
+    width: 100% !important;
     height: auto !important;
-    min-height: auto !important;
+    min-height: 100svh !important;
     max-height: none !important;
     overflow: hidden !important;
-    padding: clamp(3rem, 6vh, 4.5rem) 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    justify-content: stretch !important;
   }
 
   .community-section-sticky {
-    position: relative;
-    width: 100%;
+    position: relative !important;
+    width: 100% !important;
+    min-height: 100svh !important;
     height: auto !important;
-    min-height: auto !important;
-    max-height: none !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 !important;
-    overflow: visible !important;
-    background-color: transparent;
-    border-top: none;
+    flex: 1 1 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: clamp(3.2rem, 6vh, 4.5rem) 0 !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+    background-color: transparent !important;
+    border-top: none !important;
+  }
+
+  .community-section-sticky .section-bg-image,
+  .community-section-sticky .section-bg-overlay {
+    position: absolute !important;
+    inset: 0 !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    transform: none !important;
+  }
+
+  .community-section-sticky .section-bg-video {
+    position: absolute !important;
+    inset: 0 !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    object-fit: cover !important;
+    object-position: center center !important;
   }
 
   .community-container {
@@ -1073,13 +1107,49 @@ body {
 
   .roles-grid {
     grid-template-columns: 1fr !important;
-    gap: 1rem !important;
+    gap: 0.85rem !important;
     margin-bottom: 2rem !important;
   }
 
+  /* 移动端角色卡片：icon 置于文字左侧，标题与描述紧凑水平排布 */
   .role-card {
-    padding: 1.35rem 1.25rem !important;
+    display: grid !important;
+    grid-template-columns: auto 1fr !important;
+    grid-template-rows: auto auto !important;
+    column-gap: 1.15rem !important;
+    row-gap: 0.3rem !important;
+    align-items: center !important;
+    padding: 1.25rem 1.2rem !important;
     min-height: auto !important;
+  }
+
+  .role-card .icon-wrapper {
+    grid-row: 1 / 3 !important;
+    grid-column: 1 !important;
+    margin: 0 !important;
+    width: 44px !important;
+    height: 44px !important;
+    flex-shrink: 0 !important;
+    align-self: center !important;
+  }
+
+  .role-card .role-title {
+    grid-row: 1 !important;
+    grid-column: 2 !important;
+    font-size: 1.05rem !important;
+    margin: 0 !important;
+    line-height: 1.25 !important;
+  }
+
+  .role-card .role-desc {
+    grid-row: 2 !important;
+    grid-column: 2 !important;
+    font-size: 0.80rem !important;
+    line-height: 1.45 !important;
+    margin: 0 !important;
+    border-top: none !important;
+    padding-top: 0 !important;
+    width: 100% !important;
   }
 
   .actions-block {
@@ -3155,7 +3225,43 @@ body {
     grid-template-columns: 1fr;
     max-width: 560px;
     margin: 0 auto;
-    gap: 1.35rem;
+    gap: 0.95rem;
+  }
+
+  /* 移动端卡片：icon 置于文字左侧，标题与说明紧凑排布 */
+  .rules-feature-card {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: flex-start !important;
+    gap: 1.15rem !important;
+    padding: 1.35rem 1.25rem !important;
+  }
+
+  .rules-card-icon {
+    width: 44px !important;
+    height: 44px !important;
+    flex-shrink: 0 !important;
+    margin-top: 0.15rem !important;
+  }
+
+  .rules-card-text {
+    flex: 1 1 auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.35rem !important;
+    text-align: left !important;
+  }
+
+  .rules-card-title {
+    font-size: 1.05rem !important;
+    line-height: 1.25 !important;
+    margin: 0 !important;
+  }
+
+  .rules-card-desc {
+    font-size: 0.82rem !important;
+    line-height: 1.48 !important;
+    margin: 0 !important;
   }
 }
 
