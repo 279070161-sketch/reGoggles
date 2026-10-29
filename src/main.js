@@ -714,6 +714,13 @@ function initApp() {
   }
 
   function updateParallax() {
+    if (window.innerWidth <= 900) {
+      pItems.forEach((item) => {
+        if (item.el.style.transform !== 'none') item.el.style.transform = 'none';
+      });
+      return;
+    }
+
     const vh = window.innerHeight;
     const scrollY = window.scrollY;
 

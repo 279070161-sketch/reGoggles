@@ -515,11 +515,49 @@ body {
   .rules-section,
   .sdk-section,
   .community-section,
+  .community-section-sticky,
   .build-section {
     height: auto !important;
     min-height: auto !important;
     max-height: none !important;
     overflow: visible !important;
+  }
+
+  /* Section 2 与 Section 8 背景视频与暗色遮罩在移动端牢牢填满整个动态高度板块 */
+  .fieldwork-section-wrapper,
+  .fieldwork-section,
+  .community-section-wrapper,
+  .community-section-sticky {
+    position: relative !important;
+    overflow: hidden !important;
+    background-color: #0b1113 !important;
+  }
+
+  .fieldwork-section .section-bg-image,
+  .fieldwork-section .section-bg-overlay,
+  .community-section-sticky .section-bg-image,
+  .community-section-sticky .section-bg-overlay {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    transform: none !important;
+  }
+
+  .fieldwork-section .section-bg-video,
+  .community-section-sticky .section-bg-video {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center center !important;
+  }
+
+  .fieldwork-section .section-bg-overlay,
+  .community-section-sticky .section-bg-overlay {
+    background: linear-gradient(180deg, rgba(11, 17, 19, 0.90) 0%, rgba(11, 17, 19, 0.86) 50%, rgba(11, 17, 19, 0.94) 100%) !important;
+    z-index: 2 !important;
   }
 }
 
@@ -633,29 +671,87 @@ body {
   animation: none; /* 静态展示 */
 }
 
-/* 移动端降级：文字在上、图片沉底居中（仍大图裁切，文字压在图上方） */
+/* 移动端降级：文字放上方，去除顶部大片空白，按钮紧凑，图片沉底适度展示 */
 @media (max-width: 900px) {
+  .hero-section {
+    min-height: 100svh !important;
+    height: 100svh !important;
+    padding-top: calc(var(--header-height) + 0.6rem) !important;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden !important;
+  }
+  .banner-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0 0 1rem 0;
+    box-sizing: border-box;
+  }
+  .banner-content-grid {
+    align-items: flex-start;
+    padding: 0 clamp(1.4rem, 5vw, 2.2rem);
+    margin-top: 0;
+    flex: 0 0 auto;
+  }
   .hero-split-layout {
     flex-direction: column;
     align-items: flex-start;
-    gap: 1.6rem;
+    gap: 0;
+    width: 100%;
   }
   .top-left-content {
     max-width: 100%;
     padding-right: 0;
+    transform: none;
+    margin-top: 0;
+  }
+  .hero-brand-title {
+    font-size: clamp(2.8rem, 11vw, 3.8rem) !important;
+    line-height: 1.1 !important;
+    margin: 0 0 0.5rem 0 !important;
+  }
+  .hero-intro-text {
+    font-size: clamp(0.92rem, 3.8vw, 1.08rem) !important;
+    line-height: 1.42 !important;
+    max-width: 100% !important;
+  }
+  .hero-cta-group {
+    margin-top: 1.1rem !important;
+    gap: 0.65rem !important;
+  }
+  .hero-btn {
+    padding: 0.52rem 1.15rem !important;
+    font-size: 0.8rem !important;
   }
   .hero-image-right {
     position: absolute;
     top: auto;
     left: 50%;
-    bottom: -10vh;
+    bottom: clamp(1rem, 5vh, 3.5rem);
     transform: translateX(-50%);
+    width: 135vw;
+    max-width: 540px;
+    pointer-events: none;
   }
   .hero-image-right .product-image {
-    width: 200vw;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+  .bottom-annotation-bar {
+    padding: 0 clamp(1.4rem, 5vw, 2.2rem);
+    z-index: 25;
+    position: relative;
   }
   .annotation-text {
-    white-space: normal; /* 窄屏恢复自动换行，避免单行溢出 */
+    white-space: normal;
+    font-size: 0.68rem;
+    line-height: 1.35;
+    opacity: 0.7;
   }
 }
 
@@ -824,28 +920,87 @@ body {
    ========================================================================== */
 
 /* Section 2 普通流式区块（整屏高度） */
-.community-section-wrapper {
-  position: relative;
-  width: 100%;
-  height: 100vh;
-  height: 100dvh;
-  min-height: 100vh;
-  max-height: 100vh;
-  overflow: hidden;
+@media (min-width: 901px) {
+  .community-section-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    min-height: 100vh;
+    max-height: 100vh;
+    overflow: hidden;
+  }
+
+  .community-section-sticky {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    overflow: hidden;
+    background-color: var(--bg-primary);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
 }
 
-.community-section-sticky {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  min-height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  overflow: hidden;
-  background-color: var(--bg-primary);
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+@media (max-width: 900px) {
+  .community-section-wrapper {
+    position: relative;
+    width: 100%;
+    height: auto !important;
+    min-height: auto !important;
+    max-height: none !important;
+    overflow: hidden !important;
+    padding: clamp(3rem, 6vh, 4.5rem) 0 !important;
+  }
+
+  .community-section-sticky {
+    position: relative;
+    width: 100%;
+    height: auto !important;
+    min-height: auto !important;
+    max-height: none !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 !important;
+    overflow: visible !important;
+    background-color: transparent;
+    border-top: none;
+  }
+
+  .community-container {
+    padding: 0 clamp(1.4rem, 5vw, 2.2rem) !important;
+  }
+
+  .community-header-grid {
+    margin-bottom: 1.8rem !important;
+    gap: 0.8rem !important;
+  }
+
+  .community-main-title {
+    font-size: clamp(1.75rem, 6.2vw, 2.4rem) !important;
+    line-height: 1.2 !important;
+  }
+
+  .roles-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+    margin-bottom: 2rem !important;
+  }
+
+  .role-card {
+    padding: 1.35rem 1.25rem !important;
+    min-height: auto !important;
+  }
+
+  .actions-block {
+    padding-top: 0.5rem !important;
+    justify-content: flex-start !important;
+  }
 }
 
 .section-bg-image {
@@ -1977,29 +2132,52 @@ body {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .features-section-wrapper {
-    padding: 4rem 0 3.5rem;
-    height: auto;
-    min-height: 100vh;
+    padding: clamp(3rem, 6vh, 4rem) 0 !important;
+    height: auto !important;
+    min-height: auto !important;
   }
   .features-container {
-    max-width: 460px;
+    max-width: 100% !important;
+    padding: 0 clamp(1rem, 4vw, 2rem) !important;
+  }
+  .features-header {
+    margin-bottom: 1.8rem;
+  }
+  .features-main-title {
+    font-size: clamp(1.6rem, 5.5vw, 2.2rem) !important;
+    margin-bottom: 0.8rem;
+  }
+  .features-subtitle {
+    font-size: clamp(0.82rem, 2.8vw, 0.92rem) !important;
+    line-height: 1.48;
   }
   .features-bento-grid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: clamp(0.55rem, 2.5vw, 0.9rem) !important;
   }
   .fbento-card {
-    padding: 1.35rem 1.35rem;
+    padding: clamp(0.95rem, 3vw, 1.25rem) clamp(0.8rem, 2.6vw, 1.1rem) !important;
+    gap: 0.65rem !important;
+    border-radius: 12px !important;
   }
-}
-
-@media (max-width: 480px) {
-  .features-container {
-    max-width: 100%;
-    padding-left: 1.25rem !important;
-    padding-right: 1.25rem !important;
+  .fbento-icon-box {
+    width: 32px !important;
+    height: 32px !important;
+  }
+  .fbento-icon-box svg {
+    width: 16px !important;
+    height: 16px !important;
+  }
+  .fbento-card-title {
+    font-size: clamp(0.78rem, 2.7vw, 0.92rem) !important;
+    line-height: 1.25 !important;
+    margin-bottom: 0.25rem !important;
+  }
+  .fbento-card-desc {
+    font-size: clamp(0.68rem, 2.3vw, 0.78rem) !important;
+    line-height: 1.4 !important;
   }
 }
 
@@ -2601,10 +2779,83 @@ body {
   transform: translateX(-50%) translateY(0);
 }
 
-@media (max-width: 992px) {
+@media (max-width: 900px) {
+  .expansion-section-wrapper {
+    padding: clamp(3rem, 6vh, 4rem) 0 !important;
+    height: auto !important;
+    min-height: auto !important;
+  }
+  .expansion-container {
+    padding: 0 clamp(1rem, 4vw, 2rem) !important;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .expansion-header-grid {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    margin-bottom: 1.5rem !important;
+  }
+  .expansion-title {
+    font-size: clamp(1.6rem, 5.5vw, 2.2rem) !important;
+    line-height: 1.2;
+    text-align: center;
+  }
   .expansion-content-grid {
-    grid-template-columns: 1fr;
-    gap: 2.5rem;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 1.2rem !important;
+    min-height: auto !important;
+    width: 100% !important;
+  }
+  /* 模式切换按钮置于眼镜下方，成为正常流式元素，绝不遮挡眼镜 */
+  .expansion-tabs {
+    position: relative !important;
+    left: auto !important;
+    bottom: auto !important;
+    transform: none !important;
+    margin: 1.2rem auto 0 auto !important;
+    gap: 0.75rem !important;
+    z-index: 20 !important;
+    width: 100% !important;
+    justify-content: center !important;
+  }
+  .exp-mode-tab {
+    width: clamp(130px, 38vw, 160px) !important;
+    padding: 0.58rem 0 !important;
+    font-size: 0.85rem !important;
+  }
+  .expansion-video-wrapper {
+    width: 100% !important;
+    max-width: 500px !important;
+    overflow: visible !important;
+  }
+  .video-display-card {
+    width: 56% !important;
+    max-width: 225px !important;
+    aspect-ratio: 16 / 11 !important;
+    overflow: visible !important;
+    margin: 0 auto !important;
+  }
+  #image-vision,
+  #image-extension {
+    transform: scale(1.02) !important;
+  }
+  /* 移动端标注文字与引线：缩小字号并自然随引线对齐，完整呈现在屏幕内 */
+  .vann-title {
+    font-size: 0.62rem !important;
+    white-space: nowrap !important;
+  }
+  .vann-sub {
+    font-size: 0.56rem !important;
+    line-height: 1.25 !important;
+    max-width: 120px !important;
+  }
+  .vann-dot {
+    width: 5px !important;
+    height: 5px !important;
+    margin: -2.5px 0 0 -2.5px !important;
   }
 }
 
@@ -2915,36 +3166,65 @@ body {
 
 @media (max-width: 900px) {
   .protective-section-wrapper {
-    height: auto;
-    min-height: auto;
-    padding: 3.5rem 0 2rem;
+    height: auto !important;
+    min-height: auto !important;
+    padding: clamp(3rem, 6vh, 4rem) 0 0 0 !important; /* 底部内边距为0，让视频完全贴合板块底缘 */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden !important;
+    background: #111417;
   }
   .protective-section {
-    height: auto;
-    min-height: auto;
+    height: auto !important;
+    min-height: auto !important;
+    display: flex;
     flex-direction: column;
-    align-items: flex-start;
-  }
-  .protective-video-container {
-    position: relative;
+    justify-content: space-between;
+    align-items: stretch;
     width: 100%;
-    height: 56vw;
-    min-height: 280px;
-    order: 2;
-    margin-top: 1.5rem;
+    padding: 0 !important;
+  }
+  .protective-container {
+    order: 1 !important;
+    width: 100%;
+    padding: 0 clamp(1.4rem, 5vw, 2.2rem) !important;
+    box-sizing: border-box;
+  }
+  .protective-text-col {
+    max-width: 100%;
+    padding: 0 !important;
+    margin-bottom: 0.5rem;
+  }
+  .protective-title {
+    font-size: clamp(1.6rem, 5.5vw, 2.2rem) !important;
+    margin-bottom: 0.8rem !important;
+  }
+  .protective-subtitle {
+    font-size: clamp(0.85rem, 3vw, 0.96rem) !important;
+    line-height: 1.5;
+  }
+  /* 视频变大，贴紧板块下方位置，并向上柔和羽化 */
+  .protective-video-container {
+    order: 2 !important;
+    position: relative !important;
+    width: 100% !important;
+    height: clamp(340px, 78vw, 560px) !important;
+    margin: 1.5rem 0 0 0 !important;
+    padding: 0 !important;
+    display: block;
+    overflow: hidden;
   }
   .protective-video {
-    object-position: center center;
-    -webkit-mask-image: none;
-    mask-image: none;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center bottom !important;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.8) 12%, #000 25%) !important;
+    mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.8) 12%, #000 25%) !important;
   }
   .protective-fade-overlay {
     display: none;
-  }
-  .protective-text-col {
-    order: 1;
-    max-width: 100%;
-    padding: 0;
   }
 }
 
