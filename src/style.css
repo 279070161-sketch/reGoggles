@@ -4374,12 +4374,13 @@ html {
 }
 
 .fieldwork-tab-item {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
   gap: 0.65rem;
-  padding: 0.95rem 1.1rem;
+  padding: 0.95rem 2.2rem 0.95rem 1.1rem;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 12px;
@@ -4403,6 +4404,37 @@ html {
   border-color: var(--accent-lime);
   box-shadow: 0 4px 20px rgba(198, 229, 61, 0.18);
   transform: translateY(-2px);
+}
+
+.tab-arrow {
+  position: absolute;
+  right: 0.95rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  color: rgba(255, 255, 255, 0.45);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.tab-arrow svg {
+  width: 12px;
+  height: 12px;
+  transition: transform 0.25s ease;
+}
+
+.fieldwork-tab-item:hover .tab-arrow {
+  color: #ffffff;
+  transform: translateY(-50%) translateX(3px);
+}
+
+.fieldwork-tab-item.active .tab-arrow {
+  color: var(--accent-lime);
+  transform: translateY(-50%) translateX(3px);
 }
 
 .tab-icon {
@@ -4678,7 +4710,7 @@ html {
     gap: 0.75rem;
   }
   .fieldwork-tab-item {
-    padding: 0.85rem 0.95rem;
+    padding: 0.85rem 2.1rem 0.85rem 0.95rem;
     gap: 0.55rem;
   }
 }
@@ -4739,7 +4771,7 @@ html {
     gap: 0.75rem;
   }
   .fieldwork-tab-item {
-    padding: 0.8rem 0.95rem;
+    padding: 0.8rem 2.1rem 0.8rem 0.95rem;
     gap: 0.5rem;
   }
   .fieldwork-panels-container {
@@ -4791,7 +4823,7 @@ html {
     gap: 0.7rem;
   }
   .fieldwork-tab-item {
-    padding: 0.8rem 1rem;
+    padding: 0.8rem 2.1rem 0.8rem 1rem;
     gap: 0.5rem;
   }
   .tab-en-title {
@@ -4868,9 +4900,16 @@ html {
     gap: 0.5rem;
   }
   .fieldwork-tab-item {
-    padding: 0.7rem 0.75rem;
+    padding: 0.7rem 1.8rem 0.7rem 0.75rem;
     gap: 0.4rem;
     border-radius: 10px;
+  }
+  .tab-arrow {
+    right: 0.55rem;
+  }
+  .tab-arrow svg {
+    width: 10px;
+    height: 10px;
   }
   .tab-icon svg {
     width: 16px;
