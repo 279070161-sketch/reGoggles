@@ -817,29 +817,32 @@ body {
     bottom: auto !important;
     transform: none !important;
     width: 100% !important;
-    max-width: none !important;
-    margin: 0.2rem 0 !important;
+    max-width: 100% !important;
+    margin: 0.4rem auto 0.2rem auto !important;
     display: flex !important;
     align-items: center !important;
-    justify-content: flex-start !important;
+    justify-content: center !important;
     flex: 0 0 auto !important;
     min-height: auto !important;
     pointer-events: none;
     overflow: visible !important;
   }
   .hero-image-right picture {
-    display: block !important;
-    width: auto !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
     overflow: visible !important;
   }
   .hero-image-right .product-image {
     display: block !important;
-    width: 122vw !important; /* 尺寸放大，超出右侧屏幕，如 PC 端般大气质感 */
-    max-width: 530px !important;
+    width: 100% !important;
+    max-width: min(94vw, 420px) !important;
     height: auto !important;
-    max-height: clamp(180px, 38vh, 320px) !important;
+    max-height: clamp(180px, 36vh, 290px) !important;
     object-fit: contain !important;
-    transform: translateX(4vw) !important; /* 主体居中偏左，右侧镜腿延伸超出屏幕右缘 */
+    transform: none !important;
+    margin: 0 auto !important;
   }
   .bottom-annotation-bar {
     width: 100% !important;
