@@ -2917,30 +2917,66 @@ body {
     overflow: visible !important;
   }
   .video-display-card {
-    width: 56% !important;
-    max-width: 225px !important;
-    aspect-ratio: 16 / 11 !important;
+    width: clamp(185px, 50vw, 215px) !important;
+    aspect-ratio: 16 / 10 !important;
     overflow: visible !important;
     margin: 0 auto !important;
+    transform: translateX(-16px) !important;
   }
-  #image-vision,
+  #image-vision {
+    transform: translateX(15%) scale(1.2) !important;
+  }
   #image-extension {
-    transform: scale(1.02) !important;
+    transform: translateY(-10%) scale(1.3) !important;
   }
-  /* 移动端标注文字与引线：缩小字号并自然随引线对齐，完整呈现在屏幕内 */
+  /* 移动端标注文字与引线：缩小字号并自然随引线对齐，完整呈现在屏幕内，点位严丝合缝 */
+  #orig-maincam .vann-text,
+  #orig-mainimu .vann-text,
+  #orig-leftmic .vann-text,
+  #orig-leftspk .vann-text,
+  #ext-callout-general .vann-text {
+    left: 114% !important;
+  }
+  .v-callout .vann-text.txt-right {
+    left: auto !important;
+    right: calc(100% + 8.5% + 10px) !important;
+  }
+  #ext-callout-vision .vann-text {
+    left: auto !important;
+    right: calc(100% - 1.7% + 10px) !important;
+    top: 82% !important;
+    transform: translateY(-50%) !important;
+    text-align: right !important;
+    align-items: flex-end !important;
+  }
   .vann-title {
-    font-size: 0.62rem !important;
+    font-size: clamp(0.50rem, 1.8vw, 0.58rem) !important;
+    line-height: 1.1 !important;
     white-space: nowrap !important;
+    letter-spacing: -0.015em !important;
   }
   .vann-sub {
-    font-size: 0.56rem !important;
-    line-height: 1.25 !important;
-    max-width: 120px !important;
+    font-size: 0.46rem !important;
+    line-height: 1.2 !important;
+    max-width: 95px !important;
   }
   .vann-dot {
-    width: 5px !important;
-    height: 5px !important;
-    margin: -2.5px 0 0 -2.5px !important;
+    width: 6px !important;
+    height: 6px !important;
+    margin: -3px 0 0 -3px !important;
+  }
+  /* 解决移动端左下方 USB Type-C 与 Right-Speaker 紧邻重叠的问题 */
+  #orig-usbc .vann-text {
+    top: calc(var(--txt-y) - 6px) !important;
+  }
+  #orig-rightspk .vann-text {
+    top: calc(var(--txt-y) + 7px) !important;
+  }
+  #orig-mainimu .vann-text {
+    top: calc(var(--txt-y) - 3px) !important;
+  }
+  #orig-leftmic .vann-text {
+    top: calc(var(--txt-y) + 3px) !important;
   }
 }
 
