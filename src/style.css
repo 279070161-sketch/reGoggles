@@ -41,8 +41,6 @@ html {
   color: var(--text-primary);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
-  overscroll-behavior: none;
-  overscroll-behavior-y: none;
 }
 
 body {
@@ -53,8 +51,6 @@ body {
   flex-direction: column;
   background-color: var(--bg-primary);
   font-family: 'Montserrat', sans-serif !important;
-  overscroll-behavior: none;
-  overscroll-behavior-y: none;
 }
 
 #app {
@@ -434,33 +430,97 @@ body {
 }
 
 /* ==========================================================================
-   全设备整屏 PPT 幻灯片布局（Full-Page Slide Deck Presentation）
+   桌面端整屏 PPT 幻灯片布局（Desktop Full-Page Slide Deck Presentation > 900px）
    ========================================================================== */
-.hero-section,
-.fieldwork-section-wrapper,
-.features-section-wrapper,
-.community-section-wrapper,
-.expansion-section-wrapper,
-.protective-section-wrapper,
-.rules-section-wrapper,
-.data-section-wrapper,
-.sdk-section-wrapper,
-.build-section-wrapper {
-  height: 100vh;
-  height: 100dvh;
-  min-height: 100vh;
-  min-height: 100dvh;
-  max-height: 100vh;
-  max-height: 100dvh;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  justify-content: safe center;
-  align-items: stretch;
-  position: relative;
-  overflow: hidden;
-  isolation: isolate;
+@media (min-width: 901px) {
+  html, body {
+    overscroll-behavior: none;
+    overscroll-behavior-y: none;
+  }
+
+  .hero-section,
+  .fieldwork-section-wrapper,
+  .features-section-wrapper,
+  .community-section-wrapper,
+  .expansion-section-wrapper,
+  .protective-section-wrapper,
+  .rules-section-wrapper,
+  .data-section-wrapper,
+  .sdk-section-wrapper,
+  .build-section-wrapper {
+    height: 100vh;
+    height: 100dvh;
+    min-height: 100vh;
+    min-height: 100dvh;
+    max-height: 100vh;
+    max-height: 100dvh;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    justify-content: safe center;
+    align-items: stretch;
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+}
+
+/* ==========================================================================
+   移动端/小平板自然顺畅流式滚动布局（Mobile Natural Flow Scroll <= 900px）
+   解开 100vh 锁死，内容有多高自然撑开多高，杜绝任何图文、卡片或表单被截断遮挡
+   ========================================================================== */
+@media (max-width: 900px) {
+  html, body {
+    overscroll-behavior: auto;
+    overscroll-behavior-y: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .hero-section,
+  .fieldwork-section-wrapper,
+  .features-section-wrapper,
+  .community-section-wrapper,
+  .expansion-section-wrapper,
+  .protective-section-wrapper,
+  .rules-section-wrapper,
+  .data-section-wrapper,
+  .sdk-section-wrapper,
+  .build-section-wrapper {
+    height: auto !important;
+    min-height: 100svh !important;
+    max-height: none !important;
+    overflow: visible !important;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    position: relative;
+    isolation: isolate;
+  }
+
+  .hero-section {
+    min-height: 100svh !important;
+    height: 100svh !important;
+    overflow: hidden !important;
+  }
+
+  .fieldwork-section,
+  .features-section,
+  .expansion-section,
+  .protective-section,
+  .rules-section,
+  .sdk-section,
+  .community-section,
+  .build-section {
+    height: auto !important;
+    min-height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
 }
 
 /* 视差元素提升为独立合成层，滚动时 GPU 平滑位移 */
