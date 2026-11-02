@@ -105,6 +105,27 @@ function initApp() {
 
       console.log('[reGoggles 埋点数据]', payload);
 
+      // 1. 同步上报至 Google Analytics 4 (GA4)
+      if (typeof window.gtag === 'function') {
+        try {
+          // page_view 已由 gtag('config') 默认采集，避免重复计数；其余自定义交互事件全部上报
+          if (eventType !== 'page_view') {
+            window.gtag('event', eventType, {
+              event_category: options.section || getCurrentSectionName(),
+              event_label: options.target || options.extra_info || eventName,
+              section: options.section || getCurrentSectionName(),
+              target: options.target || '',
+              extra_info: options.extra_info || '',
+              device_type: getDeviceType(),
+              ...options
+            });
+          }
+        } catch (gaErr) {
+          console.warn('[GA4 上报微异常]', gaErr);
+        }
+      }
+
+      // 2. 飞书多维表格自动化 Webhook
       const jsonStr = JSON.stringify(payload);
       if (navigator.sendBeacon) {
         const blob = new Blob([jsonStr], { type: 'text/plain;charset=UTF-8' });
@@ -617,8 +638,13 @@ function initApp() {
         }
 
         const targetId = tab.dataset.fwTarget;
-        const tabTitle = tab.querySelector('.fieldwork-tab-title')?.textContent?.trim() || tab.textContent.trim();
-        trackEvent('tab_click', '切换工业巡检Tab: ' + tabTitle, {
+        const tabTitle = tab.querySelector('.tab-en-title')?.textContent?.trim() || 
+                         tab.querySelector('.fieldwork-tab-title')?.textContent?.trim() || 
+                         tab.textContent.trim();
+
+        // 重点埋点：专门记录第二页（工业巡检）6个应用方向标签点击
+        trackEvent('app_direction_click', '点击应用方向: ' + tabTitle, {
+          application_name: tabTitle,
           target: targetId,
           section: SECTION_LABELS['field-work']
         });
