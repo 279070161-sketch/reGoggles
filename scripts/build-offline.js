@@ -139,4 +139,57 @@ html = html.replace('</body>', scriptTags);
 
 fs.writeFileSync(path.join(DIST, 'index.html'), html, 'utf8');
 
-console.log('=== Standalone Offline Package Built Successfully in dist/ ===');
+// 5. Generate inlined CMS Embed HTML for https://www.seeedstudio.com/regoggles
+console.log('5. Generating dist/seeedstudio-cms-embed.html for seeedstudio.com CMS...');
+const appBundleJs = fs.readFileSync(path.join(ASSETS_OUT, 'app.bundle.js'), 'utf8');
+let cmsHtml = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+
+// Replace stylesheet link with inlined <style>
+cmsHtml = cmsHtml.replace(
+  /<link\s+rel="stylesheet"\s+href="\.\/src\/style\.css"\s*\/?>/i,
+  `<style>\n${minifiedCss.code}\n</style>`
+);
+
+// Remove module script and importmap
+cmsHtml = cmsHtml.replace(/<script\s+type="importmap">[\s\S]*?<\/script>/i, '');
+cmsHtml = cmsHtml.replace(/<script\s+type="module"\s+src="\.\/src\/main\.js"><\/script>/i, '');
+
+// Convert relative asset paths to absolute CDN / GitHub Pages URLs so they load on seeedstudio.com
+const CDN_BASE = 'https://279070161-sketch.github.io/reGoggles';
+cmsHtml = cmsHtml.replace(/\.\/assets\//g, `${CDN_BASE}/assets/`);
+cmsHtml = cmsHtml.replace(/\.\/logo\.svg/g, `${CDN_BASE}/logo.svg`);
+cmsHtml = cmsHtml.replace(/\.\/calibrate\.html/g, `${CDN_BASE}/calibrate.html`);
+
+// Append watchdog + inlined bundle before </body>
+const inlinedScriptTags = `
+  <script>
+    (function () {
+      setTimeout(function () {
+        var el = document.getElementById('preloader-percent');
+        if (!el || el.textContent !== '0') return;
+        var p = document.getElementById('global-preloader');
+        var n = 0;
+        var iv = setInterval(function () {
+          n += 3;
+          el.textContent = Math.min(100, n);
+          if (n >= 100) {
+            clearInterval(iv);
+            if (p) {
+              p.classList.add('loaded');
+              setTimeout(function () { try { p.remove(); } catch (e) {} }, 600);
+            }
+          }
+        }, 60);
+      }, 6000);
+    })();
+  </script>
+  <script>
+${appBundleJs}
+  </script>
+</body>`;
+
+cmsHtml = cmsHtml.replace('</body>', inlinedScriptTags);
+fs.writeFileSync(path.join(DIST, 'seeedstudio-cms-embed.html'), cmsHtml, 'utf8');
+
+console.log('=== Standalone Offline Package & CMS Embed Built Successfully in dist/ ===');
+
